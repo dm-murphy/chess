@@ -7,8 +7,10 @@ require_relative 'knight.rb'
 
 # game = Tree.new
 # game.knight_moves([0, 0], [3, 3])
-test = Knight.new([1, 0])
-p test.possible_moves
+# test = Knight.new([1, 0])
+# p test.possible_moves
+knight_test = Game.new
+knight_test.start
 
 # Could check against list of available moves (open board spaces)
 # Or could block any moves of your own pieces (except for castle rules)
