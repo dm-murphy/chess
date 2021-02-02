@@ -11,5 +11,7 @@ class Game
 
   def start
     p @board.display
+    @board.grid[0][1] = "N"
+    p @board.display
   end
 end
