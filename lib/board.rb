@@ -22,4 +22,10 @@ class Board
     HEREDOC
 
   end
+
+  def start_pieces_knight
+    # Display test method to start a white knight piece in correct position
+    @grid[0][1] = "N"
+  end
+  
 end
