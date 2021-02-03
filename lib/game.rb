@@ -16,22 +16,28 @@ class Game
   end
 
   def start_turn
-    display
-    current_piece = @current_player.prompt_piece
-    puts current_piece
+    display_user
+    ask_user
   end
 
-  def display
+  def display_user
     p @board.display
     puts "#{@current_player.name} choose a piece"
     puts
   end
+
+  def ask_user
+    loop do
+      current_piece = @current_player.prompt_piece
+      if check_piece(current_piece)
+        current_piece
+        break
+      end
+    end
+  end
 end
 
 # Next Pseudo Steps
-    
-    
-    
     # Prevent non-eligible selections
     # Show possible moves
     # Prompt for destination or (to cancel piece selection ... extra )
