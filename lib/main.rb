@@ -3,6 +3,7 @@
 require_relative 'board.rb'
 require_relative 'tree.rb'
 require_relative 'game.rb'
+require_relative 'player.rb'
 require_relative 'knight.rb'
 
 # game = Tree.new
