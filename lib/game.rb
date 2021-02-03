@@ -3,10 +3,10 @@
 # lib/chess_spec.rb
 
 class Game
-  def initialize(board = Board.new)#, player_one = Player.new('white'), player_two = Player.new('black'))
+  def initialize(board = Board.new, player_one = Player.new('Player 1', 'white'), player_two = Player.new('Player 2', 'black'))
     @board = board
-    #@player_one = player_one
-    #@player_two = player_two
+    @player_one = player_one
+    @player_two = player_two
   end
 
   def start
@@ -16,7 +16,7 @@ class Game
 end
 
 # Next Pseudo Steps
-    # Make player class
+    
     # Initiliaze new Player One object in Game class
     # Set Player class values for piece color, name ("Player One vs Player Two")
     # Make input prompt from Game to Player object
