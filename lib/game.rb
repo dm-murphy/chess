@@ -16,8 +16,15 @@ class Game
   end
 
   def start_turn
+    display
+    current_piece = @current_player.prompt_piece
+    puts current_piece
+  end
+
+  def display
     p @board.display
-    @current_player.prompt_piece
+    puts "#{@current_player.name} choose a piece"
+    puts
   end
 end
 
@@ -25,10 +32,6 @@ end
     
     
     
-    # Make input prompt from Game to Player object
-      # Makje current player
-      # Prompt current player for piece
-    # Make Player class method to receive user input on piece selection
     # Prevent non-eligible selections
     # Show possible moves
     # Prompt for destination or (to cancel piece selection ... extra )
