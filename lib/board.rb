@@ -25,7 +25,7 @@ class Board
 
   def start_pieces_knight
     # Display test method to start a white knight piece in correct position
-    @grid[0][1] = "N"
+    @grid[0][1] = Knight.new([0, 1], "white").display
   end
   
 end
