@@ -17,8 +17,9 @@ class Game
 
   def start_turn
     display_user
-    start_position = ask_user
+    start_position = ask_user_start
     possible_moves(start_position)
+    end_position = ask_user_end(possible_moves)
   end
 
   def display_user
@@ -27,7 +28,7 @@ class Game
     puts
   end
 
-  def ask_user
+  def ask_user_start
     loop do
       current_piece = @current_player.prompt_piece
       return current_piece if check_piece(current_piece)
@@ -48,6 +49,10 @@ class Game
     row = position[0].to_i
     column = position[1].to_i
     @board.grid[row][column].possible_moves
+  end
+
+  def ask_user_end(possible_moves)
+  
   end
 end
 
