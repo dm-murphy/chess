@@ -17,7 +17,8 @@ class Game
 
   def start_turn
     display_user
-    ask_user
+    start_position = ask_user
+    possible_moves(start_position)
   end
 
   def display_user
@@ -29,10 +30,7 @@ class Game
   def ask_user
     loop do
       current_piece = @current_player.prompt_piece
-      if check_piece(current_piece)
-        current_piece
-        break
-      end
+      return current_piece if check_piece(current_piece)
     end
   end
 
