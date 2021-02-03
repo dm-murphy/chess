@@ -35,10 +35,20 @@ class Game
       end
     end
   end
+
+  def check_piece(current_piece)
+    true if current_piece == '01'
+
+    # Piece has to belong to user's pieces (or it should be a knight object and value of white if player 1 or black if player 2) && piece has to have a possible move
+    # So does a node exist here?
+    # Does that node belong to current_player.pieces?
+    # Does that node have 1+ possible moves?
+    # If yes to all that, then prompt User for destination    
+  end
 end
 
 # Next Pseudo Steps
-    # Prevent non-eligible selections
+    # Take current_piece and find possible moves
     # Show possible moves
     # Prompt for destination or (to cancel piece selection ... extra )
     # Check valid destination entry
