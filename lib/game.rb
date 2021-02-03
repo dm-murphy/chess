@@ -43,6 +43,17 @@ class Game
     # Does that node have 1+ possible moves?
     # If yes to all that, then prompt User for destination    
   end
+
+  def possible_moves(position)
+    # So really it's get the node object from that position and then get possible moves from that class's piece?
+    row = position[0].to_i
+    column = position[1].to_i
+    p @board.grid[row][column]
+
+    # So it's giving me the display ("N") because the Board grid is set to the display value of the node instead of the node itself
+    # Solution: Keep the node itself as the grid value but find way to display the board separately with display values to user
+
+  end
 end
 
 # Next Pseudo Steps
