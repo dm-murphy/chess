@@ -2,10 +2,12 @@
 
 # Creates knight (node) objects for Tree class with coordinates, possible moves and links to parent and children nodes
 class Knight
-  attr_accessor :coord, :possible_moves, :children, :parent
+  attr_accessor :coord, :pieces, :display, :possible_moves, :children, :parent
 
-  def initialize(coord)
+  def initialize(coord, pieces)
     @coord = coord
+    @pieces = pieces
+    @display = "N"
     @possible_moves = []
     @children = []
     @parent = nil
