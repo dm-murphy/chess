@@ -24,11 +24,7 @@ class Game
     update_board(start_position, end_position)
   end
 
-  def update_board(start_position, end_position)
-    # Change end position string into board coordinates
-    # Get start_position node and change its coordinates to end_position
-    # The node that start_position piece leaves from just becomes empty?
-    
+  def update_board(start_position, end_position)    
     puts "This is start position: #{start_position}"
     puts "This is end position: #{end_position}"
     row = start_position[0].to_i
@@ -87,8 +83,8 @@ class Game
 end
 
 # Next Pseudo Steps
-    # Return a valid destination entry to (Game class?) or to Board class and update nodes ( change blank space to piece )
-      # So would Board update the original user entry to be a blank space
-      # And Board would update the new destination to be the node object
-    # Display updated board
+    # Make Board have display of Node object's piece value or of blank hyphen space
+    # Perhaps make new @display_grid that is a 2D array with coordinates just for displays. So one for displays and one for nodes
     # Switch player
+    # Or work on repeating the turn and moving again
+    # Change hardwired #check_piece in Game class to a real conditional
