@@ -20,27 +20,26 @@ class Game
     start_position = ask_user_start
     destinations = possible_moves(start_position)
     end_position = ask_user_end(destinations)
-    p end_position
     update_board(start_position, end_position)
   end
 
   def update_board(start_position, end_position)    
-    puts "This is start position: #{start_position}"
-    puts "This is end position: #{end_position}"
+    # puts "This is start position: #{start_position}"
+    # puts "This is end position: #{end_position}"
     row = start_position[0].to_i
     column = start_position[1].to_i
     end_row = end_position[0].to_i
     end_column = end_position[1].to_i
-    puts "This is row: #{row}"
-    puts "This is column: #{column}"
-    puts "this is end_row: #{end_row}"
-    puts "this is end_column: #{end_column}"
+    # puts "This is row: #{row}"
+    # puts "This is column: #{column}"
+    # puts "this is end_row: #{end_row}"
+    # puts "this is end_column: #{end_column}"
     @board.change_piece(row, column, end_row, end_column)
     display_user
   end
 
   def display_user
-    p @board.display
+    @board.show_grid
     puts "#{@current_player.name} choose a piece"
     puts
   end
@@ -83,8 +82,6 @@ class Game
 end
 
 # Next Pseudo Steps
-    # Make Board have display of Node object's piece value or of blank hyphen space
-    # Perhaps make new @display_grid that is a 2D array with coordinates just for displays. So one for displays and one for nodes
     # Switch player
     # Or work on repeating the turn and moving again
     # Change hardwired #check_piece in Game class to a real conditional

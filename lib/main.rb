@@ -5,6 +5,7 @@ require_relative 'tree.rb'
 require_relative 'game.rb'
 require_relative 'player.rb'
 require_relative 'knight.rb'
+require_relative 'square.rb'
 
 # game = Tree.new
 # game.knight_moves([0, 0], [3, 3])
