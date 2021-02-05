@@ -16,11 +16,30 @@ class Game
   end
 
   def start_turn
-    display_user
-    start_position = ask_user_start
-    destinations = possible_moves(start_position)
-    end_position = ask_user_end(destinations)
-    update_board(start_position, end_position)
+    loop do
+      display_user
+      start_position = ask_user_start
+      destinations = possible_moves(start_position)
+      end_position = ask_user_end(destinations)
+      update_board(start_position, end_position)
+      break if game_over?
+
+      swap_player
+    end
+  end
+
+  def game_over?
+    # Hard code false for now
+    # Check for Draw or Checkmate
+    false
+  end
+
+  def swap_player
+    @current_player = if @current_player == @player_one
+                        @player_two
+                      else
+                        @player_one
+                      end
   end
 
   def update_board(start_position, end_position)    
@@ -35,7 +54,6 @@ class Game
     # puts "this is end_row: #{end_row}"
     # puts "this is end_column: #{end_column}"
     @board.change_piece(row, column, end_row, end_column)
-    display_user
   end
 
   def display_user
@@ -82,6 +100,6 @@ class Game
 end
 
 # Next Pseudo Steps
-    # Switch player
     # Or work on repeating the turn and moving again
     # Change hardwired #check_piece in Game class to a real conditional
+    # Switch player
