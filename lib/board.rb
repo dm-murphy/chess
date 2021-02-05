@@ -28,4 +28,15 @@ class Board
     @grid[0][1] = Knight.new([0, 1], "white")
   end
   
+  # So in board class, I'm making all the white and black pieces as nodes right from the start
+  # Too many pieces to have instance variables for each object
+  # Can the board object coordinates work instead? How do I take that knight object node and reassign its coordinates?
+
+  def change_piece(row, column, end_row, end_column)
+    @grid[row][column].coord = @grid[end_row][end_column]
+    #@grid[row][column].coord = [end_row][end_column]
+
+    p @grid[end_row][end_column]
+    p @grid[row][column]
+  end
 end
