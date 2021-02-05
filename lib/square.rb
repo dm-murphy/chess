@@ -8,6 +8,5 @@ def initialize
   @display = "-"
 end
 
-
 end
 
