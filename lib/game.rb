@@ -18,8 +18,29 @@ class Game
   def start_turn
     display_user
     start_position = ask_user_start
-    possible_moves(start_position)
-    end_position = ask_user_end(possible_moves)
+    destinations = possible_moves(start_position)
+    end_position = ask_user_end(destinations)
+    p end_position
+    update_board(start_position, end_position)
+  end
+
+  def update_board(start_position, end_position)
+    # Change end position string into board coordinates
+    # Get start_position node and change its coordinates to end_position
+    # The node that start_position piece leaves from just becomes empty?
+    
+    puts "This is start position: #{start_position}"
+    puts "This is end position: #{end_position}"
+    row = start_position[0].to_i
+    column = start_position[1].to_i
+    end_row = end_position[0].to_i
+    end_column = end_position[1].to_i
+    puts "This is row: #{row}"
+    puts "This is column: #{column}"
+    puts "this is end_row: #{end_row}"
+    puts "this is end_column: #{end_column}"
+    @board.change_piece(row, column, end_row, end_column)
+    display_user
   end
 
   def display_user
@@ -51,16 +72,23 @@ class Game
     @board.grid[row][column].possible_moves
   end
 
-  def ask_user_end(possible_moves)
-  
+  def ask_user_end(destinations)
+    loop do
+      puts "Choose a square: #{destinations}"
+      current_destination = @current_player.prompt_piece
+      return current_destination if check_destination(current_destination, destinations)
+    end
+  end
+
+  def check_destination(current_destination, destinations)
+    converted_destination = current_destination.chomp.split('').map(&:to_i)
+    true if destinations.include?(converted_destination)
   end
 end
 
 # Next Pseudo Steps
-    # Take current_piece and find possible moves
-    # Show possible moves
-    # Prompt for destination or (to cancel piece selection ... extra )
-    # Check valid destination entry
     # Return a valid destination entry to (Game class?) or to Board class and update nodes ( change blank space to piece )
+      # So would Board update the original user entry to be a blank space
+      # And Board would update the new destination to be the node object
     # Display updated board
     # Switch player
