@@ -28,7 +28,8 @@ class Board
     # Display test method to start a white knight piece in correct position
     
     # This seems wrong
-    @grid[0][1] = Knight.new([0, 1], "white")
+    @grid[0][1] = Knight.new([0, 1], 'white')
+    @grid[7][1] = Knight.new([7, 1], 'black')
 
     # Would all knight objects just be made at once?
     # How do I access just this one object then? 
@@ -41,8 +42,12 @@ class Board
   def change_piece(row, column, end_row, end_column)
     # puts "This is @grid[row][column]: #{@grid[row][column]}"
     # puts "This is @grid[end_row][end_column]: #{@grid[end_row][end_column]}"
-    temp_node = @grid[row][column]
-    @grid[end_row][end_column] = temp_node
+    node = @grid[row][column]
+    node.coord = [end_row, end_column]
+    node.possible_moves = []
+    node.find_moves
+    p node
+    @grid[end_row][end_column] = node
     @grid[row][column] = Square.new
     # puts "This is the new @grid[end_row][end_column]: #{@grid[end_row][end_column]}"
     # puts "This is the new @grid[row][column]: #{@grid[row][column]}"

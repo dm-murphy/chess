@@ -9,12 +9,10 @@ class Knight
     @pieces = pieces
     @display = "N"
     @possible_moves = []
-    @children = []
-    @parent = nil
-    find_moves(coord)
+    find_moves
   end
 
-  def find_moves(coord)
+  def find_moves
     coord_changes = [[1, 2],
                      [2, 1],
                      [2, -1],
@@ -25,7 +23,7 @@ class Knight
                      [-1, 2]]
 
     coord_moves = coord_changes.map do |x, y|
-      [coord[0] + x, coord[1] + y]
+      [@coord[0] + x, @coord[1] + y]
     end
     coord_moves.map do |x, y|
       @possible_moves.push([x, y]) if x.between?(0, 7) && y.between?(0,7)

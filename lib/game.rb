@@ -70,7 +70,8 @@ class Game
   end
 
   def check_piece(current_piece)
-    true if current_piece == '01'
+    # true if current_piece == '01'
+    true
 
     # Piece has to belong to user's pieces (or it should be a knight object and value of white if player 1 or black if player 2) && piece has to have a possible move
     # So does a node exist here?
@@ -100,6 +101,5 @@ class Game
 end
 
 # Next Pseudo Steps
-    # Or work on repeating the turn and moving again
-    # Change hardwired #check_piece in Game class to a real conditional
-    # Switch player
+    # Change hardwired #check_piece in Game class to a real conditional so other moves can happen
+    # Re-roll the possible moves for the piece afters its moved
