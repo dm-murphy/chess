@@ -70,20 +70,19 @@ class Game
   end
 
   def check_piece(current_piece)
-    # true if current_piece == '01'
-    true
+    node = coords_to_node(current_piece)
+    true if node.pieces == @current_player.pieces && node.possible_moves.empty? == false 
+  end
 
-    # Piece has to belong to user's pieces (or it should be a knight object and value of white if player 1 or black if player 2) && piece has to have a possible move
-    # So does a node exist here?
-    # Does that node belong to current_player.pieces?
-    # Does that node have 1+ possible moves?
-    # If yes to all that, then prompt User for destination    
+  def coords_to_node(coords)
+    row = coords[0].to_i
+    column = coords[1].to_i
+    @board.grid[row][column]
   end
 
   def possible_moves(position)
-    row = position[0].to_i
-    column = position[1].to_i
-    @board.grid[row][column].possible_moves
+    node = coords_to_node(position)
+    node.possible_moves
   end
 
   def ask_user_end(destinations)
@@ -101,5 +100,3 @@ class Game
 end
 
 # Next Pseudo Steps
-    # Change hardwired #check_piece in Game class to a real conditional so other moves can happen
-    # Re-roll the possible moves for the piece afters its moved
