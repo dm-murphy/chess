@@ -26,18 +26,9 @@ class Board
 
   def start_pieces_knight
     # Display test method to start a white knight piece in correct position
-    
-    # This seems wrong
     @grid[0][1] = Knight.new([0, 1], 'white')
     @grid[7][1] = Knight.new([7, 1], 'black')
-
-    # Would all knight objects just be made at once?
-    # How do I access just this one object then? 
   end
-  
-  # So in board class, I'm making all the white and black pieces as nodes right from the start
-  # Too many pieces to have instance variables for each object
-  # Can the board object coordinates work instead? How do I take that knight object node and reassign its coordinates?
 
   def change_piece(row, column, end_row, end_column)
     # puts "This is @grid[row][column]: #{@grid[row][column]}"

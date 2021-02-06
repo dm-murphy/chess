@@ -100,3 +100,16 @@ class Game
 end
 
 # Next Pseudo Steps
+
+# Run through possible_moves array and REMOVE any illegal moves
+    # Illegal moves: Uncapturable pieces? King, but wouldn't this already be triggered by a prior 'check' check?
+    # Putting self into check
+    # How does it check if another piece is blocking it's path? Own pieces as well as opponent pieces
+    # Start small: Add a second knight node of White pieces
+        # Don't let one knight move to position of other knight
+        # So check if possible_moves array includes a position of Board grid with an existing node of own player pieces. If yes, then remove
+        # If grid node is blank square, then don't remove for KNIGHT (not same with other pieces that might have a blocked path)
+        # If grid node exists and pieces are Black, and NOT their king???, but really any knight move here is good? Don't remove
+        # Basically for knight, the other grid position it can't move to is where it's own node pieces exist
+    
+
