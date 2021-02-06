@@ -19,8 +19,8 @@ class Game
     loop do
       display_user
       start_position = ask_user_start
-      destinations = possible_moves(start_position)
-      end_position = ask_user_end(destinations)
+      moves = possible_moves(start_position)
+      end_position = ask_user_end(moves)
       update_board(start_position, end_position)
       break if game_over?
 
@@ -85,17 +85,17 @@ class Game
     node.possible_moves
   end
 
-  def ask_user_end(destinations)
+  def ask_user_end(moves)
     loop do
-      puts "Choose a square: #{destinations}"
+      puts "Choose a square: #{moves}"
       current_destination = @current_player.prompt_piece
-      return current_destination if check_destination(current_destination, destinations)
+      return current_destination if check_destination(current_destination, moves)
     end
   end
 
-  def check_destination(current_destination, destinations)
+  def check_destination(current_destination, moves)
     converted_destination = current_destination.chomp.split('').map(&:to_i)
-    true if destinations.include?(converted_destination)
+    true if moves.include?(converted_destination)
   end
 end
 
