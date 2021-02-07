@@ -33,9 +33,7 @@ knight_test.start
 # Current Player picks destination
 # Compiuter checks that destination is an available move out of the possible moves
 
-        # Computer updates the board to reflect the move and any captures/checks that follow
-
-        # Computer checks for checkmate/draw and if true displays result
+        # Computer checks for check/checkmate/draw and if true displays result
 
 # Computer switches Current Player
 # Computer displays updated board

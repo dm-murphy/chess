@@ -43,18 +43,20 @@ class Game
                       end
   end
 
-  def update_board(start_position, end_position)    
-    # puts "This is start position: #{start_position}"
-    # puts "This is end position: #{end_position}"
-    row = start_position[0].to_i
-    column = start_position[1].to_i
-    end_row = end_position[0].to_i
-    end_column = end_position[1].to_i
-    # puts "This is row: #{row}"
-    # puts "This is column: #{column}"
-    # puts "this is end_row: #{end_row}"
-    # puts "this is end_column: #{end_column}"
+  def update_board(start_position, end_position)
+    row = find_row(start_position)
+    column = find_column(start_position)
+    end_row = find_row(end_position)
+    end_column = find_column(end_position)
     @board.change_piece(row, column, end_row, end_column)
+  end
+
+  def find_row(position)
+    position[0].to_i
+  end
+
+  def find_column(position)
+    position[1].to_i
   end
 
   def display_user
@@ -124,5 +126,8 @@ end
         # If grid node is blank square, then don't remove for KNIGHT (not same with other pieces that might have a blocked path)
         # If grid node exists and pieces are Black, and NOT their king???, but really any knight move here is good? Don't remove
         # Basically for knight, the other grid position it can't move to is where it's own node pieces exist
-    
 
+# Main Game logic missing:
+        # Computer checks for check/checkmate/draw and if true displays result
+        # Current Player is notified if in check
+        # Loop ends when checkmate/draw occurs
