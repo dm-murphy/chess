@@ -28,6 +28,8 @@ class Board
     @grid[0][6] = Knight.new([0, 6], 'white')
     @grid[7][1] = Knight.new([7, 1], 'black')
     @grid[7][6] = Knight.new([7, 6], 'black')
+    @grid[0][4] = King.new([0, 4], 'white')
+    @grid[7][4] = King.new([7, 4], 'black')
   end
 
   def change_pieces(old_coord, new_coord)
