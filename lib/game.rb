@@ -11,50 +11,22 @@ class Game
   end
 
   def start
-    @board.start_pieces_knight
+    # Add display for rules and how to input board positions
+    # Add option to Load game file
     start_turn
   end
 
   def start_turn
     loop do
       display_user
-      start_position = ask_user_start
-      moves = possible_moves(start_position)
-      legal_moves = check_legal(moves)
-      end_position = ask_user_end(legal_moves)
-      update_board(start_position, end_position)
+      start_coord = ask_user_start
+      legal_moves = find_moves(start_coord)
+      destination_coord = ask_user_destination(legal_moves)
+      update_board(start_coord, destination_coord)
       break if game_over?
 
       swap_player
     end
-  end
-
-  def game_over?
-    # Hard code false for now
-    # Check for Draw or Checkmate
-    false
-  end
-
-  def swap_player
-    @current_player = if @current_player == @player_one
-                        @player_two
-                      else
-                        @player_one
-                      end
-  end
-
-  def update_board(start_position, end_position)
-    old_coord = start_position.chomp.split('').map(&:to_i)
-    new_coord = end_position.chomp.split('').map(&:to_i)
-    @board.change_pieces(old_coord, new_coord)
-  end
-
-  def find_row(position)
-    position[0].to_i
-  end
-
-  def find_column(position)
-    position[1].to_i
   end
 
   def display_user
@@ -66,27 +38,29 @@ class Game
   def ask_user_start
     loop do
       current_piece = @current_player.prompt_piece
-      return current_piece if check_piece(current_piece)
+      current_coord = string_to_array(current_piece)
+      return current_coord if check_piece(current_coord)
     end
   end
 
-  def check_piece(current_piece)
-    node = coords_to_node(current_piece)
-    true if node.pieces == @current_player.pieces && node.possible_moves.empty? == false 
+  def string_to_array(position)
+    position.chomp.split('').map(&:to_i)
   end
 
-  def coords_to_node(coords)
-    row = coords[0].to_i
-    column = coords[1].to_i
+  def check_piece(current_coord)
+    node = coords_to_node(current_coord)
+    true if node.pieces == @current_player.pieces && node.possible_moves.empty? == false
+  end
+
+  def coords_to_node(coord)
+    row = coord.first
+    column = coord.last
     @board.grid[row][column]
   end
 
-  def possible_moves(position)
-    p position
-    # Not really taking coords to node but string of coords to node
-    node = coords_to_node(position)
-    p node
-    node.possible_moves
+  def find_moves(coord)
+    node = coords_to_node(coord)
+    check_legal(node.possible_moves)
   end
 
   def check_legal(moves)
@@ -96,33 +70,43 @@ class Game
       legal_moves.push(move) if coords_to_node(move).pieces != @current_player.pieces
     end
     legal_moves
-
     # Later, check for putting yourself into Check
-    # Also check for one of your pieces blocking you along the way to the destination, so would need to calculate all the squares along the way and see if one's own pieces are blocking
+    # Also check for pieces blocking path
   end
 
-  def ask_user_end(legal_moves)
+  def ask_user_destination(legal_moves)
     loop do
-      puts "Choose a square: #{legal_moves}"
-      current_destination = @current_player.prompt_piece
-      return current_destination if check_destination(current_destination, legal_moves)
+      puts "Choose a destination: #{legal_moves}"
+      destination = @current_player.prompt_piece
+      destination_coord = string_to_array(destination)
+      return destination_coord if check_destination(destination_coord, legal_moves)
     end
   end
 
-  def check_destination(current_destination, moves)
-    converted_destination = current_destination.chomp.split('').map(&:to_i)
-    true if moves.include?(converted_destination)
+  def check_destination(destination_coord, legal_moves)
+    true if legal_moves.include?(destination_coord)
+  end
+
+  def update_board(start_coord, destination_coord)
+    @board.change_pieces(start_coord, destination_coord)
+  end
+
+  def game_over?
+    # Hard code false for now
+    # Conditional check for Draw or Checkmate
+    false
+  end
+
+  def swap_player
+    @current_player = if @current_player == @player_one
+                        @player_two
+                      else
+                        @player_one
+                      end
   end
 end
 
 # Next Pseudo Steps
-
-    # Refactor Steps:
-        # Board class #start_pieces to init
-        # Game class change all the strings to coords for methods
-            # Could probably get rid of find row and column methods then
-            # So also need a string_to_coords method
-            # Basically once user gives string it should be converted from string to array for our purposes
 
     # Legal Moves missing:
         # Putting self into check

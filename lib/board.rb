@@ -4,6 +4,7 @@ class Board
   attr_accessor :grid
   def initialize
     @grid = Array.new(8) { Array.new(8, Square.new) }
+    start_pieces
   end
 
   def show_grid
@@ -22,7 +23,7 @@ class Board
     HEREDOC
   end
 
-  def start_pieces_knight
+  def start_pieces
     @grid[0][1] = Knight.new([0, 1], 'white')
     @grid[0][6] = Knight.new([0, 6], 'white')
     @grid[7][1] = Knight.new([7, 1], 'black')
