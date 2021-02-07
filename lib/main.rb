@@ -6,7 +6,5 @@ require_relative 'player.rb'
 require_relative 'knight.rb'
 require_relative 'square.rb'
 
-knight_test = Game.new
-knight_test.start
-
-
+test_game = Game.new
+test_game.start
