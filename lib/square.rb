@@ -8,6 +8,4 @@ class Square
     @display = '-'
     @pieces = nil
   end
-
 end
-

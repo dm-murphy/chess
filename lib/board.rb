@@ -3,7 +3,6 @@
 class Board
   attr_accessor :grid
   def initialize
-    # @grid = Array.new(8) { Array.new(8, "-") }
     @grid = Array.new(8) { Array.new(8, Square.new) }
   end
 
@@ -21,28 +20,34 @@ class Board
          0    1    2    3    4    5    6    7
     
     HEREDOC
-
   end
 
   def start_pieces_knight
-    # Display test method to start a white knight piece in correct position
     @grid[0][1] = Knight.new([0, 1], 'white')
     @grid[0][6] = Knight.new([0, 6], 'white')
     @grid[7][1] = Knight.new([7, 1], 'black')
     @grid[7][6] = Knight.new([7, 6], 'black')
   end
 
-  def change_piece(row, column, end_row, end_column)
-    # puts "This is @grid[row][column]: #{@grid[row][column]}"
-    # puts "This is @grid[end_row][end_column]: #{@grid[end_row][end_column]}"
-    node = @grid[row][column]
-    node.coord = [end_row, end_column]
+  def change_pieces(old_coord, new_coord)
+    node = move_piece(old_coord, new_coord)
+    update_piece(node, new_coord)
+    clean_square(old_coord)
+  end
+
+  def move_piece(old_coord, new_coord)
+    node = @grid[old_coord.first][old_coord.last]
+    @grid[new_coord.first][new_coord.last] = node
+  end
+
+  def update_piece(node, new_coord)
+    node.coord = new_coord
     node.possible_moves = []
     node.find_moves
-    p node
-    @grid[end_row][end_column] = node
-    @grid[row][column] = Square.new
-    # puts "This is the new @grid[end_row][end_column]: #{@grid[end_row][end_column]}"
-    # puts "This is the new @grid[row][column]: #{@grid[row][column]}"
+  end
+
+  def clean_square(old_coord)
+    @grid[old_coord.first][old_coord.last] = Square.new
   end
 end
+
