@@ -82,7 +82,10 @@ class Game
   end
 
   def possible_moves(position)
+    p position
+    # Not really taking coords to node but string of coords to node
     node = coords_to_node(position)
+    p node
     node.possible_moves
   end
 
@@ -113,6 +116,13 @@ class Game
 end
 
 # Next Pseudo Steps
+
+    # Refactor Steps:
+        # Board class #start_pieces to init
+        # Game class change all the strings to coords for methods
+            # Could probably get rid of find row and column methods then
+            # So also need a string_to_coords method
+            # Basically once user gives string it should be converted from string to array for our purposes
 
     # Legal Moves missing:
         # Putting self into check
