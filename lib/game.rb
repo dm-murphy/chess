@@ -20,7 +20,8 @@ class Game
       display_user
       start_position = ask_user_start
       moves = possible_moves(start_position)
-      end_position = ask_user_end(moves)
+      legal_moves = check_legal(moves)
+      end_position = ask_user_end(legal_moves)
       update_board(start_position, end_position)
       break if game_over?
 
@@ -85,11 +86,23 @@ class Game
     node.possible_moves
   end
 
-  def ask_user_end(moves)
+  def check_legal(moves)
+    legal_moves = []
+    # If one of the moves includes a square with a player's own pieces, then remove from array
+    moves.map do |move|
+      legal_moves.push(move) if coords_to_node(move).pieces != @current_player.pieces
+    end
+    legal_moves
+
+    # Later, check for putting yourself into Check
+    # Also check for one of your pieces blocking you along the way to the destination, so would need to calculate all the squares along the way and see if one's own pieces are blocking
+  end
+
+  def ask_user_end(legal_moves)
     loop do
-      puts "Choose a square: #{moves}"
+      puts "Choose a square: #{legal_moves}"
       current_destination = @current_player.prompt_piece
-      return current_destination if check_destination(current_destination, moves)
+      return current_destination if check_destination(current_destination, legal_moves)
     end
   end
 

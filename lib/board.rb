@@ -27,7 +27,9 @@ class Board
   def start_pieces_knight
     # Display test method to start a white knight piece in correct position
     @grid[0][1] = Knight.new([0, 1], 'white')
+    @grid[0][6] = Knight.new([0, 6], 'white')
     @grid[7][1] = Knight.new([7, 1], 'black')
+    @grid[7][6] = Knight.new([7, 6], 'black')
   end
 
   def change_piece(row, column, end_row, end_column)
