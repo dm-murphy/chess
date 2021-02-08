@@ -69,9 +69,28 @@ class Game
     moves.map do |move|
       legal_moves.push(move) if coords_to_node(move).pieces != @current_player.pieces
     end
-    legal_moves
+    # legal_moves
+    safe_moves = self_check(legal_moves)
     # Later, check for putting yourself into Check
     # Also check for pieces blocking path
+  end
+
+  def self_check(legal_moves)
+    safe_moves = []
+    legal_moves.map do |move|
+      safe_moves.push(move) if no_check(move)
+    end
+    safe_moves
+  end
+
+  def no_check(move)
+    puts "This is a move #{move}"
+    true
+    # See if puts current_player King in check?
+    # Could find King node
+    # Then see if any of the opponent pieces put in check
+    # P.S. can't do this with only knights and kings? Yes could stop a King movement that puts King in check
+    # Does Game class need access to King node specifically? Or Player class? Or maybe Board class needs access to King variable for White and Black. 
   end
 
   def ask_user_destination(legal_moves)
@@ -91,6 +110,8 @@ class Game
     @board.change_pieces(start_coord, destination_coord)
   end
 
+  
+
   def game_over?
     # Hard code false for now
     # Conditional check for Draw or Checkmate
@@ -109,8 +130,8 @@ end
 # Next Pseudo Steps
 
     # Legal Moves missing:
-        # Putting self into check
-        # How does it check if another piece is blocking it's path? Own pieces as well as opponent pieces
+        # Prevent putting self into check
+        # Prevent moves where another piece is blocking path
 
     # Main Game logic missing:
         # Computer checks for check/checkmate/draw and if true displays result
