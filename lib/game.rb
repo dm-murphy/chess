@@ -31,8 +31,25 @@ class Game
 
   def display_user
     @board.show_grid
+    check_message
     puts "#{@current_player.name} choose a piece"
     puts
+  end
+
+  def check_message
+    if check_alert == true
+      puts "#{@current_player.name} (#{@current_player.pieces.capitalize}) is in CHECK"
+    end
+  end
+  
+  def check_alert
+    if @current_player.pieces == 'white'
+      king = @board.white_king.coord
+      regular_check(king, 'black')
+    elsif @current_player.pieces == 'black'
+      king = @board.black_king.coord
+      regular_check(king, 'white')
+    end
   end
 
   def ask_user_start
@@ -168,5 +185,5 @@ end
 
     # Main Game logic missing:
         # Computer checks for check/checkmate/draw and if true displays result
-        # Current Player is notified if in check
+        # Current Player can't make any other move than to get out of check
         # Loop ends when checkmate/draw occurs
