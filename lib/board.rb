@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 class Board
-  attr_accessor :grid
+  attr_accessor :grid, :white_king, :black_king
   def initialize
     @grid = Array.new(8) { Array.new(8, Square.new) }
+    @white_king = King.new([0, 4], 'white')
+    @black_king = King.new([7, 4], 'black')
     start_pieces
   end
 
@@ -28,8 +30,8 @@ class Board
     @grid[0][6] = Knight.new([0, 6], 'white')
     @grid[7][1] = Knight.new([7, 1], 'black')
     @grid[7][6] = Knight.new([7, 6], 'black')
-    @grid[0][4] = King.new([0, 4], 'white')
-    @grid[7][4] = King.new([7, 4], 'black')
+    @grid[0][4] = @white_king
+    @grid[7][4] = @black_king
   end
 
   def change_pieces(old_coord, new_coord)

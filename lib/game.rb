@@ -60,37 +60,71 @@ class Game
 
   def find_moves(coord)
     node = coords_to_node(coord)
-    check_legal(node.possible_moves)
+    check_legal(node)
   end
 
-  def check_legal(moves)
+  def check_legal(node)
+    moves = node.possible_moves
     legal_moves = []
-    # If one of the moves includes a square with a player's own pieces, then remove from array
+
     moves.map do |move|
-      legal_moves.push(move) if coords_to_node(move).pieces != @current_player.pieces
+      legal_moves.push(move) if valid_move(move, node)
     end
-    # legal_moves
-    safe_moves = self_check(legal_moves)
-    # Later, check for putting yourself into Check
-    # Also check for pieces blocking path
+    legal_moves
   end
 
-  def self_check(legal_moves)
-    safe_moves = []
-    legal_moves.map do |move|
-      safe_moves.push(move) if no_check(move)
-    end
-    safe_moves
+  def valid_move(move, node)
+    true if coords_to_node(move).pieces != @current_player.pieces && check?(move, node) == false
   end
 
-  def no_check(move)
-    puts "This is a move #{move}"
-    true
-    # See if puts current_player King in check?
-    # Could find King node
-    # Then see if any of the opponent pieces put in check
-    # P.S. can't do this with only knights and kings? Yes could stop a King movement that puts King in check
-    # Does Game class need access to King node specifically? Or Player class? Or maybe Board class needs access to King variable for White and Black. 
+  def check?(move, node)
+    if node == @board.white_king
+      king_moves(move, 'black')
+    elsif node == @board.black_king
+      king_moves(move, 'white')
+    elsif @current_player.pieces == 'white'
+      white_king = @board.white_king.coord
+      regular_check(white_king, 'black')
+    elsif @current_player.pieces == 'black'
+      black_king = @board.black_king.coord
+      regular_check(black_king, 'white')
+    end
+  end
+
+  def king_moves(destination, opponent)
+    opposite_pieces = []
+
+    @board.grid.map do |row|
+      row.map do |piece|
+        piece.pieces
+        opposite_pieces.push(piece) if piece.pieces == opponent
+      end
+    end
+
+    opposite_pieces.map do |piece|
+      piece.possible_moves.map do |move|
+        return true if move == destination
+      end
+    end
+    false
+  end
+  
+  def regular_check(king, opponent)
+    opposite_pieces = []
+
+    @board.grid.map do |row|
+      row.map do |piece|
+        piece.pieces
+        opposite_pieces.push(piece) if piece.pieces == opponent
+      end
+    end
+
+    opposite_pieces.map do |piece|
+      piece.possible_moves.map do |move|
+        return true if move == king
+      end
+    end
+    false
   end
 
   def ask_user_destination(legal_moves)
@@ -130,7 +164,6 @@ end
 # Next Pseudo Steps
 
     # Legal Moves missing:
-        # Prevent putting self into check
         # Prevent moves where another piece is blocking path
 
     # Main Game logic missing:
