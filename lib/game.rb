@@ -45,10 +45,50 @@ class Game
   def check_alert
     if @current_player.pieces == 'white'
       king = @board.white_king.coord
-      regular_check(king, 'black')
+      in_check?(king, 'black')
     elsif @current_player.pieces == 'black'
       king = @board.black_king.coord
-      regular_check(king, 'white')
+      in_check?(king, 'white')
+    end
+  end
+
+  def in_check?(coord, opponent)
+    opponent_pieces = find_opponent_pieces(opponent)
+    opponent_moves = find_opponent_moves(opponent_pieces)
+    coord_in_check?(coord, opponent_moves)
+  end
+
+  def find_opponent_pieces(opponent)
+    opponent_pieces = []
+    @board.grid.map do |row|
+      row.map do |piece|
+        opponent_pieces.push(piece) if piece.pieces == opponent
+      end
+    end
+    opponent_pieces
+  end
+
+  def find_opponent_moves(opponent_pieces)
+    opponent_pieces.map do |piece|
+      piece.possible_moves
+    end
+  end
+
+  def coord_in_check?(coord, opponent_moves)
+    opponent_moves.map do |row|
+      row.map do |move|
+        return true if move == coord
+      end
+    end
+    false
+  end
+
+  def self_check?(move, node)
+    if node == @board.white_king
+      in_check?(move, 'black')
+    elsif node == @board.black_king
+      in_check?(move, 'white')
+    else check_alert
     end
   end
 
@@ -85,63 +125,13 @@ class Game
     legal_moves = []
 
     moves.map do |move|
-      legal_moves.push(move) if valid_move(move, node)
+      legal_moves.push(move) if valid_move?(move, node)
     end
     legal_moves
   end
 
-  def valid_move(move, node)
-    true if coords_to_node(move).pieces != @current_player.pieces && check?(move, node) == false
-  end
-
-  def check?(move, node)
-    if node == @board.white_king
-      king_moves(move, 'black')
-    elsif node == @board.black_king
-      king_moves(move, 'white')
-    elsif @current_player.pieces == 'white'
-      white_king = @board.white_king.coord
-      regular_check(white_king, 'black')
-    elsif @current_player.pieces == 'black'
-      black_king = @board.black_king.coord
-      regular_check(black_king, 'white')
-    end
-  end
-
-  def king_moves(destination, opponent)
-    opposite_pieces = []
-
-    @board.grid.map do |row|
-      row.map do |piece|
-        piece.pieces
-        opposite_pieces.push(piece) if piece.pieces == opponent
-      end
-    end
-
-    opposite_pieces.map do |piece|
-      piece.possible_moves.map do |move|
-        return true if move == destination
-      end
-    end
-    false
-  end
-  
-  def regular_check(king, opponent)
-    opposite_pieces = []
-
-    @board.grid.map do |row|
-      row.map do |piece|
-        piece.pieces
-        opposite_pieces.push(piece) if piece.pieces == opponent
-      end
-    end
-
-    opposite_pieces.map do |piece|
-      piece.possible_moves.map do |move|
-        return true if move == king
-      end
-    end
-    false
+  def valid_move?(move, node)
+    true if coords_to_node(move).pieces != @current_player.pieces && self_check?(move, node) == false
   end
 
   def ask_user_destination(legal_moves)
@@ -160,8 +150,6 @@ class Game
   def update_board(start_coord, destination_coord)
     @board.change_pieces(start_coord, destination_coord)
   end
-
-  
 
   def game_over?
     # Hard code false for now
@@ -185,5 +173,7 @@ end
 
     # Main Game logic missing:
         # Computer checks for check/checkmate/draw and if true displays result
+
         # Current Player can't make any other move than to get out of check
+
         # Loop ends when checkmate/draw occurs
