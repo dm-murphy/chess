@@ -54,7 +54,7 @@ class Game
 
   def in_check?(coord, opponent)
     opponent_pieces = find_opponent_pieces(opponent)
-    opponent_moves = find_opponent_moves(opponent_pieces)
+    opponent_moves = find_opponent_moves(opponent_pieces).flatten(1)
     coord_in_check?(coord, opponent_moves)
   end
 
@@ -75,10 +75,10 @@ class Game
   end
 
   def coord_in_check?(coord, opponent_moves)
-    opponent_moves.map do |row|
-      row.map do |move|
-        return true if move == coord
-      end
+    # p coord
+    # p opponent_moves
+    opponent_moves.map do |move|
+      return true if move == coord
     end
     false
   end
