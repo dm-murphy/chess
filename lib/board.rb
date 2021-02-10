@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# lib/chess_spec.rb
+
 class Board
   attr_accessor :grid, :white_king, :black_king
   def initialize

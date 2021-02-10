@@ -168,12 +168,21 @@ end
 
 # Next Pseudo Steps
 
-    # Legal Moves missing:
-        # Prevent moves where another piece is blocking path
+    # Write tests:
+        
+        # White King cannot put self into check
+        # Black King cannot put self into check
+        # White is notified if in check
+        # Black is notified if in check
+        # Knight can capture opponent Knight
+        # King can capture opponent Knight
 
     # Main Game logic missing:
-        # Computer checks for check/checkmate/draw and if true displays result
+        
+        # Current Player can't make any other move than to get out of check 
+            # Working but signify this is the case to user
+            # Don't allow user to select a piece with no moves... ahead of time?
+    
+        # Prevent moves where another piece is blocking path
 
-        # Current Player can't make any other move than to get out of check
-
-        # Loop ends when checkmate/draw occurs
+        # Computer checks for checkmate/draw and if true displays result
