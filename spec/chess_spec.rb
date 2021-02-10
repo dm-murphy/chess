@@ -58,6 +58,8 @@ describe Game do
   describe "#coord_in_check" do
     # Query sent to self nested in #check_message -> #check_alert -> #in_check
 
+    # The opponent moves are showing all opponent piece moves
+
     subject(:test_game) { described_class.new} 
     
     context 'when opponent Knight at [1, 2] and player King at [0, 4]' do
@@ -68,6 +70,16 @@ describe Game do
         expect(test_game.coord_in_check?(coord, opponent_moves)).to be true
       end
     end
+
+    context 'when opponent Knight at [7, 1] and player King at [0, 4]' do
+    
+      it 'returns false' do
+        opponent_moves = [[5, 0], [5, 2], [6, 3], [7, 5], [7, 3], [6, 4], [6, 5], [6, 3], [6, 4], [5, 5], [5, 7]]
+        coord = [0, 4]
+        expect(test_game.coord_in_check?(coord, opponent_moves)).to be false
+      end
+    end
+
   end
 end
 
