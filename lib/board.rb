@@ -4,6 +4,7 @@
 
 class Board
   attr_accessor :grid, :white_king, :black_king
+
   def initialize
     @grid = Array.new(8) { Array.new(8, Square.new) }
     @white_king = King.new([0, 4], 'white')
