@@ -43,47 +43,6 @@ class Game
   #     puts "#{@current_player.name} (#{@current_player.pieces.capitalize}) is in CHECK"
   #   end
   # end
-  
-  # def check_alert
-  #   if @current_player.pieces == 'white'
-  #     king = @board.white_king.coord
-  #     in_check?(king, 'black')
-  #   elsif @current_player.pieces == 'black'
-  #     king = @board.black_king.coord
-  #     in_check?(king, 'white')
-  #   end
-  # end
-
-  # def in_check?(coord, opponent)
-    #   opponent_pieces = find_opponent_pieces(opponent)
-    #   opponent_moves = find_opponent_moves(opponent_pieces).flatten(1)
-    #   coord_in_check?(coord, opponent_moves)
-    # end
-
-  
-
-  def find_opponent_pieces(opponent)
-    opponent_pieces = []
-    @board.grid.map do |row|
-      row.map do |piece|
-        opponent_pieces.push(piece) if piece.pieces == opponent
-      end
-    end
-    opponent_pieces
-  end
-
-  def find_opponent_moves(opponent_pieces)
-    opponent_pieces.map do |piece|
-      piece.possible_moves
-    end
-  end
-
-  def coord_in_check?(coord, opponent_moves)
-    opponent_moves.map do |move|
-      return true if move == coord
-    end
-    false
-  end
 
   def ask_user_start
     loop do
@@ -130,21 +89,8 @@ class Game
     node.pieces == @current_player.pieces
   end
 
-  # def king_in_check?(move, node)
-  #   if king_is_moving?(node)
-  #     king_coord = move
-  #   else
-  #     king_coord = find_king_coord
-  #   end
-  #   check?(king_coord, move)
-  # end
-
   def king_in_check?(move, node)
-    king_coord = if king_is_moving?(node)
-                   move
-                 else
-                   find_king_coord
-                 end
+    king_coord = king_is_moving?(node) ? move : find_king_coord
     check?(king_coord, move)
   end
 
@@ -169,11 +115,34 @@ class Game
   end
 
   def check?(king_coord, move)
+    opponent_moves = find_opponent_moves(move)
+    coord_in_check?(king_coord, opponent_moves)
+  end
+
+  def find_opponent_moves(move)
     opponent = find_opponent
     opponent_pieces = find_opponent_pieces(opponent)
     remaining_pieces = remove_possible_capture(opponent_pieces, move)
-    opponent_moves = find_opponent_moves(remaining_pieces).flatten(1)
-    coord_in_check?(king_coord, opponent_moves)
+    find_possible_moves(remaining_pieces).flatten(1)
+  end
+
+  def find_opponent
+    if @current_player.pieces == 'white'
+      'black'
+    elsif @current_player.pieces == 'black'
+      'white'
+    end
+  end
+
+  def find_opponent_pieces(opponent)
+    opponent_pieces = []
+
+    @board.grid.map do |row|
+      row.map do |piece|
+        opponent_pieces.push(piece) if piece.pieces == opponent
+      end
+    end
+    opponent_pieces
   end
 
   def remove_possible_capture(opponent_pieces, move)
@@ -185,15 +154,16 @@ class Game
     remaining_pieces
   end
 
-  def find_opponent
-    if @current_player.pieces == 'white'
-      'black'
-    elsif @current_player.pieces == 'black'
-      'white'
-    end
+  def find_possible_moves(opponent_pieces)
+    opponent_pieces.map(&:possible_moves)
   end
 
-  
+  def coord_in_check?(coord, opponent_moves)
+    opponent_moves.map do |move|
+      return true if move == coord
+    end
+    false
+  end
 
   def ask_user_destination(legal_moves)
     loop do
@@ -239,14 +209,11 @@ end
     # King can capture opponent Knight
 
   # Main Game logic missing:
-
-    # Exposes_king_to_check?
-      # which also sees if a capture on the move prevents that exposure
-        
-    # Current Player can't make any other move than to get out of check 
-
-    # Don't allow user to select a piece with no moves... ahead of time?
+     
+    # Don't allow user to select a piece with no moves... ahead of time? Could Dry up a lot of the user prompt methods like in check_piece
     
     # Prevent moves where another piece along the way is blocking path
 
     # Computer checks for checkmate/draw and if true displays result
+
+    # Tell User they are in check
