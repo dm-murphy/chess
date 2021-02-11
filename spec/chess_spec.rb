@@ -55,79 +55,103 @@ describe Game do
     end
   end
  
-  describe "#coord_in_check" do
+  describe '#coord_in_check' do
     # Query sent to self nested in #check_message -> #check_alert -> #in_check
 
     # The opponent moves are showing all opponent piece moves
 
-    subject(:test_game) { described_class.new} 
+    subject(:test_game) { described_class.new } 
     
-    context 'when opponent Knight at [1, 2] and player King at [0, 4]' do
+    context 'when opponent Knight at [1, 2] and player King at [0 , 4]' do
     
       it 'returns true' do
-        opponent_moves = [[2, 4], [3, 3], [3, 1], [2, 0], [0, 0], [0, 4], [7, 5], [7, 3], [6, 4], [6, 5], [6, 3], [6, 4], [5, 5], [5, 7]]
+        opponent_moves = [[2, 4], [3, 3], [3, 1], [2, 0], [0, 0], [0, 4]]
         coord = [0, 4]
         expect(test_game.coord_in_check?(coord, opponent_moves)).to be true
       end
     end
 
-    context 'when opponent Knight at [7, 1] and player King at [0, 4]' do
+    context 'when opponent Knight is at [7, 1] and player King at [0, 4]' do
     
       it 'returns false' do
-        opponent_moves = [[5, 0], [5, 2], [6, 3], [7, 5], [7, 3], [6, 4], [6, 5], [6, 3], [6, 4], [5, 5], [5, 7]]
+        opponent_moves = [[5, 0], [5, 2], [6, 3]]
         coord = [0, 4]
         expect(test_game.coord_in_check?(coord, opponent_moves)).to be false
       end
     end
 
   end
-end
 
+  # describe '#self_check?' do
+  #   # Query sent to self nested in #valid_move -> #check_legal -> #find_moves
 
+  #   let(:test_white_king) { instance_double(King) }
+  #   let(:test_black_king) { instance_double(King) }
+  #   let(:test_board) { instance_double(Board, white_king: test_white_king, black_king: test_black_king) }
+  #   subject(:test_game) { described_class.new(test_board) }
 
-    # # No idea what's going on here...
+  #   context 'when White King attempts a move that would put into check' do
     
-    # let(:game_board) { double(Board) }
-    # subject(:test_game) { described_class.new(game_board) }
+  #     it 'returns true' do
 
-    # context 'when white King is in check' do
-    #   before do
+  #       test_game.instance_variable_set(:@board, test_board)
+  #       node = test_board.instance_variable_get(:@white_king)
+  #       move = [1, 5]
+  #       allow(test_game).to receive(:in_check?).and_return(true)
+  #       # allow(test_game).to receive(:in_check?).and_return(false)
+  #       # allow(test_game).to receive(:check_alert).and_return(false)
         
-    #     # game_board = Board.new
-    #     grid = game_board.instance_variable_set(:@grid, 
-    #       [
-    #       [Square.new, Knight.new([0, 1], 'white'), Square.new, Square.new, King.new([0,4], 'white'), Square.new, Square.new, Square.new],
-    #       [Square.new, Square.new, Square.new, Square.new, Square.new, Square.new, Square.new, Square.new],
-    #       [Square.new, Square.new, Square.new, Square.new, Square.new, Square.new, Square.new, Square.new],
-    #       [Square.new, Square.new, Square.new, Square.new, Square.new, Square.new, Square.new, Square.new],
-    #       [Square.new, Square.new, Square.new, Square.new, Square.new, Square.new, Square.new, Square.new],
-    #       [Square.new, Square.new, Square.new, Square.new, Square.new, Square.new, Square.new, Square.new],
-    #       [Square.new, Square.new, Square.new, Square.new, Square.new, Square.new, Square.new, Square.new],
-    #       [Square.new, Square.new, Square.new, Square.new, Square.new, Square.new, Square.new, Square.new]
-    #       ]
-    #     )
+  #       expect(test_game.self_check?(move, node)).to be true
 
-    #     game_board.show_grid
-    #     # allow(game_board).to receive(:white_king.coord)
-    #     white_king = game_board.instance_variable_get(:@white_king)
-    #     p white_king
-    #     white_king_coord = white_king.coord
-    #     p white_king_coord
-    #     allow(test_game).to receive(:in_check?).and_return(true)
-    #   end
-
-    #   it 'returns true' do
-    #     test_game.in_check?(white_king_coord, "black")
-    #     expect(test_game.check_alert).to be true
-    #   end
-    # end
+      
+      
+  #     end
+    
+  #   end
 
 
+  # end
 
+  # describe '#self_check?' do
+  #   # Query sent to self nested in #valid_move -> #check_legal -> #find_moves
 
+  #   subject(:test_game) { described_class.new }
+
+  #   context 'when White King attempts a move that would put into check' do
+
+  #     before do
+  #       @board = Board.new
+  #       @white_king = @board.white_king
+  #     end
+
+  #     it 'returns true' do
+  #       node = @white_king
+  #       move = [1, 5]
+  #       # allow(test_game).to receive(:in_check?).and_return(true)
+  #       expect(test_game.self_check?(move, node)).to be true
+  #     end
+  #   end
+  # end
+
+  # describe '#self_check?' do
+  #   # Query sent to self nested in #valid_move -> #check_legal -> #find_moves
+
+  #   let(:test_board) { instance_double(Board) }
+  #   subject(:test_game) { described_class.new(test_board) }
+
+  #   context 'when White King attempts a move that would put into check' do
+
+  #     it 'returns true' do
+  #       # node = double(:node, white_king?: true)
+  #       move = [1, 5]
+  #       # allow(test_game).to receive(:in_check?).and_return(true)
+  #       expect(test_game.self_check?(move, node)).to be true
+  #     end
+  #   end
   # end
 
 
 
 
-# end
+end
+

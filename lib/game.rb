@@ -26,6 +26,7 @@ class Game
       moves = find_node_moves(node)
       
       legal_moves = find_legal_moves(moves, node)
+      p legal_moves
       
       destination_coord = ask_user_destination(legal_moves)
       update_board(start_coord, destination_coord)
@@ -60,8 +61,8 @@ class Game
 
   def in_check?(coord, opponent)
     opponent_pieces = find_opponent_pieces(opponent)
-    # opponent_moves = find_opponent_moves(opponent_pieces).flatten(1)
-    opponent_moves = find_opponent_moves(opponent_pieces)
+    opponent_moves = find_opponent_moves(opponent_pieces).flatten(1)
+    # opponent_moves = find_opponent_moves(opponent_pieces)
     coord_in_check?(coord, opponent_moves)
   end
 
@@ -82,39 +83,10 @@ class Game
   end
 
   def coord_in_check?(coord, opponent_moves)
-    # p coord
-    # p opponent_moves
-    p opponent_moves
     opponent_moves.map do |move|
       return true if move == coord
     end
     false
-  end
-
-  # def self_check?(move, node)
-  #   if node == @board.white_king
-  #     in_check?(move, 'black')
-  #   elsif node == @board.black_king
-  #     in_check?(move, 'white')
-  #   else check_alert
-  #   end
-  # end
-
-  def self_check?(move, node)
-    if white_king?(node)
-      in_check?(move, 'black')
-    elsif black_king?(node)
-      in_check?(move, 'white')
-    else check_alert
-    end
-  end
-
-  def white_king?(node)
-    node == @board.white_king
-  end
-
-  def black_king?(node)
-    node == @board.black_king
   end
 
   def ask_user_start
@@ -144,29 +116,21 @@ class Game
     node.possible_moves
   end
 
-  # def find_legal_moves(moves, node)
-    
-  #   legal_moves = []
-
-  #   moves.map do |move|
-  #     legal_moves.push(move) if valid_move?(move, node)
-  #   end
-  #   legal_moves
-  # end
-
   def find_legal_moves(moves, node)
+    legal_moves = []
+
     moves.map do |move|
-      move if valid_move?(move, node)
+      legal_moves.push(move) unless illegal_move?(move, node)
     end
+    legal_moves
   end
 
-  def valid_move?(move, node)
-    # p move
-    # p node
-    # p occupied_by_current_player?(move)
-    # true if coords_to_node(move).pieces != @current_player.pieces && self_check?(move, node) == false
-    true unless occupied_by_current_player?(move) && self_check?(move, node)
-    # a move is valid, true, if it the space is not a current player node && does not put self in check
+  def illegal_move?(move, node)
+    occupied_by_current_player?(move) || king_moves_into_check?(move, node)  #|| leaves_king_in_check(move, node)
+    # Still need:
+      # Exposes_king_to_check?
+        # Which also sees if a capture on the move prevents that exposure
+      # Prevent other piece moves while in check
   end
 
   def occupied_by_current_player?(move)
@@ -174,6 +138,64 @@ class Game
     node.pieces == @current_player.pieces
   end
 
+  def king_moves_into_check?(move, node)
+    if white_king?(node)
+      in_check?(move, 'black')
+    elsif black_king?(node)
+      in_check?(move, 'white')
+    end
+  end
+
+  def white_king?(node)
+    node == @board.white_king
+  end
+
+  def black_king?(node)
+    node == @board.black_king
+  end
+
+  # def leaves_king_in_check(move, node)
+  #   # put king_moves_into_check? inside here?
+  # end
+
+
+
+  # def in_check?(coord, opponent)
+  #   opponent_pieces = find_opponent_pieces(opponent)
+  #   opponent_moves = find_opponent_moves(opponent_pieces).flatten(1)
+  #   # opponent_moves = find_opponent_moves(opponent_pieces)
+  #   coord_in_check?(coord, opponent_moves)
+  # end
+
+  # def find_opponent_pieces(opponent)
+  #   opponent_pieces = []
+  #   @board.grid.map do |row|
+  #     row.map do |piece|
+  #       opponent_pieces.push(piece) if piece.pieces == opponent
+  #     end
+  #   end
+  #   opponent_pieces
+  # end
+
+  # def find_opponent_moves(opponent_pieces)
+  #   opponent_pieces.map do |piece|
+  #     piece.possible_moves
+  #   end
+  # end
+
+  # def coord_in_check?(coord, opponent_moves)
+  #   opponent_moves.map do |move|
+  #     return true if move == coord
+  #   end
+  #   false
+  # end
+
+
+
+
+
+
+  
   def ask_user_destination(legal_moves)
     loop do
       puts "Choose a destination: #{legal_moves}"
@@ -218,11 +240,15 @@ end
         # King can capture opponent Knight
 
     # Main Game logic missing:
-        
-        # Current Player can't make any other move than to get out of check 
-            # Working but signify this is the case to user
-            # Don't allow user to select a piece with no moves... ahead of time?
-    
-        # Prevent moves where another piece is blocking path
 
-        # Computer checks for checkmate/draw and if true displays result
+
+# Still need:
+      # Exposes_king_to_check?
+        # which also sees if a capture on the move prevents that exposure
+        
+      # Current Player can't make any other move than to get out of check 
+         # Don't allow user to select a piece with no moves... ahead of time?
+    
+      # Prevent moves where another piece along the way is blocking path
+
+      # Computer checks for checkmate/draw and if true displays result
