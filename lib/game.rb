@@ -20,7 +20,13 @@ class Game
     loop do
       display_user
       start_coord = ask_user_start
-      legal_moves = find_moves(start_coord)
+      
+      node = coords_to_node(start_coord)
+
+      moves = find_node_moves(node)
+      
+      legal_moves = find_legal_moves(moves, node)
+      
       destination_coord = ask_user_destination(legal_moves)
       update_board(start_coord, destination_coord)
       break if game_over?
@@ -54,7 +60,8 @@ class Game
 
   def in_check?(coord, opponent)
     opponent_pieces = find_opponent_pieces(opponent)
-    opponent_moves = find_opponent_moves(opponent_pieces).flatten(1)
+    # opponent_moves = find_opponent_moves(opponent_pieces).flatten(1)
+    opponent_moves = find_opponent_moves(opponent_pieces)
     coord_in_check?(coord, opponent_moves)
   end
 
@@ -77,19 +84,37 @@ class Game
   def coord_in_check?(coord, opponent_moves)
     # p coord
     # p opponent_moves
+    p opponent_moves
     opponent_moves.map do |move|
       return true if move == coord
     end
     false
   end
 
+  # def self_check?(move, node)
+  #   if node == @board.white_king
+  #     in_check?(move, 'black')
+  #   elsif node == @board.black_king
+  #     in_check?(move, 'white')
+  #   else check_alert
+  #   end
+  # end
+
   def self_check?(move, node)
-    if node == @board.white_king
+    if white_king?(node)
       in_check?(move, 'black')
-    elsif node == @board.black_king
+    elsif black_king?(node)
       in_check?(move, 'white')
     else check_alert
     end
+  end
+
+  def white_king?(node)
+    node == @board.white_king
+  end
+
+  def black_king?(node)
+    node == @board.black_king
   end
 
   def ask_user_start
@@ -115,23 +140,38 @@ class Game
     @board.grid[row][column]
   end
 
-  def find_moves(coord)
-    node = coords_to_node(coord)
-    check_legal(node)
+  def find_node_moves(node)
+    node.possible_moves
   end
 
-  def check_legal(node)
-    moves = node.possible_moves
-    legal_moves = []
+  # def find_legal_moves(moves, node)
+    
+  #   legal_moves = []
 
+  #   moves.map do |move|
+  #     legal_moves.push(move) if valid_move?(move, node)
+  #   end
+  #   legal_moves
+  # end
+
+  def find_legal_moves(moves, node)
     moves.map do |move|
-      legal_moves.push(move) if valid_move?(move, node)
+      move if valid_move?(move, node)
     end
-    legal_moves
   end
 
   def valid_move?(move, node)
-    true if coords_to_node(move).pieces != @current_player.pieces && self_check?(move, node) == false
+    # p move
+    # p node
+    # p occupied_by_current_player?(move)
+    # true if coords_to_node(move).pieces != @current_player.pieces && self_check?(move, node) == false
+    true unless occupied_by_current_player?(move) && self_check?(move, node)
+    # a move is valid, true, if it the space is not a current player node && does not put self in check
+  end
+
+  def occupied_by_current_player?(move)
+    node = coords_to_node(move)
+    node.pieces == @current_player.pieces
   end
 
   def ask_user_destination(legal_moves)
