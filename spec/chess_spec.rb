@@ -82,12 +82,12 @@ describe Game do
   end
 
   describe '#remove_possible_capture' do
-    # Command sent to self, nested in #find_opponent_moves -> #king_in_check?
+    # Query sent to self, nested in #find_opponent_moves -> #king_in_check?
 
     subject(:test_game) { described_class.new }
     let(:opponent_knight_one) { Knight.new([2, 1], 'black') }
     let(:opponent_knight_two) { Knight.new([3, 4], 'black') }
-    let(:opponent_king) { King.new([7, 6], 'black') }
+    let(:opponent_king) { King.new([7, 4], 'black') }
 
     context 'when opponent pieces includes a coordinate the current player is moving to capture' do
       
@@ -108,6 +108,41 @@ describe Game do
 
         remaining_pieces = [opponent_knight_one, opponent_knight_two, opponent_king]
         expect(test_game.remove_possible_capture(opponent_pieces, move)).to eq remaining_pieces
+      end
+    end
+  end
+
+  describe '#find_opponent_pieces' do
+    # Query sent to self, nested in #find_opponent_moves -> #king_in_check?
+
+    let(:test_board) { Board.new }
+    subject(:test_game) { described_class.new(test_board) }
+    let(:opponent_knight_one) { Knight.new([7, 1], 'black') }
+    let(:opponent_knight_two) { Knight.new([7, 6], 'black') }
+    let(:opponent_king) { King.new([7, 4], 'black') }
+
+
+    context 'when mapping through Board object grid' do
+
+      it 'returns array of pieces that match opponent type' do
+
+        test_board.instance_variable_set(:@grid, 
+          [
+            [Square.new, Knight.new([0, 1], 'white'), Square.new, Square.new, King.new([0, 4], 'white'), Square.new, Knight.new([0, 6], 'white'), Square.new],
+            [Square.new, Square.new, Square.new, Square.new, Square.new, Square.new, Square.new, Square.new],
+            [Square.new, Square.new, Square.new, Square.new, Square.new, Square.new, Square.new, Square.new],
+            [Square.new, Square.new, Square.new, Square.new, Square.new, Square.new, Square.new, Square.new],
+            [Square.new, Square.new, Square.new, Square.new, Square.new, Square.new, Square.new, Square.new],
+            [Square.new, Square.new, Square.new, Square.new, Square.new, Square.new, Square.new, Square.new],
+            [Square.new, Square.new, Square.new, Square.new, Square.new, Square.new, Square.new, Square.new],
+            [Square.new, opponent_knight_one, Square.new, Square.new, opponent_king, Square.new, opponent_knight_two, Square.new]
+          ]  
+        )
+
+        opponent = 'black'
+
+        opponent_pieces = [opponent_knight_one, opponent_king, opponent_knight_two]
+        expect(test_game.find_opponent_pieces(opponent)).to eq opponent_pieces
       end
     end
   end
