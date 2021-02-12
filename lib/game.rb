@@ -23,6 +23,8 @@ class Game
       node = coords_to_node(start_coord)
       moves = find_node_moves(node)
       legal_moves = find_legal_moves(moves, node)
+      start_turn if legal_moves.empty?
+
       destination_coord = ask_user_destination(legal_moves)
       update_board(start_coord, destination_coord)
       break if game_over?
@@ -33,17 +35,10 @@ class Game
 
   def display_user
     @board.show_grid
-    # check_message
     puts "#{@current_player.name} choose a piece"
     puts
   end
-
-  # def check_message
-  #   if check_alert == true
-  #     puts "#{@current_player.name} (#{@current_player.pieces.capitalize}) is in CHECK"
-  #   end
-  # end
-
+  
   def ask_user_start
     loop do
       current_piece = @current_player.prompt_piece
@@ -91,7 +86,8 @@ class Game
 
   def king_in_check?(move, node)
     king_coord = king_is_moving?(node) ? move : find_king_coord
-    check?(king_coord, move)
+    opponent_moves = find_opponent_moves(move)
+    coord_in_check?(king_coord, opponent_moves)
   end
 
   def king_is_moving?(node)
@@ -112,11 +108,6 @@ class Game
     elsif @current_player.pieces == 'black'
       @board.black_king.coord
     end
-  end
-
-  def check?(king_coord, move)
-    opponent_moves = find_opponent_moves(move)
-    coord_in_check?(king_coord, opponent_moves)
   end
 
   def find_opponent_moves(move)
@@ -170,13 +161,11 @@ class Game
       puts "Choose a destination: #{legal_moves}"
       destination = @current_player.prompt_piece
       destination_coord = string_to_array(destination)
-      return destination_coord if check_destination(destination_coord, legal_moves)
+      return destination_coord if legal_moves.include?(destination_coord)
     end
   end
 
-  def check_destination(destination_coord, legal_moves)
-    true if legal_moves.include?(destination_coord)
-  end
+
 
   def update_board(start_coord, destination_coord)
     @board.change_pieces(start_coord, destination_coord)

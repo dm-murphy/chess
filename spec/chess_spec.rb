@@ -55,8 +55,8 @@ describe Game do
     end
   end
  
-  describe '#coord_in_check' do
-    # Query sent to self nested in #check_message -> #check_alert -> #in_check
+  describe '#coord_in_check?' do
+    # Query sent to self, nested in #king_in_check? -> #illegal_move? -> #find_legal_moves -> #start_turn
 
     # Opponent_moves show all opponent piece moves
 
@@ -80,17 +80,43 @@ describe Game do
       end
     end
   end
+    
+# describe '#find_possible_moves' do
+  # Query sent to Node objects class: (Knight, King), nested in #find_opponent_moves -> #king_in_check
+# end
+
+# describe '#ask_user_destination' do
+  # Query loop sent to Player class, returns user input as coordinate, nested in nested in #start_turn
+# end
+
+
+
+
 end
 
   # Test?
    
+    #ask_user_start
+
+    #coords_to_node
+
+    #find_node_moves
+
+
+
+
+
+
+
     # find_legal_moves
-    
+
 
 
     # find_opponent
     # find_opponent_pieces
     # remove_possible_capture
-    # find_possible_moves
+    
 
+    # ask_user_destination
 
+   
