@@ -80,6 +80,37 @@ describe Game do
       end
     end
   end
+
+  describe '#remove_possible_capture' do
+    # Command sent to self, nested in #find_opponent_moves -> #king_in_check?
+
+    subject(:test_game) { described_class.new }
+    let(:opponent_knight_one) { Knight.new([2, 1], 'black') }
+    let(:opponent_knight_two) { Knight.new([3, 4], 'black') }
+    let(:opponent_king) { King.new([7, 6], 'black') }
+
+    context 'when opponent pieces includes a coordinate the current player is moving to capture' do
+      
+      it 'returns array of opponent pieces without the captured piece' do
+        opponent_pieces = [opponent_knight_one, opponent_knight_two, opponent_king]
+        move = [2, 1]
+
+        remaining_pieces = [opponent_knight_two, opponent_king]
+        expect(test_game.remove_possible_capture(opponent_pieces, move)).to eq remaining_pieces
+      end
+    end
+
+    context 'when opponent pieces does not include a coordinate the current player is moving to' do
+
+      it 'returns array of all opponent pieces' do
+        opponent_pieces = [opponent_knight_one, opponent_knight_two, opponent_king]
+        move = [1, 6]
+
+        remaining_pieces = [opponent_knight_one, opponent_knight_two, opponent_king]
+        expect(test_game.remove_possible_capture(opponent_pieces, move)).to eq remaining_pieces
+      end
+    end
+  end
     
 # describe '#find_possible_moves' do
   # Query sent to Node objects class: (Knight, King), nested in #find_opponent_moves -> #king_in_check
@@ -88,9 +119,6 @@ describe Game do
 # describe '#ask_user_destination' do
   # Query loop sent to Player class, returns user input as coordinate, nested in nested in #start_turn
 # end
-
-
-
 
 end
 
@@ -114,7 +142,7 @@ end
 
     # find_opponent
     # find_opponent_pieces
-    # remove_possible_capture
+    
     
 
     # ask_user_destination
