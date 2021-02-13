@@ -8,6 +8,6 @@ class Square
 
   def initialize
     @display = '-'
-    @pieces = nil
+    # @pieces = nil
   end
 end

@@ -188,18 +188,7 @@ end
 
 # Next Pseudo Steps
 
-  # Write tests:
-        
-    # White King cannot put self into check
-    # Black King cannot put self into check
-    # White is notified if in check
-    # Black is notified if in check
-    # Knight can capture opponent Knight
-    # King can capture opponent Knight
-
   # Main Game logic missing:
-     
-    # Don't allow user to select a piece with no moves... ahead of time? Could Dry up a lot of the user prompt methods like in check_piece
     
     # Prevent moves where another piece along the way is blocking path
 
