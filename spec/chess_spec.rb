@@ -9,6 +9,100 @@ require './lib/king'
 
 describe Game do
 
+# describe '#illegal_move?' do
+#  # Query script sent to self, nested in #find_legal_moves -> #start_turn
+#  # Tets and comments below for methods inside #occupied_by_player? and #king_in_check?
+# end
+
+  describe '#occupied_by_player?' do
+    # Query sent to self? But calling from other object piece class and from Board class? nested in #illegal_move? -> #find_legal_moves -> #start_turn
+    subject(:test_game) { described_class.new }
+    let(:test_white_piece) { Knight.new([0, 1], 'white') }
+    let(:test_black_piece) { Knight.new([7, 1], 'black') }
+
+    context 'when coordinate is a blank square' do
+
+      it 'returns false' do
+        test_coord = [2, 0]
+
+        blank_square = Square.new
+        allow(test_game).to receive(:coords_to_node) { blank_square }
+        expect(test_game.occupied_by_player?(test_coord, test_white_piece)).to be false
+      end
+    end
+
+    context 'when current player is white and coordinate is a black piece' do
+  
+      it 'returns false' do
+        test_coord = [2, 2]
+
+        black_knight = Knight.new([2, 2], 'black')
+        allow(test_game).to receive(:coords_to_node) { black_knight }
+        expect(test_game.occupied_by_player?(test_coord, test_white_piece)).to be false
+      end
+    end
+
+    context 'when current player is white and coordinate is a white piece' do
+  
+      it 'returns true' do
+        test_coord = [1, 3]
+
+        other_white_knight = Knight.new([1, 3], 'white')
+        allow(test_game).to receive(:coords_to_node) { other_white_knight }
+        expect(test_game.occupied_by_player?(test_coord, test_white_piece)).to be true
+      end
+    end
+
+    context 'when current player is black and coordinate is a white piece' do
+    
+      it 'returns false' do
+        test_coord = [5, 2]
+
+        white_knight = Knight.new([5, 2], 'white')
+        allow(test_game).to receive(:coords_to_node) { white_knight }
+        expect(test_game.occupied_by_player?(test_coord, test_black_piece)).to be false
+      end
+    end
+
+    context 'when current player is black and coordinate is a black piece' do
+    
+      it 'returns true' do
+        test_coord = [6, 3]
+
+        other_black_knight = Knight.new([6, 3], 'black')
+        allow(test_game).to receive(:coords_to_node) { other_black_knight }
+        expect(test_game.occupied_by_player?(test_coord, test_black_piece)).to be true
+      end
+    end
+  end
+
+# describe '#king_in_check?' do
+#  # Script, nested in #illegal_move? -> find_legal_moves -> #start_turn
+#  # Tests and comments below for methods inside #king_is_moving?, #find_opponent_moves, #coord_in_check?
+# end
+
+# describe '#king_is_moving?' do
+#  # Query sent to self but conditional on methods inside
+# end
+
+# describe '#white_king?' do
+#  # Query sent to self using outgoing query to Board class?
+# end
+
+# describe '#black_king?' do
+#  # Query sent to self using outgoing query to Board class?
+# end
+
+# describe '#find_king_coord' do
+#  # Outgoing query to Board class
+# end
+
+# describe '#find_opponent_moves' do
+#  # Script, nested in #king_in_check?
+#  # Tests below for methods inside #find_opponent, #find_opponent_pieces, #remove_possible_capture
+#  # For #find_possible_moves test the outgoing query #possible_moves in each piece class
+# end
+
   describe '#find_opponent' do
     # Query sent to self, nested in #find_opponent_moves -> #king_in_check
     
@@ -180,29 +274,3 @@ describe Game do
     end
   end
 end
-
-  # Test?
-   
-    #ask_user_start
-
-    #coords_to_node
-
-    #find_node_moves
-
-
-
-
-
-
-
-    # find_legal_moves
-
-
-
-    # find_opponent
-    
-    
-
-    # ask_user_destination
-
-   

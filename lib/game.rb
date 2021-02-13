@@ -76,12 +76,12 @@ class Game
   end
 
   def illegal_move?(move, node)
-    occupied_by_current_player?(move) || king_in_check?(move, node)
+    occupied_by_player?(move, node) || king_in_check?(move, node)
   end
 
-  def occupied_by_current_player?(move)
-    node = coords_to_node(move)
-    node.pieces == @current_player.pieces
+  def occupied_by_player?(move_coord, moving_piece)
+    landing_node = coords_to_node(move_coord)
+    landing_node.pieces == moving_piece.pieces
   end
 
   def king_in_check?(move, node)
