@@ -19,14 +19,13 @@ class Game
   def start_turn
     loop do
       display_user
-      start_coord = ask_user_start
-      node = coords_to_node(start_coord)
-      p node
-      moves = find_node_moves(node)
-      legal_moves = find_legal_moves(moves, node)
+      piece = ask_user_start
+      moves = find_node_moves(piece)
+      legal_moves = find_legal_moves(moves, piece)
       start_turn if legal_moves.empty?
 
       destination_coord = ask_user_destination(legal_moves)
+      start_coord = piece.coord
       update_board(start_coord, destination_coord)
       break if game_over?
 
@@ -42,19 +41,19 @@ class Game
   
   def ask_user_start
     loop do
-      current_piece = @current_player.prompt_piece
-      current_coord = string_to_array(current_piece)
-      return current_coord if check_piece(current_coord)
+      string = @current_player.prompt_piece
+      coord = string_to_coord(string)
+      piece = coords_to_node(coord)
+      return piece if player_piece?(piece)
     end
   end
 
-  def string_to_array(position)
-    position.chomp.split('').map(&:to_i)
+  def string_to_coord(string)
+    string.chomp.split('').map(&:to_i)
   end
 
-  def check_piece(current_coord)
-    node = coords_to_node(current_coord)
-    true if node.pieces == @current_player.pieces && node.possible_moves.empty? == false
+  def player_piece?(piece)
+    piece.pieces == @current_player.pieces
   end
 
   def coords_to_node(coord)
@@ -161,7 +160,7 @@ class Game
     loop do
       puts "Choose a destination: #{legal_moves}"
       destination = @current_player.prompt_piece
-      destination_coord = string_to_array(destination)
+      destination_coord = string_to_coord(destination)
       return destination_coord if legal_moves.include?(destination_coord)
     end
   end
