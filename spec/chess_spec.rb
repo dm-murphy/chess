@@ -9,9 +9,57 @@ require './lib/king'
 
 describe Game do
 
+  describe '#find_legal_moves' do
+    # Query sent to self, nested in #start_turn
+    subject(:test_game) { described_class.new }
+    let(:test_node) { Knight.new([0, 1], 'white') }
+    
+    context 'when all moves are legal' do
+      it 'returns array with all moves' do
+        moves = [[1, 3], [2, 2], [2, 0]]
+        node = test_node
+
+        full_array = [[1, 3], [2, 2], [2, 0]]
+        allow(test_game).to receive(:illegal_move?).with([1, 3], node) { false }
+        allow(test_game).to receive(:illegal_move?).with([2, 2], node) { false }
+        allow(test_game).to receive(:illegal_move?).with([2, 0], node) { false }
+
+        expect(test_game.find_legal_moves(moves, node)).to eq full_array
+      end
+    end
+
+    context 'when one move is illegal' do
+      it 'returns array without the illegal move' do
+        moves = [[1, 3], [2, 2], [2, 0]]
+        node = test_node
+
+        partial_array = [[2, 2], [2, 0]]
+        allow(test_game).to receive(:illegal_move?).with([1, 3], node) { true }
+        allow(test_game).to receive(:illegal_move?).with([2, 2], node) { false }
+        allow(test_game).to receive(:illegal_move?).with([2, 0], node) { false }
+
+        expect(test_game.find_legal_moves(moves, node)).to eq partial_array
+      end
+    end
+
+    context 'when all moves are illegal' do
+      it 'returns empty array' do
+        moves = [[1, 3], [2, 2], [2, 0]]
+        node = test_node
+
+        empty_array = []
+        allow(test_game).to receive(:illegal_move?).with([1, 3], node) { true }
+        allow(test_game).to receive(:illegal_move?).with([2, 2], node) { true }
+        allow(test_game).to receive(:illegal_move?).with([2, 0], node) { true }
+
+        expect(test_game.find_legal_moves(moves, node)).to eq empty_array
+      end
+    end
+  end
+
 # describe '#illegal_move?' do
 #  # Query script sent to self, nested in #find_legal_moves -> #start_turn
-#  # Tets and comments below for methods inside #occupied_by_player? and #king_in_check?
+#  # Tests and comments below for methods inside #occupied_by_player? and #king_in_check?
 # end
 
   describe '#occupied_by_player?' do

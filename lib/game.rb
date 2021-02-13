@@ -21,6 +21,7 @@ class Game
       display_user
       start_coord = ask_user_start
       node = coords_to_node(start_coord)
+      p node
       moves = find_node_moves(node)
       legal_moves = find_legal_moves(moves, node)
       start_turn if legal_moves.empty?
