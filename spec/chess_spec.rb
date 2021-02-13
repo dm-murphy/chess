@@ -9,6 +9,17 @@ require './lib/king'
 
 describe Game do
 
+
+
+
+# describe '#coords_to_node' do
+# # Outgoing query sent to Board class, found in #check_piece, #start_turn and #occupied_by_player?
+# end
+
+# describe '#find_node_moves' do
+# # Outgoing query sent to class of node object, nested in #start_turn
+# end
+
   describe '#find_legal_moves' do
     # Query sent to self, nested in #start_turn
     subject(:test_game) { described_class.new }
