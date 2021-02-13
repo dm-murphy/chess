@@ -31,7 +31,7 @@ describe Game do
       end
     end
 
-    context 'when current player is white and coordinate is a black piece' do
+    context 'when player piece is white and coordinate is a black piece' do
   
       it 'returns false' do
         test_coord = [2, 2]
@@ -42,7 +42,7 @@ describe Game do
       end
     end
 
-    context 'when current player is white and coordinate is a white piece' do
+    context 'when player piece is white and coordinate is a white piece' do
   
       it 'returns true' do
         test_coord = [1, 3]
@@ -53,7 +53,7 @@ describe Game do
       end
     end
 
-    context 'when current player is black and coordinate is a white piece' do
+    context 'when player piece is black and coordinate is a white piece' do
     
       it 'returns false' do
         test_coord = [5, 2]
@@ -64,7 +64,7 @@ describe Game do
       end
     end
 
-    context 'when current player is black and coordinate is a black piece' do
+    context 'when player piece is black and coordinate is a black piece' do
     
       it 'returns true' do
         test_coord = [6, 3]
