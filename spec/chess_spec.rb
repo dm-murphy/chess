@@ -9,8 +9,37 @@ require './lib/king'
 
 describe Game do
 
+# describe '#start_turn' do
+# # Loop script
+# # Tests and comments below for methods inside #display_user, #ask_user_start, #find_node_moves, #find_legal_moves, #ask_user_destination, #update_board, #game_over?, #swap_player
+# end
 
+# describe '#display_user' do
+# # Outgoing query sent to Board class and puts message, nested in #start_turn
+# end
 
+# describe '#ask_user_start' do
+# # Loop script, nested in #start_turn
+# # Tests and comments below for methods inside #string_to_coord, #coords_to_node, #player_piece?
+# end
+
+  describe '#string_to_coord' do
+    # Query sent to self, found in #ask_user_start and #ask_user_destination
+    subject(:test_game) { described_class.new }
+  
+    context 'when given a string of numbers' do
+  
+      it 'returns array of coordinates' do
+        string = '12'
+        result = [1, 2]
+        expect(test_game.string_to_coord(string)).to eq result
+      end
+    end
+  end
+
+# describe '#player_piece?' do
+# # Compares outgoing query to Player class and outgoing query to piece object's class
+# end
 
 # describe '#coords_to_node' do
 # # Outgoing query sent to Board class, found in #check_piece, #start_turn and #occupied_by_player?
