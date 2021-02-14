@@ -6,8 +6,19 @@ require './lib/board'
 require './lib/square'
 require './lib/knight'
 require './lib/king'
+require './lib/rook'
 
 describe Game do
+
+# describe 'game_over?' do
+# # Script sent to self
+# # Tests and comments below for methods inside #checkmate?, #draw?
+# end
+
+# describe 'no_player_moves?' do
+# # Script sent to self
+# # Tests and comments below for methods inside #find_pieces, #find_possible_moves, #find_legal_moves, #find_king, #coord_in_check
+# end
 
 # describe '#start_turn' do
 # # Loop script
@@ -187,7 +198,7 @@ describe Game do
 
 # describe '#find_opponent_moves' do
 #  # Script, nested in #king_in_check?
-#  # Tests below for methods inside #find_opponent, #find_opponent_pieces, #remove_possible_capture
+#  # Tests below for methods inside #find_opponent, #find_pieces, #remove_possible_capture
 #  # For #find_possible_moves test the outgoing query #possible_moves in each piece class
 # end
 
@@ -217,7 +228,7 @@ describe Game do
     end 
   end
 
-  describe '#find_opponent_pieces' do
+  describe '#find_pieces' do
     # Query sent to self, nested in #find_opponent_moves -> #king_in_check?
 
     let(:test_board) { Board.new }
@@ -247,7 +258,7 @@ describe Game do
         opponent = 'black'
 
         opponent_pieces = [opponent_knight_one, opponent_king, opponent_knight_two]
-        expect(test_game.find_opponent_pieces(opponent)).to eq opponent_pieces
+        expect(test_game.find_pieces(opponent)).to eq opponent_pieces
       end
     end
   end
