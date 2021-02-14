@@ -18,6 +18,8 @@ class Game
 
   def start_turn
     loop do
+      # break if game_over?
+
       display_user
       piece = ask_user_start
       moves = find_piece_moves(piece)
@@ -27,7 +29,7 @@ class Game
       destination_coord = ask_user_destination(legal_moves)
       start_coord = piece.coord
       update_board(start_coord, destination_coord)
-      break if game_over?
+      # break if game_over?
 
       swap_player
     end
@@ -112,7 +114,7 @@ class Game
 
   def find_opponent_moves(move)
     opponent = find_opponent
-    opponent_pieces = find_opponent_pieces(opponent)
+    opponent_pieces = find_pieces(opponent)
     remaining_pieces = remove_possible_capture(opponent_pieces, move)
     find_possible_moves(remaining_pieces).flatten(1)
   end
@@ -125,15 +127,15 @@ class Game
     end
   end
 
-  def find_opponent_pieces(opponent)
-    opponent_pieces = []
+  def find_pieces(player)
+    pieces = []
 
     @board.grid.map do |row|
       row.map do |piece|
-        opponent_pieces.push(piece) if piece.pieces == opponent
+        pieces.push(piece) if piece.pieces == player
       end
     end
-    opponent_pieces
+    pieces
   end
 
   def remove_possible_capture(opponent_pieces, move)
@@ -145,8 +147,8 @@ class Game
     remaining_pieces
   end
 
-  def find_possible_moves(opponent_pieces)
-    opponent_pieces.map(&:possible_moves)
+  def find_possible_moves(pieces)
+    pieces.map(&:possible_moves)
   end
 
   def coord_in_check?(coord, opponent_moves)
@@ -170,10 +172,39 @@ class Game
   end
 
   def game_over?
-    # Hard code false for now
-    # Conditional check for Draw or Checkmate
+    checkmate? #|| draw?
+  end
+
+  def checkmate?
+    no_player_moves?
+  end
+
+  def no_player_moves?
+    player = @current_player.pieces
+    player_pieces = find_pieces(player)
+    player_moves = find_possible_moves(player_pieces)
+    
+  
+
+  # player_pieces.map do |piece|
+  # 
+
+  # get all the player pieces
+  # get all the player moves for each piece
+  # run through legal moves for each piece
+  # if empty then true
+
+    legal_moves = find_legal_moves(moves, piece)
+    # legal_moves = get the legal moves
+    # if legal_moves is empty?
+    # true
     false
   end
+
+  # def draw?
+  #   # Placeholder for now
+  #   false
+  # end
 
   def swap_player
     @current_player = if @current_player == @player_one
