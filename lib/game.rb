@@ -41,7 +41,7 @@ class Game
   
   def ask_user_start
     loop do
-      string = @current_player.prompt_piece
+      string = @current_player.select_piece
       coord = string_to_coord(string)
       piece = coords_to_grid_object(coord)
       return piece if player_piece?(piece)
@@ -159,7 +159,7 @@ class Game
   def ask_user_destination(legal_moves)
     loop do
       puts "Choose a destination: #{legal_moves}"
-      destination = @current_player.prompt_piece
+      destination = @current_player.select_piece
       destination_coord = string_to_coord(destination)
       return destination_coord if legal_moves.include?(destination_coord)
     end

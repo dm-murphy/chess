@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# lib/chess_spec.rb
+
 class Player
   attr_accessor :name, :pieces
 
@@ -8,7 +10,7 @@ class Player
     @pieces = pieces
   end
   
-  def prompt_piece
+  def select_piece
     gets.chomp
   end
 end
