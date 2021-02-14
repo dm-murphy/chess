@@ -38,20 +38,20 @@ class Board
   end
 
   def change_pieces(old_coord, new_coord)
-    node = move_piece(old_coord, new_coord)
-    update_piece(node, new_coord)
+    piece = move_piece(old_coord, new_coord)
+    update_piece(piece, new_coord)
     clean_square(old_coord)
   end
 
   def move_piece(old_coord, new_coord)
-    node = @grid[old_coord.first][old_coord.last]
-    @grid[new_coord.first][new_coord.last] = node
+    piece = @grid[old_coord.first][old_coord.last]
+    @grid[new_coord.first][new_coord.last] = piece
   end
 
-  def update_piece(node, new_coord)
-    node.coord = new_coord
-    node.possible_moves = []
-    node.find_moves
+  def update_piece(piece, new_coord)
+    piece.coord = new_coord
+    piece.possible_moves = []
+    piece.find_moves
   end
 
   def clean_square(old_coord)

@@ -11,7 +11,7 @@ describe Game do
 
 # describe '#start_turn' do
 # # Loop script
-# # Tests and comments below for methods inside #display_user, #ask_user_start, #find_node_moves, #find_legal_moves, #ask_user_destination, #update_board, #game_over?, #swap_player
+# # Tests and comments below for methods inside #display_user, #ask_user_start, #find_piece_moves, #find_legal_moves, #ask_user_destination, #update_board, #game_over?, #swap_player
 # end
 
 # describe '#display_user' do
@@ -20,7 +20,7 @@ describe Game do
 
 # describe '#ask_user_start' do
 # # Loop script, nested in #start_turn
-# # Tests and comments below for methods inside #string_to_coord, #coords_to_node, #player_piece?
+# # Tests and comments below for methods inside #string_to_coord, #coords_to_grid_object, #player_piece?
 # end
 
   describe '#string_to_coord' do
@@ -41,58 +41,58 @@ describe Game do
 # # Compares outgoing query to Player class and outgoing query to piece object's class
 # end
 
-# describe '#coords_to_node' do
+# describe '#coords_to_grid_object' do
 # # Outgoing query sent to Board class, found in #check_piece, #start_turn and #occupied_by_player?
 # end
 
-# describe '#find_node_moves' do
-# # Outgoing query sent to class of node object, nested in #start_turn
+# describe '#find_piece_moves' do
+# # Outgoing query sent to class of piece object, nested in #start_turn
 # end
 
   describe '#find_legal_moves' do
     # Query sent to self, nested in #start_turn
     subject(:test_game) { described_class.new }
-    let(:test_node) { Knight.new([0, 1], 'white') }
+    let(:test_knight) { Knight.new([0, 1], 'white') }
     
     context 'when all moves are legal' do
       it 'returns array with all moves' do
         moves = [[1, 3], [2, 2], [2, 0]]
-        node = test_node
+        piece = test_knight
 
         full_array = [[1, 3], [2, 2], [2, 0]]
-        allow(test_game).to receive(:illegal_move?).with([1, 3], node) { false }
-        allow(test_game).to receive(:illegal_move?).with([2, 2], node) { false }
-        allow(test_game).to receive(:illegal_move?).with([2, 0], node) { false }
+        allow(test_game).to receive(:illegal_move?).with([1, 3], piece) { false }
+        allow(test_game).to receive(:illegal_move?).with([2, 2], piece) { false }
+        allow(test_game).to receive(:illegal_move?).with([2, 0], piece) { false }
 
-        expect(test_game.find_legal_moves(moves, node)).to eq full_array
+        expect(test_game.find_legal_moves(moves, piece)).to eq full_array
       end
     end
 
     context 'when one move is illegal' do
       it 'returns array without the illegal move' do
         moves = [[1, 3], [2, 2], [2, 0]]
-        node = test_node
+        piece = test_knight
 
         partial_array = [[2, 2], [2, 0]]
-        allow(test_game).to receive(:illegal_move?).with([1, 3], node) { true }
-        allow(test_game).to receive(:illegal_move?).with([2, 2], node) { false }
-        allow(test_game).to receive(:illegal_move?).with([2, 0], node) { false }
+        allow(test_game).to receive(:illegal_move?).with([1, 3], piece) { true }
+        allow(test_game).to receive(:illegal_move?).with([2, 2], piece) { false }
+        allow(test_game).to receive(:illegal_move?).with([2, 0], piece) { false }
 
-        expect(test_game.find_legal_moves(moves, node)).to eq partial_array
+        expect(test_game.find_legal_moves(moves, piece)).to eq partial_array
       end
     end
 
     context 'when all moves are illegal' do
       it 'returns empty array' do
         moves = [[1, 3], [2, 2], [2, 0]]
-        node = test_node
+        piece = test_knight
 
         empty_array = []
-        allow(test_game).to receive(:illegal_move?).with([1, 3], node) { true }
-        allow(test_game).to receive(:illegal_move?).with([2, 2], node) { true }
-        allow(test_game).to receive(:illegal_move?).with([2, 0], node) { true }
+        allow(test_game).to receive(:illegal_move?).with([1, 3], piece) { true }
+        allow(test_game).to receive(:illegal_move?).with([2, 2], piece) { true }
+        allow(test_game).to receive(:illegal_move?).with([2, 0], piece) { true }
 
-        expect(test_game.find_legal_moves(moves, node)).to eq empty_array
+        expect(test_game.find_legal_moves(moves, piece)).to eq empty_array
       end
     end
   end
@@ -114,7 +114,7 @@ describe Game do
         test_coord = [2, 0]
 
         blank_square = Square.new
-        allow(test_game).to receive(:coords_to_node) { blank_square }
+        allow(test_game).to receive(:coords_to_grid_object) { blank_square }
         expect(test_game.occupied_by_player?(test_coord, test_white_piece)).to be false
       end
     end
@@ -125,7 +125,7 @@ describe Game do
         test_coord = [2, 2]
 
         black_knight = Knight.new([2, 2], 'black')
-        allow(test_game).to receive(:coords_to_node) { black_knight }
+        allow(test_game).to receive(:coords_to_grid_object) { black_knight }
         expect(test_game.occupied_by_player?(test_coord, test_white_piece)).to be false
       end
     end
@@ -136,7 +136,7 @@ describe Game do
         test_coord = [1, 3]
 
         other_white_knight = Knight.new([1, 3], 'white')
-        allow(test_game).to receive(:coords_to_node) { other_white_knight }
+        allow(test_game).to receive(:coords_to_grid_object) { other_white_knight }
         expect(test_game.occupied_by_player?(test_coord, test_white_piece)).to be true
       end
     end
@@ -147,7 +147,7 @@ describe Game do
         test_coord = [5, 2]
 
         white_knight = Knight.new([5, 2], 'white')
-        allow(test_game).to receive(:coords_to_node) { white_knight }
+        allow(test_game).to receive(:coords_to_grid_object) { white_knight }
         expect(test_game.occupied_by_player?(test_coord, test_black_piece)).to be false
       end
     end
@@ -158,7 +158,7 @@ describe Game do
         test_coord = [6, 3]
 
         other_black_knight = Knight.new([6, 3], 'black')
-        allow(test_game).to receive(:coords_to_node) { other_black_knight }
+        allow(test_game).to receive(:coords_to_grid_object) { other_black_knight }
         expect(test_game.occupied_by_player?(test_coord, test_black_piece)).to be true
       end
     end
@@ -284,7 +284,7 @@ describe Game do
   end
 
 # describe '#find_possible_moves' do
-  # Query sent to Node objects class: (Knight, King), nested in #find_opponent_moves -> #king_in_check
+  # Query sent to piece objects class: (Knight, King), nested in #find_opponent_moves -> #king_in_check
 # end
 
   describe '#coord_in_check?' do

@@ -20,7 +20,7 @@ class Game
     loop do
       display_user
       piece = ask_user_start
-      moves = find_node_moves(piece)
+      moves = find_piece_moves(piece)
       legal_moves = find_legal_moves(moves, piece)
       start_turn if legal_moves.empty?
 
@@ -43,7 +43,7 @@ class Game
     loop do
       string = @current_player.prompt_piece
       coord = string_to_coord(string)
-      piece = coords_to_node(coord)
+      piece = coords_to_grid_object(coord)
       return piece if player_piece?(piece)
     end
   end
@@ -56,50 +56,50 @@ class Game
     piece.pieces == @current_player.pieces
   end
 
-  def coords_to_node(coord)
+  def coords_to_grid_object(coord)
     row = coord.first
     column = coord.last
     @board.grid[row][column]
   end
 
-  def find_node_moves(node)
-    node.possible_moves
+  def find_piece_moves(piece)
+    piece.possible_moves
   end
 
-  def find_legal_moves(moves, node)
+  def find_legal_moves(moves, piece)
     legal_moves = []
 
     moves.map do |move|
-      legal_moves.push(move) unless illegal_move?(move, node)
+      legal_moves.push(move) unless illegal_move?(move, piece)
     end
     legal_moves
   end
 
-  def illegal_move?(move, node)
-    occupied_by_player?(move, node) || king_in_check?(move, node)
+  def illegal_move?(move, piece)
+    occupied_by_player?(move, piece) || king_in_check?(move, piece)
   end
 
   def occupied_by_player?(move_coord, moving_piece)
-    landing_node = coords_to_node(move_coord)
-    landing_node.pieces == moving_piece.pieces
+    landing_space = coords_to_grid_object(move_coord)
+    landing_space.pieces == moving_piece.pieces
   end
 
-  def king_in_check?(move, node)
-    king_coord = king_is_moving?(node) ? move : find_king_coord
+  def king_in_check?(move, piece)
+    king_coord = king_is_moving?(piece) ? move : find_king_coord
     opponent_moves = find_opponent_moves(move)
     coord_in_check?(king_coord, opponent_moves)
   end
 
-  def king_is_moving?(node)
-    white_king?(node) || black_king?(node)
+  def king_is_moving?(piece)
+    white_king?(piece) || black_king?(piece)
   end
 
-  def white_king?(node)
-    node == @board.white_king
+  def white_king?(piece)
+    piece == @board.white_king
   end
 
-  def black_king?(node)
-    node == @board.black_king
+  def black_king?(piece)
+    piece == @board.black_king
   end
 
   def find_king_coord
@@ -164,8 +164,6 @@ class Game
       return destination_coord if legal_moves.include?(destination_coord)
     end
   end
-
-
 
   def update_board(start_coord, destination_coord)
     @board.change_pieces(start_coord, destination_coord)
