@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
-# Creates knight (node) objects for Board class with coordinates, possible moves and links to parent and children nodes
+# lib/chess_spec.rb
+
+# Creates knight objects for Board class with coordinates, pieces, display style and possible moves
 class Knight
-  attr_accessor :coord, :pieces, :display, :possible_moves, :children, :parent
+  attr_accessor :coord, :pieces, :display, :possible_moves
 
   def initialize(coord, pieces)
     @coord = coord

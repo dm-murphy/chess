@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-# lib/chess_spec.rb
 
-# Creates king (node) objects for Board class with coordinates, pieces, display styke and possible moves
+# Creates king objects for Board class with coordinates, pieces, display style and possible moves
 class King
   attr_accessor :coord, :pieces, :display, :possible_moves, :children, :parent
 
