@@ -29,6 +29,7 @@ class Board
   end
 
   def start_pieces
+    @grid[0][0] = Rook.new([0, 0], 'white')
     @grid[0][1] = Knight.new([0, 1], 'white')
     @grid[0][6] = Knight.new([0, 6], 'white')
     @grid[7][1] = Knight.new([7, 1], 'black')
