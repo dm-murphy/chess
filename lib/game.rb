@@ -8,6 +8,7 @@ class Game
     @player_one = player_one
     @player_two = player_two
     @current_player = @player_one
+    @current_piece = nil
   end
 
   def start
@@ -19,18 +20,16 @@ class Game
   def start_turn
     loop do
       # break if game_over?
-
       display_user
-      piece = ask_user_start
-      moves = find_piece_moves(piece)
-      legal_moves = find_legal_moves(moves, piece)
+      @current_piece = ask_user_start
+      moves = find_piece_moves(@current_piece)
+      legal_moves = find_legal_moves(moves)
       start_turn if legal_moves.empty?
-
+      
       destination_coord = ask_user_destination(legal_moves)
-      start_coord = piece.coord
+      start_coord = @current_piece.coord
       update_board(start_coord, destination_coord)
       # break if game_over?
-
       swap_player
     end
   end
@@ -68,31 +67,34 @@ class Game
     piece.possible_moves
   end
 
-  def find_legal_moves(moves, piece)
+  def find_legal_moves(moves)
     legal_moves = []
 
     moves.map do |move|
-      legal_moves.push(move) unless illegal_move?(move, piece)
+      legal_moves.push(move) unless illegal_move?(move)
     end
     legal_moves
   end
 
-  def illegal_move?(move, piece)
-    occupied_by_player?(move, piece) || king_in_check?(move, piece)
+  def illegal_move?(move)
+    if occupied_by_player?(move)
+      true
+    elsif piece_is_king?
+      king_coord = move
+      king_in_check?(move, king_coord)
+    else
+      king_coord = find_king_coord
+      king_in_check?(move, king_coord)
+    end
   end
 
-  def occupied_by_player?(move_coord, moving_piece)
+  def occupied_by_player?(move_coord)
     landing_space = coords_to_grid_object(move_coord)
-    landing_space.pieces == moving_piece.pieces
+    landing_space.pieces == @current_player.pieces
   end
 
-  def king_in_check?(move, piece)
-    king_coord = king_is_moving?(piece) ? move : find_king_coord
-    opponent_moves = find_opponent_moves(move)
-    coord_in_check?(king_coord, opponent_moves)
-  end
-
-  def king_is_moving?(piece)
+  def piece_is_king?
+    piece = @current_piece
     white_king?(piece) || black_king?(piece)
   end
 
@@ -110,6 +112,11 @@ class Game
     elsif @current_player.pieces == 'black'
       @board.black_king.coord
     end
+  end
+  
+  def king_in_check?(move, king_coord)
+    opponent_moves = find_opponent_moves(move)
+    coord_in_check?(king_coord, opponent_moves)
   end
 
   def find_opponent_moves(move)
@@ -183,7 +190,7 @@ class Game
     player = @current_player.pieces
     player_pieces = find_pieces(player)
     player_moves = find_possible_moves(player_pieces)
-    
+    p player_moves
   
 
   # player_pieces.map do |piece|
@@ -194,7 +201,7 @@ class Game
   # run through legal moves for each piece
   # if empty then true
 
-    legal_moves = find_legal_moves(moves, piece)
+    legal_moves = find_legal_moves(player_moves, piece)
     # legal_moves = get the legal moves
     # if legal_moves is empty?
     # true
