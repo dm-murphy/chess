@@ -8,7 +8,7 @@ class King
   def initialize(coord, pieces)
     @coord = coord
     @pieces = pieces
-    @display = "K"
+    @display = pieces == 'white' ? "\u{2654}" : "\u{265A}"
     @possible_moves = []
     find_moves
   end

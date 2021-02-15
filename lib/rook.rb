@@ -9,7 +9,7 @@ class Rook
   def initialize(coord, pieces)
     @coord = coord
     @pieces = pieces
-    @display = "R"
+    @display = pieces == 'white' ? "\u{2656}" : "\u{265C}"
     @possible_moves = []
     find_moves
   end

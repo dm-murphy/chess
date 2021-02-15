@@ -9,7 +9,7 @@ class Knight
   def initialize(coord, pieces)
     @coord = coord
     @pieces = pieces
-    @display = "N"
+    @display = pieces == 'white' ? "\u{2658}" : "\u{265E}"
     @possible_moves = []
     find_moves
   end
