@@ -63,70 +63,65 @@ describe Game do
   describe '#find_legal_moves' do
     # Query sent to self, nested in #start_turn
     subject(:test_game) { described_class.new }
-    let(:test_knight) { Knight.new([0, 1], 'white') }
-    
+
     context 'when all moves are legal' do
       it 'returns array with all moves' do
         moves = [[1, 3], [2, 2], [2, 0]]
-        piece = test_knight
 
         full_array = [[1, 3], [2, 2], [2, 0]]
-        allow(test_game).to receive(:illegal_move?).with([1, 3], piece) { false }
-        allow(test_game).to receive(:illegal_move?).with([2, 2], piece) { false }
-        allow(test_game).to receive(:illegal_move?).with([2, 0], piece) { false }
+        allow(test_game).to receive(:illegal_move?).with([1, 3]) { false }
+        allow(test_game).to receive(:illegal_move?).with([2, 2]) { false }
+        allow(test_game).to receive(:illegal_move?).with([2, 0]) { false }
 
-        expect(test_game.find_legal_moves(moves, piece)).to eq full_array
+        expect(test_game.find_legal_moves(moves)).to eq full_array
       end
     end
 
     context 'when one move is illegal' do
       it 'returns array without the illegal move' do
         moves = [[1, 3], [2, 2], [2, 0]]
-        piece = test_knight
 
         partial_array = [[2, 2], [2, 0]]
-        allow(test_game).to receive(:illegal_move?).with([1, 3], piece) { true }
-        allow(test_game).to receive(:illegal_move?).with([2, 2], piece) { false }
-        allow(test_game).to receive(:illegal_move?).with([2, 0], piece) { false }
+        allow(test_game).to receive(:illegal_move?).with([1, 3]) { true }
+        allow(test_game).to receive(:illegal_move?).with([2, 2]) { false }
+        allow(test_game).to receive(:illegal_move?).with([2, 0]) { false }
 
-        expect(test_game.find_legal_moves(moves, piece)).to eq partial_array
+        expect(test_game.find_legal_moves(moves)).to eq partial_array
       end
     end
 
     context 'when all moves are illegal' do
       it 'returns empty array' do
         moves = [[1, 3], [2, 2], [2, 0]]
-        piece = test_knight
 
         empty_array = []
-        allow(test_game).to receive(:illegal_move?).with([1, 3], piece) { true }
-        allow(test_game).to receive(:illegal_move?).with([2, 2], piece) { true }
-        allow(test_game).to receive(:illegal_move?).with([2, 0], piece) { true }
+        allow(test_game).to receive(:illegal_move?).with([1, 3]) { true }
+        allow(test_game).to receive(:illegal_move?).with([2, 2]) { true }
+        allow(test_game).to receive(:illegal_move?).with([2, 0]) { true }
 
-        expect(test_game.find_legal_moves(moves, piece)).to eq empty_array
+        expect(test_game.find_legal_moves(moves)).to eq empty_array
       end
     end
   end
 
 # describe '#illegal_move?' do
-#  # Query script sent to self, nested in #find_legal_moves -> #start_turn
-#  # Tests and comments below for methods inside #occupied_by_player? and #king_in_check?
+#  # Query script, nested in #find_legal_moves -> #start_turn
+#  # Tests and comments below for methods inside #occupied_by_player?, #piece_is_king? and #king_in_check?
 # end
 
   describe '#occupied_by_player?' do
-    # Query sent to self? But calling from other object piece class and from Board class? nested in #illegal_move? -> #find_legal_moves -> #start_turn
+    # Query outoing to player class and piece or square object, nested in #illegal_move? -> #find_legal_moves -> #start_turn
     subject(:test_game) { described_class.new }
-    let(:test_white_piece) { Knight.new([0, 1], 'white') }
-    let(:test_black_piece) { Knight.new([7, 1], 'black') }
 
     context 'when coordinate is a blank square' do
 
       it 'returns false' do
         test_coord = [2, 0]
+        test_game.instance_variable_set(:@current_player, Player.new('Player 1', 'white'))
 
         blank_square = Square.new
         allow(test_game).to receive(:coords_to_grid_object) { blank_square }
-        expect(test_game.occupied_by_player?(test_coord, test_white_piece)).to be false
+        expect(test_game.occupied_by_player?(test_coord)).to be false
       end
     end
 
@@ -134,10 +129,11 @@ describe Game do
   
       it 'returns false' do
         test_coord = [2, 2]
+        test_game.instance_variable_set(:@current_player, Player.new('Player 1', 'white'))
 
         black_knight = Knight.new([2, 2], 'black')
         allow(test_game).to receive(:coords_to_grid_object) { black_knight }
-        expect(test_game.occupied_by_player?(test_coord, test_white_piece)).to be false
+        expect(test_game.occupied_by_player?(test_coord)).to be false
       end
     end
 
@@ -145,10 +141,11 @@ describe Game do
   
       it 'returns true' do
         test_coord = [1, 3]
+        test_game.instance_variable_set(:@current_player, Player.new('Player 1', 'white'))
 
         other_white_knight = Knight.new([1, 3], 'white')
         allow(test_game).to receive(:coords_to_grid_object) { other_white_knight }
-        expect(test_game.occupied_by_player?(test_coord, test_white_piece)).to be true
+        expect(test_game.occupied_by_player?(test_coord)).to be true
       end
     end
 
@@ -156,10 +153,11 @@ describe Game do
     
       it 'returns false' do
         test_coord = [5, 2]
+        test_game.instance_variable_set(:@current_player, Player.new('Player 2', 'black'))
 
         white_knight = Knight.new([5, 2], 'white')
         allow(test_game).to receive(:coords_to_grid_object) { white_knight }
-        expect(test_game.occupied_by_player?(test_coord, test_black_piece)).to be false
+        expect(test_game.occupied_by_player?(test_coord)).to be false
       end
     end
 
@@ -167,10 +165,11 @@ describe Game do
     
       it 'returns true' do
         test_coord = [6, 3]
+        test_game.instance_variable_set(:@current_player, Player.new('Player 2', 'black'))
 
         other_black_knight = Knight.new([6, 3], 'black')
         allow(test_game).to receive(:coords_to_grid_object) { other_black_knight }
-        expect(test_game.occupied_by_player?(test_coord, test_black_piece)).to be true
+        expect(test_game.occupied_by_player?(test_coord)).to be true
       end
     end
   end
@@ -180,20 +179,20 @@ describe Game do
 #  # Tests and comments below for methods inside #king_is_moving?, #find_opponent_moves, #coord_in_check?
 # end
 
-# describe '#king_is_moving?' do
-#  # Query sent to self but conditional on methods inside
+# describe '#piece_is_king?' do
+#  # Query script sent to self, nested in #king_in_check?
 # end
 
 # describe '#white_king?' do
-#  # Query sent to self using outgoing query to Board class?
+#  # Outgoing query sent to Board
 # end
 
 # describe '#black_king?' do
-#  # Query sent to self using outgoing query to Board class?
+#  # Outgoing query sent to Board
 # end
 
 # describe '#find_king_coord' do
-#  # Outgoing query to Board class
+#  # Outgoing query sent to Board
 # end
 
 # describe '#find_opponent_moves' do
