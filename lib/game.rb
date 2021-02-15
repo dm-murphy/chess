@@ -19,18 +19,17 @@ class Game
 
   def start_turn
     loop do
-      # break if game_over?
       display_user
       @current_piece = ask_user_start
       moves = find_piece_moves(@current_piece)
       legal_moves = find_legal_moves(moves)
       start_turn if legal_moves.empty?
-      
+
       destination_coord = ask_user_destination(legal_moves)
       start_coord = @current_piece.coord
       update_board(start_coord, destination_coord)
-      # break if game_over?
       swap_player
+      break if game_over?
     end
   end
 
@@ -39,7 +38,7 @@ class Game
     puts "#{@current_player.name} choose a piece"
     puts
   end
-  
+
   def ask_user_start
     loop do
       string = @current_player.select_piece
@@ -83,7 +82,8 @@ class Game
       king_coord = move
       king_in_check?(move, king_coord)
     else
-      king_coord = find_king_coord
+      king = find_king
+      king_coord = king.coord
       king_in_check?(move, king_coord)
     end
   end
@@ -106,14 +106,14 @@ class Game
     piece == @board.black_king
   end
 
-  def find_king_coord
+  def find_king
     if @current_player.pieces == 'white'
-      @board.white_king.coord
+      @board.white_king
     elsif @current_player.pieces == 'black'
-      @board.black_king.coord
+      @board.black_king
     end
   end
-  
+
   def king_in_check?(move, king_coord)
     opponent_moves = find_opponent_moves(move)
     coord_in_check?(king_coord, opponent_moves)
@@ -183,29 +183,21 @@ class Game
   end
 
   def checkmate?
-    no_player_moves?
-  end
-
-  def no_player_moves?
     player = @current_player.pieces
     player_pieces = find_pieces(player)
-    player_moves = find_possible_moves(player_pieces)
-    p player_moves
-  
+    no_player_moves?(player_pieces)
+  end
 
-  # player_pieces.map do |piece|
-  # 
+  def no_player_moves?(player_pieces)
+    any_legal_moves = []
 
-  # get all the player pieces
-  # get all the player moves for each piece
-  # run through legal moves for each piece
-  # if empty then true
-
-    legal_moves = find_legal_moves(player_moves, piece)
-    # legal_moves = get the legal moves
-    # if legal_moves is empty?
-    # true
-    false
+    player_pieces.map do |piece|
+      @current_piece = piece
+      moves = find_piece_moves(piece)
+      legal_moves = find_legal_moves(moves)
+      any_legal_moves.push(legal_moves)
+    end
+    any_legal_moves.map{ |row| return row.empty? }
   end
 
   # def draw?
