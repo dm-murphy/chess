@@ -15,6 +15,11 @@ describe Game do
 # # Tests and comments below for methods inside #checkmate?, #draw?
 # end
 
+# describe 'checkmate?' do
+# # Script sent to self
+# # Tests and comments below for methods inside #no_player_moves?
+# end
+
 # describe 'no_player_moves?' do
 # # Script sent to self
 # # Tests and comments below for methods inside #find_pieces, #find_possible_moves, #find_legal_moves, #find_king, #coord_in_check
@@ -176,23 +181,15 @@ describe Game do
 
 # describe '#king_in_check?' do
 #  # Script, nested in #illegal_move? -> find_legal_moves -> #start_turn
-#  # Tests and comments below for methods inside #king_is_moving?, #find_opponent_moves, #coord_in_check?
+#  # Tests and comments below for methods inside #find_opponent_moves, #coord_in_check?
 # end
 
 # describe '#piece_is_king?' do
-#  # Query script sent to self, nested in #king_in_check?
+#  # Query sent to self, nested in #king_in_check?
 # end
 
-# describe '#white_king?' do
-#  # Outgoing query sent to Board
-# end
-
-# describe '#black_king?' do
-#  # Outgoing query sent to Board
-# end
-
-# describe '#find_king_coord' do
-#  # Outgoing query sent to Board
+# describe '#find_king' do
+#  # Outgoing query sent to Board, called from #piece_is_king? and #checkmate?
 # end
 
 # describe '#find_opponent_moves' do
