@@ -23,8 +23,8 @@ class Game
       @current_piece = ask_user_start
       moves = find_piece_moves(@current_piece)
       legal_moves = find_legal_moves(moves)
-      start_turn if legal_moves.empty?
-
+      # start_turn if legal_moves.empty?
+      redo if legal_moves.empty?
       destination_coord = ask_user_destination(legal_moves)
       start_coord = @current_piece.coord
       update_board(start_coord, destination_coord)
@@ -92,18 +92,13 @@ class Game
     landing_space = coords_to_grid_object(move_coord)
     landing_space.pieces == @current_player.pieces
   end
+  
+  # def piece_is_king?
+  #   @current_piece == @board.white_king || @current_piece == @board.black_king
+  # end
 
   def piece_is_king?
-    piece = @current_piece
-    white_king?(piece) || black_king?(piece)
-  end
-
-  def white_king?(piece)
-    piece == @board.white_king
-  end
-
-  def black_king?(piece)
-    piece == @board.black_king
+    @current_piece == find_king
   end
 
   def find_king
@@ -179,13 +174,29 @@ class Game
   end
 
   def game_over?
-    checkmate? #|| draw?
+    return unless checkmate?
+
+    display_checkmate
+    true
+    # elsif draw?
+    #   display_draw
+    #   true
+    # else
+    #   false
+    # end
+  end
+
+  def display_checkmate
+    @board.show_grid
+    puts "Checkmate."
   end
 
   def checkmate?
     player = @current_player.pieces
     player_pieces = find_pieces(player)
-    no_player_moves?(player_pieces)
+    king = find_king
+    king_coord = king.coord
+    no_player_moves?(player_pieces) && king_in_check?(nil, king_coord)
   end
 
   def no_player_moves?(player_pieces)
@@ -220,6 +231,4 @@ end
     
     # Prevent moves where another piece along the way is blocking path
 
-    # Computer checks for checkmate/draw and if true displays result
-
-    # Tell User they are in check
+    # Computer checks for draw and if true displays result
