@@ -22,12 +22,12 @@ describe Game do
 
 # describe 'no_player_moves?' do
 # # Script sent to self
-# # Tests and comments below for methods inside #find_pieces, #find_possible_moves, #find_legal_moves, #find_king, #coord_in_check
+# # Tests and comments below for methods inside #find_pieces, #find_possible_moves, #find_piece_legal_moves, #find_king, #coord_in_check
 # end
 
 # describe '#start_turn' do
 # # Loop script
-# # Tests and comments below for methods inside #display_user, #ask_user_start, #find_piece_moves, #find_legal_moves, #ask_user_destination, #update_board, #game_over?, #swap_player
+# # Tests and comments below for methods inside #display_user, #ask_user_start, #find_piece_moves, #find_piece_legal_moves, #ask_user_destination, #update_board, #game_over?, #swap_player
 # end
 
 # describe '#display_user' do
@@ -65,7 +65,7 @@ describe Game do
 # # Outgoing query sent to class of piece object, nested in #start_turn
 # end
 
-  describe '#find_legal_moves' do
+  describe '#find_piece_legal_moves' do
     # Query sent to self, nested in #start_turn
     subject(:test_game) { described_class.new }
 
@@ -78,7 +78,7 @@ describe Game do
         allow(test_game).to receive(:illegal_move?).with([2, 2]) { false }
         allow(test_game).to receive(:illegal_move?).with([2, 0]) { false }
 
-        expect(test_game.find_legal_moves(moves)).to eq full_array
+        expect(test_game.find_piece_legal_moves(moves)).to eq full_array
       end
     end
 
@@ -91,7 +91,7 @@ describe Game do
         allow(test_game).to receive(:illegal_move?).with([2, 2]) { false }
         allow(test_game).to receive(:illegal_move?).with([2, 0]) { false }
 
-        expect(test_game.find_legal_moves(moves)).to eq partial_array
+        expect(test_game.find_piece_legal_moves(moves)).to eq partial_array
       end
     end
 
@@ -104,18 +104,18 @@ describe Game do
         allow(test_game).to receive(:illegal_move?).with([2, 2]) { true }
         allow(test_game).to receive(:illegal_move?).with([2, 0]) { true }
 
-        expect(test_game.find_legal_moves(moves)).to eq empty_array
+        expect(test_game.find_piece_legal_moves(moves)).to eq empty_array
       end
     end
   end
 
 # describe '#illegal_move?' do
-#  # Query script, nested in #find_legal_moves -> #start_turn
+#  # Query script, nested in #find__piece_legal_moves -> #start_turn
 #  # Tests and comments below for methods inside #occupied_by_player?, #piece_is_king? and #king_in_check?
 # end
 
   describe '#occupied_by_player?' do
-    # Query outoing to player class and piece or square object, nested in #illegal_move? -> #find_legal_moves -> #start_turn
+    # Query outoing to player class and piece or square object, nested in #illegal_move? -> #find_piece_legal_moves -> #start_turn
     subject(:test_game) { described_class.new }
 
     context 'when coordinate is a blank square' do
@@ -180,7 +180,7 @@ describe Game do
   end
 
 # describe '#king_in_check?' do
-#  # Script, nested in #illegal_move? -> find_legal_moves -> #start_turn
+#  # Script, nested in #illegal_move? -> find_piece_legal_moves -> #start_turn
 #  # Tests and comments below for methods inside #find_opponent_moves, #coord_in_check?
 # end
 
@@ -295,7 +295,7 @@ describe Game do
 # end
 
   describe '#coord_in_check?' do
-    # Query sent to self, nested in #king_in_check? -> #illegal_move? -> #find_legal_moves -> #start_turn
+    # Query sent to self, nested in #king_in_check? -> #illegal_move? -> #find_piece_legal_moves -> #start_turn
 
     # Opponent_moves show all opponent piece moves
 
