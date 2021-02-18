@@ -27,8 +27,8 @@ class Game
       moves = find_piece_moves(@current_piece)
       legal_moves = find_piece_legal_moves(moves)
       
-      final = test_blocked(legal_moves)
-      puts "Start_turn final showing all BLOCKED moves: #{final}"
+      # final = test_blocked(legal_moves)
+      # puts "Start_turn final showing all BLOCKED moves: #{final}"
       # @board.reset_path_finder
       # @current_piece.parent
       
@@ -162,8 +162,8 @@ class Game
   def illegal_move?(move)
     if occupied_by_player?(move)
       true
-    # elsif blocked?(move)
-    #   true
+    elsif blocked?(move)
+      true
     elsif piece_is_king?
       king_coord = move
       king_in_check?(move, king_coord)
