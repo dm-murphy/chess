@@ -25,7 +25,7 @@ class Game
       # p @current_piece
       @current_piece = ask_user_start
       moves = find_piece_moves(@current_piece)
-      legal_moves = find_legal_moves(moves)
+      legal_moves = find_piece_legal_moves(moves)
       
       #  final = test_blocked(legal_moves)
       # @board.reset_path_finder
@@ -141,7 +141,7 @@ class Game
     piece.possible_moves
   end
 
-  def find_legal_moves(moves)
+  def find_piece_legal_moves(moves)
     legal_moves = []
 
     moves.map do |move|
@@ -268,31 +268,28 @@ class Game
   def checkmate?
     player = @current_player.pieces
     player_pieces = find_pieces(player)
+    player_legal_moves = all_legal_moves(player_pieces)
+
     king = find_king
     king_coord = king.coord
-    no_player_moves?(player_pieces) 
-    #&& king_in_check?(nil, king_coord)
+    no_player_moves?(player_legal_moves) && king_in_check?(nil, king_coord)
   end
 
-  def no_player_moves?(player_pieces)
-    any_legal_moves = []
+  def all_legal_moves(player_pieces)
+    player_legal_moves = []
 
     player_pieces.map do |piece|
       @current_piece = piece
-      
       moves = find_piece_moves(@current_piece)
-      
-      legal_moves = find_legal_moves(moves)
-      
-      any_legal_moves.push(legal_moves)
+      legal_moves = find_piece_legal_moves(moves)
+      player_legal_moves.push(legal_moves)
     end
-    # p any_legal_moves.flatten
-    # p any_legal_moves
-    final_checker = any_legal_moves.flatten(1)
-    p final_checker
-    p final_checker.any?
-    # any_legal_moves.each { |move| return move.empty? }
-    final_checker.any? == false
+    player_legal_moves
+  end
+
+  def no_player_moves?(player_legal_moves)
+    all_moves = player_legal_moves.flatten(1)
+    all_moves.any? == false
   end
 
   # def draw?
