@@ -27,15 +27,15 @@ class Game
       moves = find_piece_moves(@current_piece)
       legal_moves = find_legal_moves(moves)
       
-      # p final = test_reachable(legal_moves)
+      #  final = test_blocked(legal_moves)
       # @board.reset_path_finder
       # @current_piece.parent
       
-      
-
-    # p reachable?([0, 7])
-    # p reachable?([5, 0])
-    # p reachable?([0,5])
+      # BLOCKED
+#  p blocked?([7, 0])
+  #  p blocked?([0, 7])
+    # p blocked?([5, 0])
+    # p blocked?([0,5])
     
       
 
@@ -49,17 +49,17 @@ class Game
     end
   end
 
-  def test_reachable(legal_moves)
+  def test_blocked(legal_moves)
     test_moves = []
 
     legal_moves.map do |move|
-      test_moves.push(move) if reachable?(move)
+      test_moves.push(move) if blocked?(move)
     end
 
     test_moves
   end
 
-  def reachable?(move)
+  def blocked?(move)
     origin = @current_piece
     destination = move
     # @board.prepare_path_finder(origin)
@@ -68,12 +68,44 @@ class Game
     
     new_array = array - [move]
     # p new_array
+    
     final_array = new_array - [origin.coord]
-    # p final_array
-    final_array.each do |x, y|
-      return @board.empty_square?(x, y)
+    p final_array
+    
+    
+    # final_array.each do |x, y|
+
+
+    #   # AHHH so it's finding one empty square and returning true and not iterating the rest. 
+    #   # Have to make it so all the squares in the array are empty
+    #   # Return boolean from there.
+
+    #   p @board.empty_square?(x, y)
+    #   return @board.empty_square?(x, y)
+    #   # return false unless @board.empty_square?(x, y)
+    # end
+
+
+    final_array.any? do |x, y|
+
+
+      # AHHH so it's finding one empty square and returning true and not iterating the rest. 
+      # Have to make it so all the squares in the array are empty
+      # Return boolean from there.
+      @board.occupied?(x, y)
+      # p @board.empty_square?(x, y)
+      # return @board.empty_square?(x, y)
       # return false unless @board.empty_square?(x, y)
+
+
+
+
+
+
+# I Don't know it's just not working right now after the first move? 
+
     end
+
   end
 
   def display_user
@@ -121,6 +153,8 @@ class Game
   def illegal_move?(move)
     if occupied_by_player?(move)
       true
+    # elsif blocked?(move)
+    #   true
     elsif piece_is_king?
       king_coord = move
       king_in_check?(move, king_coord)
@@ -236,7 +270,8 @@ class Game
     player_pieces = find_pieces(player)
     king = find_king
     king_coord = king.coord
-    no_player_moves?(player_pieces) && king_in_check?(nil, king_coord)
+    no_player_moves?(player_pieces) 
+    #&& king_in_check?(nil, king_coord)
   end
 
   def no_player_moves?(player_pieces)
@@ -244,11 +279,20 @@ class Game
 
     player_pieces.map do |piece|
       @current_piece = piece
-      moves = find_piece_moves(piece)
+      
+      moves = find_piece_moves(@current_piece)
+      
       legal_moves = find_legal_moves(moves)
+      
       any_legal_moves.push(legal_moves)
     end
-    any_legal_moves.map{ |row| return row.empty? }
+    # p any_legal_moves.flatten
+    # p any_legal_moves
+    final_checker = any_legal_moves.flatten(1)
+    p final_checker
+    p final_checker.any?
+    # any_legal_moves.each { |move| return move.empty? }
+    final_checker.any? == false
   end
 
   # def draw?
