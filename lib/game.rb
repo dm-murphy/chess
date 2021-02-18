@@ -188,6 +188,7 @@ class Game
     remaining_pieces
   end
 
+  # Same name as piece method
   def find_possible_moves(pieces)
     pieces.map(&:possible_moves)
   end
