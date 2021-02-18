@@ -56,6 +56,9 @@ class Board
     piece.coord = new_coord
     piece.possible_moves = []
     piece.find_possible_moves
+    # Add this
+    piece.single_moves = []
+    piece.find_single_moves
   end
 
   def clean_square(old_coord)
@@ -66,11 +69,17 @@ class Board
     @grid[row][column].class == Square
   end
 
+  def occupied?(row, column)
+    @grid[row][column].class != Square
+  end
+
+
   def path_finder(origin, destination)
     @origin_piece = origin
     destination_coord = destination
     @visited = [@origin_piece]
     build_path(destination_coord)
+    
     # reset_path_finder
   end
 
@@ -82,7 +91,8 @@ class Board
 
   def build_path(destination_coord, queue = [@origin_piece])
     current = queue.last
-
+    # p current.coord
+    # p current.single_moves
     return if current.nil?
     return path_array(current) if current.coord == destination_coord
 

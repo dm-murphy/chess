@@ -27,16 +27,22 @@ class Game
       moves = find_piece_moves(@current_piece)
       legal_moves = find_piece_legal_moves(moves)
       
-      #  final = test_blocked(legal_moves)
+      final = test_blocked(legal_moves)
+      puts "Start_turn final showing all BLOCKED moves: #{final}"
       # @board.reset_path_finder
       # @current_piece.parent
       
       # BLOCKED
 #  p blocked?([7, 0])
   #  p blocked?([0, 7])
-    # p blocked?([5, 0])
+    # p blocked?([5, 0])g
     # p blocked?([0,5])
     
+
+
+
+
+
       
 
 
@@ -65,12 +71,15 @@ class Game
     # @board.prepare_path_finder(origin)
     # array = @board.path_finder(destination)
     array = @board.path_finder(origin, destination)
+    origin.children = []
+    # @board.reset_path_finder
+    puts "For origin/currentpiece ( #{origin} ) with coords of ( #{origin.coord} ) and children of ( #{origin.children} ) and destination ( #{destination} ) the path array is #{array}"
     
     new_array = array - [move]
     # p new_array
     
     final_array = new_array - [origin.coord]
-    p final_array
+    # p final_array
     
     
     # final_array.each do |x, y|
