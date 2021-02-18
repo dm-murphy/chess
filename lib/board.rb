@@ -9,6 +9,9 @@ class Board
     @grid = Array.new(8) { Array.new(8, Square.new) }
     @white_king = King.new([0, 4], 'white')
     @black_king = King.new([7, 4], 'black')
+    @origin_piece = nil
+    # @destination_coord = nil
+    @visited = []
     start_pieces
   end
 
@@ -52,11 +55,115 @@ class Board
   def update_piece(piece, new_coord)
     piece.coord = new_coord
     piece.possible_moves = []
-    piece.find_moves
+    piece.find_possible_moves
   end
 
   def clean_square(old_coord)
     @grid[old_coord.first][old_coord.last] = Square.new
   end
-end
 
+  def empty_square?(row, column)
+    @grid[row][column].class == Square
+  end
+
+  def path_finder(origin, destination)
+    @origin_piece = origin
+    destination_coord = destination
+    @visited = [@origin_piece]
+    build_path(destination_coord)
+    # reset_path_finder
+  end
+
+  def reset_path_finder
+    @origin_piece = nil
+    @destination_coord = nil
+    @visitied = []
+  end
+
+  def build_path(destination_coord, queue = [@origin_piece])
+    current = queue.last
+
+    return if current.nil?
+    return path_array(current) if current.coord == destination_coord
+
+    current.single_moves.each do |move|
+      next if @visited.include?(move)
+
+      class_type = current.class
+      piece_type = current.pieces
+      piece_child = class_type.new(move, piece_type)
+      current.children.push(piece_child)
+      piece_child.parent = current
+      @visited.push(piece_child.coord)
+      queue.unshift(piece_child)
+    end
+
+    queue.pop
+    build_path(destination_coord, queue)
+  end
+
+  def path_array(piece, array = [])
+    array.unshift piece.coord
+    return array if piece == @origin_piece
+
+    path_array(piece.parent, array)
+  end
+
+  # def path_finder(origin, destination)
+  #   @origin_piece = origin
+  #   @destination_coord = destination
+  #   @visited = [@origin_piece]
+  #   build_path
+  #   # reset_path_finder
+  # end
+
+  # def reset_path_finder
+  #   @origin_piece = nil
+  #   @destination_coord = nil
+  #   @visitied = []
+  # end
+
+  # def build_path(queue = [@origin_piece])
+  #   current = queue.last
+
+  #   return if current.nil?
+  #   return path_array(current) if current.coord == @destination_coord
+
+  #   current.single_moves.each do |move|
+  #     next if @visited.include?(move)
+
+  #     class_type = current.class
+  #     piece_type = current.pieces
+  #     piece_child = class_type.new(move, piece_type)
+  #     current.children.push(piece_child)
+  #     piece_child.parent = current
+  #     @visited.push(piece_child.coord)
+  #     queue.unshift(piece_child)
+  #   end
+
+  #   queue.pop
+  #   build_path(queue)
+  # end
+
+  # def path_array(piece, array = [])
+  #   array.unshift piece.coord
+  #   return array if piece == @origin_piece
+
+  #   path_array(piece.parent, array)
+  # end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+end

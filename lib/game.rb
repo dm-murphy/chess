@@ -19,17 +19,60 @@ class Game
 
   def start_turn
     loop do
+      
       display_user
+      # @current_piece = nil
+      # p @current_piece
       @current_piece = ask_user_start
       moves = find_piece_moves(@current_piece)
       legal_moves = find_legal_moves(moves)
-      # start_turn if legal_moves.empty?
+      
+      # p final = test_reachable(legal_moves)
+      # @board.reset_path_finder
+      # @current_piece.parent
+      
+      
+
+    # p reachable?([0, 7])
+    # p reachable?([5, 0])
+    # p reachable?([0,5])
+    
+      
+
+
       redo if legal_moves.empty?
       destination_coord = ask_user_destination(legal_moves)
       start_coord = @current_piece.coord
       update_board(start_coord, destination_coord)
       swap_player
       break if game_over?
+    end
+  end
+
+  def test_reachable(legal_moves)
+    test_moves = []
+
+    legal_moves.map do |move|
+      test_moves.push(move) if reachable?(move)
+    end
+
+    test_moves
+  end
+
+  def reachable?(move)
+    origin = @current_piece
+    destination = move
+    # @board.prepare_path_finder(origin)
+    # array = @board.path_finder(destination)
+    array = @board.path_finder(origin, destination)
+    
+    new_array = array - [move]
+    # p new_array
+    final_array = new_array - [origin.coord]
+    # p final_array
+    final_array.each do |x, y|
+      return @board.empty_square?(x, y)
+      # return false unless @board.empty_square?(x, y)
     end
   end
 
@@ -92,10 +135,6 @@ class Game
     landing_space = coords_to_grid_object(move_coord)
     landing_space.pieces == @current_player.pieces
   end
-  
-  # def piece_is_king?
-  #   @current_piece == @board.white_king || @current_piece == @board.black_king
-  # end
 
   def piece_is_king?
     @current_piece == find_king
