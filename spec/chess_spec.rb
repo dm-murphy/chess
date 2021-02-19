@@ -16,13 +16,16 @@ describe Game do
 # end
 
 # describe 'checkmate?' do
-# # Script sent to self
-# # Tests and comments below for methods inside #no_player_moves?
+# # Script sent to self, nested in #game_over?
+# # Tests and comments below for methods inside #all_legal_moves, #no_player_moves?, #king_in_check?
+# end
+
+# describe 'all_legal_moves' do
+# # Query script sent to self, nested in #checkmate?
 # end
 
 # describe 'no_player_moves?' do
-# # Script sent to self
-# # Tests and comments below for methods inside #find_pieces, #find_possible_moves, #find_piece_legal_moves, #find_king, #coord_in_check
+# # Query sent to self, nested in #all_legal_moves -> #checkmate?
 # end
 
 # describe '#start_turn' do
@@ -179,10 +182,26 @@ describe Game do
     end
   end
 
-# describe '#king_in_check?' do
-#  # Script, nested in #illegal_move? -> find_piece_legal_moves -> #start_turn
-#  # Tests and comments below for methods inside #find_opponent_moves, #coord_in_check?
-# end
+  describe 'king_in_check?' do
+    # Script, nested in #illegal_move? -> find_piece_legal_moves -> #start_turn
+
+    subject(:test_game) { described_class.new }
+
+    context 'when opponent Rook is at [7, 0] and player King at [7, 4] and player Knight at [7, 1] and player King at [0, 4]' do
+
+      it 'returns false' do
+
+        move = [5, 5]
+        king_coord = [7, 4]
+
+        test_moves = [[[6, 0], [5, 0], [4, 0], [3, 0], [2, 0], [1, 0], [0, 0]],
+                     [[0, 3], [0, 5], [1, 3], [1, 4], [1, 5]]]
+
+        allow(test_game).to receive(:find_opponent_moves) { test_moves }
+        expect(test_game.king_in_check?(move, king_coord)).to be false
+      end
+    end
+  end
 
 # describe '#piece_is_king?' do
 #  # Query sent to self, nested in #king_in_check?
@@ -315,6 +334,17 @@ describe Game do
       it 'returns false' do
         opponent_moves = [[5, 0], [5, 2], [6, 3]]
         coord = [0, 4]
+        expect(test_game.coord_in_check?(coord, opponent_moves)).to be false
+      end
+    end
+
+    context 'when opponent Rook is at [7, 0] with opponent King at [0, 4] and player King at [7, 4] and player Knight at [7, 1]' do
+    
+      it 'returns false' do
+        # opponent_moves = [[6, 0], [5, 0], [4, 0], [3, 0], [2, 0], [1, 0], [0, 0]]
+        opponent_moves = [[[6, 0], [5, 0], [4, 0], [3, 0], [2, 0], [1, 0], [0, 0]],
+                          [[0, 3], [0, 5], [1, 3], [1, 4], [1, 5]]]
+        coord = [7, 4]
         expect(test_game.coord_in_check?(coord, opponent_moves)).to be false
       end
     end
