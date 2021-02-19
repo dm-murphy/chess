@@ -19,34 +19,12 @@ class Game
 
   def start_turn
     loop do
-      
       display_user
-      # @current_piece = nil
-      # p @current_piece
       @current_piece = ask_user_start
       moves = find_piece_moves(@current_piece)
       legal_moves = find_piece_legal_moves(moves)
-      
-      # final = test_blocked(legal_moves)
-      # puts "Start_turn final showing all BLOCKED moves: #{final}"
-      # @board.reset_path_finder
-      # @current_piece.parent
-      
-      # BLOCKED
-#  p blocked?([7, 0])
-  #  p blocked?([0, 7])
-    # p blocked?([5, 0])g
-    # p blocked?([0,5])
-    
-
-
-
-
-
-      
-
-
       redo if legal_moves.empty?
+
       destination_coord = ask_user_destination(legal_moves)
       start_coord = @current_piece.coord
       update_board(start_coord, destination_coord)
@@ -55,66 +33,28 @@ class Game
     end
   end
 
-  def test_blocked(legal_moves)
-    test_moves = []
+  # def test_blocked(legal_moves)
+  #   test_moves = []
 
-    legal_moves.map do |move|
-      test_moves.push(move) if blocked?(move)
-    end
+  #   legal_moves.map do |move|
+  #     test_moves.push(move) if blocked?(move)
+  #   end
 
-    test_moves
-  end
+  #   test_moves
+  # end
 
-  def blocked?(move)
+  def blocked?(destination_move)
     origin = @current_piece
-    destination = move
-    # @board.prepare_path_finder(origin)
-    # array = @board.path_finder(destination)
+    destination = destination_move
     array = @board.path_finder(origin, destination)
     origin.children = []
-    # @board.reset_path_finder
-    puts "For origin/currentpiece ( #{origin} ) with coords of ( #{origin.coord} ) and children of ( #{origin.children} ) and destination ( #{destination} ) the path array is #{array}"
-    
-    new_array = array - [move]
-    # p new_array
-    
+    puts "For origin ( #{origin} ) the possible moves are #{origin.possible_moves} and the single_moves are #{origin.single_moves}"
+    #  puts "For origin/currentpiece ( #{origin} ) with coords of ( #{origin.coord} ) and children of ( #{origin.children} ) and destination ( #{destination} ) the path array is #{array}"
+    new_array = array - [destination_move]  
     final_array = new_array - [origin.coord]
-    # p final_array
-    
-    
-    # final_array.each do |x, y|
-
-
-    #   # AHHH so it's finding one empty square and returning true and not iterating the rest. 
-    #   # Have to make it so all the squares in the array are empty
-    #   # Return boolean from there.
-
-    #   p @board.empty_square?(x, y)
-    #   return @board.empty_square?(x, y)
-    #   # return false unless @board.empty_square?(x, y)
-    # end
-
-
     final_array.any? do |x, y|
-
-
-      # AHHH so it's finding one empty square and returning true and not iterating the rest. 
-      # Have to make it so all the squares in the array are empty
-      # Return boolean from there.
       @board.occupied?(x, y)
-      # p @board.empty_square?(x, y)
-      # return @board.empty_square?(x, y)
-      # return false unless @board.empty_square?(x, y)
-
-
-
-
-
-
-# I Don't know it's just not working right now after the first move? 
-
     end
-
   end
 
   def display_user
@@ -193,6 +133,7 @@ class Game
 
   def king_in_check?(move, king_coord)
     opponent_moves = find_opponent_moves(move)
+    # p opponent_moves
     coord_in_check?(king_coord, opponent_moves)
   end
 
@@ -200,7 +141,32 @@ class Game
     opponent = find_opponent
     opponent_pieces = find_pieces(opponent)
     remaining_pieces = remove_possible_capture(opponent_pieces, move)
-    find_possible_moves(remaining_pieces).flatten(1)
+    all_possible_moves = find_all_pieces_possible_moves(remaining_pieces).flatten(1)
+    all_legal_moves = find_all_pieces_legal_moves(all_possible_moves)
+    # p all_legal_moves
+    # p all_possible_moves
+    # find_piece_legal_moves(all_possible_moves)
+    # Stack level too deep
+
+    # Can we check legal moves prior to collecting all the possible moves. basically run through ti the same way we do for current player picks?
+
+
+    # all_legal_moves = find_all_pieces_legal_moves(all_possible_moves)
+    
+    # all_legal_moves = find_piece_legal_moves(all_possible_moves)
+  end
+
+  def find_all_pieces_legal_moves(moves)
+    array = []
+    moves.map do |move|
+      # p move
+      array.push(move) unless blocked?(move)
+
+      # p move
+      # test = find_piece_legal_moves(move)
+      # p test
+    end
+    p array
   end
 
   def find_opponent
@@ -231,8 +197,7 @@ class Game
     remaining_pieces
   end
 
-  # Same name as piece method
-  def find_possible_moves(pieces)
+  def find_all_pieces_possible_moves(pieces)
     pieces.map(&:possible_moves)
   end
 
@@ -318,7 +283,5 @@ end
 # Next Pseudo Steps
 
   # Main Game logic missing:
-    
-    # Prevent moves where another piece along the way is blocking path
 
     # Computer checks for draw and if true displays result

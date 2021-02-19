@@ -34,11 +34,14 @@ class Board
   def start_pieces
     @grid[0][0] = Rook.new([0, 0], 'white')
     @grid[0][1] = Knight.new([0, 1], 'white')
-    @grid[0][6] = Knight.new([0, 6], 'white')
-    @grid[7][1] = Knight.new([7, 1], 'black')
-    @grid[7][6] = Knight.new([7, 6], 'black')
     @grid[0][4] = @white_king
+    @grid[0][6] = Knight.new([0, 6], 'white')
+    @grid[0][7] = Rook.new([0, 7], 'white')
+    @grid[7][0] = Rook.new([7, 0], 'black')
+    @grid[7][1] = Knight.new([7, 1], 'black')
     @grid[7][4] = @black_king
+    @grid[7][6] = Knight.new([7, 6], 'black')
+    @grid[7][7] = Rook.new([7, 7], 'black')
   end
 
   def change_pieces(old_coord, new_coord)
