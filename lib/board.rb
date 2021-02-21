@@ -64,6 +64,10 @@ class Board
     piece.find_single_moves
   end
 
+  def replace_original_piece(piece, coords)
+    @grid[coords.first][coords.last] = piece
+  end
+
   def clean_square(old_coord)
     @grid[old_coord.first][old_coord.last] = Square.new
   end
