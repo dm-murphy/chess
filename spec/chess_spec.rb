@@ -75,39 +75,42 @@ describe Game do
     context 'when all moves are legal' do
       it 'returns array with all moves' do
         moves = [[1, 3], [2, 2], [2, 0]]
+        origin_piece = Knight.new([0, 1], 'white')
 
         full_array = [[1, 3], [2, 2], [2, 0]]
-        allow(test_game).to receive(:illegal_move?).with([1, 3]) { false }
-        allow(test_game).to receive(:illegal_move?).with([2, 2]) { false }
-        allow(test_game).to receive(:illegal_move?).with([2, 0]) { false }
+        allow(test_game).to receive(:illegal_move?).with([1, 3], origin_piece) { false }
+        allow(test_game).to receive(:illegal_move?).with([2, 2], origin_piece) { false }
+        allow(test_game).to receive(:illegal_move?).with([2, 0], origin_piece) { false }
 
-        expect(test_game.find_piece_legal_moves(moves)).to eq full_array
+        expect(test_game.find_piece_legal_moves(moves, origin_piece)).to eq full_array
       end
     end
 
     context 'when one move is illegal' do
       it 'returns array without the illegal move' do
         moves = [[1, 3], [2, 2], [2, 0]]
+        origin_piece = Knight.new([0, 1], 'white')
 
         partial_array = [[2, 2], [2, 0]]
-        allow(test_game).to receive(:illegal_move?).with([1, 3]) { true }
-        allow(test_game).to receive(:illegal_move?).with([2, 2]) { false }
-        allow(test_game).to receive(:illegal_move?).with([2, 0]) { false }
+        allow(test_game).to receive(:illegal_move?).with([1, 3], origin_piece) { true }
+        allow(test_game).to receive(:illegal_move?).with([2, 2], origin_piece) { false }
+        allow(test_game).to receive(:illegal_move?).with([2, 0], origin_piece) { false }
 
-        expect(test_game.find_piece_legal_moves(moves)).to eq partial_array
+        expect(test_game.find_piece_legal_moves(moves, origin_piece)).to eq partial_array
       end
     end
 
     context 'when all moves are illegal' do
       it 'returns empty array' do
         moves = [[1, 3], [2, 2], [2, 0]]
+        origin_piece = Knight.new([0, 1], 'white')
 
         empty_array = []
-        allow(test_game).to receive(:illegal_move?).with([1, 3]) { true }
-        allow(test_game).to receive(:illegal_move?).with([2, 2]) { true }
-        allow(test_game).to receive(:illegal_move?).with([2, 0]) { true }
+        allow(test_game).to receive(:illegal_move?).with([1, 3], origin_piece) { true }
+        allow(test_game).to receive(:illegal_move?).with([2, 2], origin_piece) { true }
+        allow(test_game).to receive(:illegal_move?).with([2, 0], origin_piece) { true }
 
-        expect(test_game.find_piece_legal_moves(moves)).to eq empty_array
+        expect(test_game.find_piece_legal_moves(moves, origin_piece)).to eq empty_array
       end
     end
   end
@@ -246,27 +249,6 @@ describe Game do
         expect(test_game.find_opponent_moves(move)).to eq result
       end
     end
-  end
-
-  describe '#find_all_pieces_legal_moves' do
-  # Query to self that returns array of legal moves, nested in #find_opponent_moves
-
-    subject(:test_game) { described_class.new }
-
-    context 'when opponent Rook is at [7, 0] and opponent King at [0, 4] and player King at [7, 4] and player Knights at [7, 1] and [7, 6]' do
-    
-      it 'returns array of legal opponent moves' do
-        moves = [[7, 1], [7, 2], [7, 3], [7, 4], [7, 5], [7, 6], [7, 7], [6, 0], [5, 0], [4, 0], [3, 0], [2, 0], [1, 0], [0, 0],
-                 [0, 3], [0, 5], [1, 3], [1, 4], [1, 5]]
-        
-        result = [[[7, 1], [6, 0], [5, 0], [4, 0], [3, 0], [2, 0], [1, 0], [0, 0]],
-        [[0, 3], [0, 5], [1, 3], [1, 4], [1, 5]]]
-
-        expect(test_game.find_all_pieces_legal_moves(moves)).to eq result
-      end
-    end
-  
-  
   end
 
   describe '#find_opponent' do
