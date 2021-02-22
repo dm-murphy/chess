@@ -221,11 +221,11 @@ describe Game do
 # end
 
   describe '#find_opponent_moves' do
-  
+
     subject(:test_game) { described_class.new }
 
     context 'when opponent Rook is at [7, 0] and opponent King at [0, 4] and player King at [7, 4] and player Knights at [7, 1] and [7, 6]' do
-      
+
       it 'returns array of all opponent moves' do
         move = [5, 5]
         result = [[[7, 1], [6, 0], [5, 0], [4, 0], [3, 0], [2, 0], [1, 0], [0, 0]],
@@ -236,16 +236,13 @@ describe Game do
         test_king = King.new([0, 4], 'white')
         test_pieces = [test_rook, test_king]
         test_remaining_pieces = [test_rook, test_king]
-        test_all_possible_moves = [[[7, 1], [7, 2], [7, 3], [7, 4], [7, 5], [7, 6], [7, 7], [6, 0], [5, 0], [4, 0], [3, 0], [2, 0], [1, 0], [0, 0]],
-        [[0, 3], [0, 5], [1, 3], [1, 4], [1, 5]]]
-        test_all_legal_moves = [[[7, 1], [6, 0], [5, 0], [4, 0], [3, 0], [2, 0], [1, 0], [0, 0]],
+        test_available_opponent_moves = [[[7, 1], [6, 0], [5, 0], [4, 0], [3, 0], [2, 0], [1, 0], [0, 0]],
         [[0, 3], [0, 5], [1, 3], [1, 4], [1, 5]]]
 
         allow(test_game).to receive(:find_opponent) { test_opponent }
         allow(test_game).to receive(:find_pieces) { test_pieces }
         allow(test_game).to receive(:remove_possible_capture) { test_remaining_pieces }
-        allow(test_game).to receive(:find_all_pieces_possible_moves) { test_all_possible_moves }
-        allow(test_game).to receive(:find_all_pieces_legal_moves) { test_all_legal_moves }
+        allow(test_game).to receive(:find_available_opponent_moves) { test_available_opponent_moves }
         expect(test_game.find_opponent_moves(move)).to eq result
       end
     end
