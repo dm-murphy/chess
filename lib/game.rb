@@ -23,10 +23,8 @@ class Game
       @current_piece = ask_user_start
       moves = find_piece_moves(@current_piece)
 
-
-      # Test
       origin_piece = @current_piece
-      
+
       legal_moves = find_piece_legal_moves(moves, origin_piece)
       redo if legal_moves.empty?
 
@@ -38,24 +36,11 @@ class Game
     end
   end
 
-  # def test_blocked(legal_moves)
-  #   test_moves = []
-
-  #   legal_moves.map do |move|
-  #     test_moves.push(move) if blocked?(move)
-  #   end
-
-  #   test_moves
-  # end
-
   def blocked?(destination_move, origin_piece)
-    
     origin = origin_piece
     destination = destination_move
     array = @board.path_finder(origin, destination)
     origin.children = []
-    # puts "For origin ( #{origin} ) the possible moves are #{origin.possible_moves} and the single_moves are #{origin.single_moves}"
-    #  puts "For origin/currentpiece ( #{origin} ) with coords of ( #{origin.coord} ) and children of ( #{origin.children} ) and destination ( #{destination} ) the path array is #{array}"
     new_array = array - [destination_move]  
     final_array = new_array - [origin.coord]
     final_array.any? do |x, y|
@@ -106,30 +91,21 @@ class Game
   end
 
   def illegal_move?(move, origin_piece)
-    if occupied_by_player?(move)
+    if occupied_by_player?(move, origin_piece)
       true
     elsif blocked?(move, origin_piece)
       true
     elsif move_puts_self_in_check?(move, origin_piece)
-      puts "Shouldn't see this"
       true
-
-
-
-    # piece is king is working but subsequent king in check is NOT  
     elsif piece_is_king?(origin_piece)
       king_coord = move
-      puts "king Coord should now be at attempted legal move #{king_coord}"
       king_in_check?(move, king_coord)
-    else #is king currently in check?
+    else
       king = find_king
       king_coord = king.coord
-      # king_in_check?(move, king_coord)
       move_shields_king?(move, origin_piece, king_coord) == false
     end
-    # elsif moving_would_now_put_king_in_check
   end
-
 
   def move_shields_king?(move, origin_piece, king_coord)
     
@@ -188,9 +164,9 @@ class Game
     end
   end
 
-  def occupied_by_player?(move_coord)
+  def occupied_by_player?(move_coord, origin_piece)
     landing_space = coords_to_grid_object(move_coord)
-    landing_space.pieces == @current_player.pieces
+    landing_space.pieces == origin_piece.pieces
   end
 
   def piece_is_king?(piece)
@@ -206,24 +182,7 @@ class Game
   end
 
   def king_in_check?(move, king_coord)
-  
-    # if king can be saved? is true
-        # then return false to keep the move as legal
-    # if king can be saved? is false
-        # then return true to discard the move as illegal
-
-    # save_the_king
-        # puts temporary coord change on board for move
-        # saves the original piece (but puece hasn't been carried here 
-      
-      # Save the King ?# changes the Board coord for the move square to something?
-
-
-
     opponent_moves = find_opponent_moves(move)
-    # puts "opponent_moves = #{opponent_moves}"
-
-    # p opponent_moves
     coord_in_check?(king_coord, opponent_moves)
   end
 
@@ -231,85 +190,18 @@ class Game
     opponent = find_opponent
     opponent_pieces = find_pieces(opponent)
     remaining_pieces = remove_possible_capture(opponent_pieces, move)
-    
-    
-    # MAYBE could temporarily remove the move coordinates from Board
-    
-    # Just map through this for each opponent piece
-    
-    test_array = []
-    remaining_pieces.each do |piece|
-      
+    find_available_opponent_moves(remaining_pieces)
+  end
+
+  def find_available_opponent_moves(pieces)
+    available_opponent_moves = []
+    pieces.each do |piece|
       moves = find_piece_moves(piece)
-      
       moves.each do |move|
-        # Or does this really need legal moves and recursive calling with some sort of break if already visited?
-        test_array.push(move) unless blocked?(move, piece) || special_occupied_by_player?(move, piece)
-        # do you even need the occupied by player for this call?
+        available_opponent_moves.push(move) unless blocked?(move, piece) || occupied_by_player?(move, piece)
       end
-      # test_array.push(legal_moves)
     end
-    test_array
-
-
-      # FRIDAY 1:30pm
-      # Basically I'm missing the ability to check that the Rook could have a new legal move against King
-      # if the first Knight were to move
-      
-      # So the board call in blocked with occuppied? doesn't show that the first KNight moving would change that call
-
-
-
-
-    # But two separate cases here
-    #  # Have to check for both knights (black) ability to move on Row 7
-    # Not only should second knight get to move with first knight blocking Rook
-    # BUT also first knight should not get to move and allow rook to check King, and is that Rook's movements not showing the possibility of checking King?
-
-
-  # From here I don't want ALL posasible moves or ALL legal moves. I just want to go through each piece
-  # in the remaining pieces and find that pieces possible moves and then that pieces legal moves.
-  # Then I can push that pieces legal moves to an array to return from the method back to king_in_check
-
-
-# OLD VERSION HERE:
-
-    # all_possible_moves = find_all_pieces_possible_moves(remaining_pieces).flatten(1)
-    # all_legal_moves = find_all_pieces_legal_moves(all_possible_moves)
-
-
-
-
-    # p all_legal_moves
-    # p all_possible_moves
-    # find_piece_legal_moves(all_possible_moves)
-    # Stack level too deep
-
-    # Can we check legal moves prior to collecting all the possible moves. basically run through ti the same way we do for current player picks?
-
-
-    # all_legal_moves = find_all_pieces_legal_moves(all_possible_moves)
-    
-    # all_legal_moves = find_piece_legal_moves(all_possible_moves)
-  end
-
-  def special_occupied_by_player?(move, piece)
-    # occupied by player without needing @currentplayerpieces
-    landing_space = coords_to_grid_object(move)
-    landing_space.pieces == piece.pieces
-  end
-
-  def find_all_pieces_legal_moves(moves)
-    array = []
-    moves.map do |move|
-      # p move
-      array.push(move) unless blocked?(move)
-
-      # p move
-      # test = find_piece_legal_moves(move)
-      # p test
-    end
-    array
+    available_opponent_moves
   end
 
   def find_opponent
@@ -425,6 +317,12 @@ class Game
 end
 
 # Next Pseudo Steps
+
+  # Clean up #move_shields_king? and #move_puts_self_in_check? 
+
+  # Check on @current_piece usage
+
+  # Write tests for new methods (#find_available_opponent_moves, #move_shields_king, #move_puts_self_in_check)
 
   # Main Game logic missing:
 
