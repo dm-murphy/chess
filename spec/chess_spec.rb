@@ -117,7 +117,7 @@ describe Game do
 
 # describe '#illegal_move?' do
 #  # Query script, nested in #find__piece_legal_moves -> #start_turn
-#  # Tests and comments below for methods inside #occupied_by_player?, #piece_is_king? and #king_in_check?
+#  # Tests and comments below for methods inside #occupied_by_player?, #blocked?, #move_puts_self_in_check?, #king_stays_in_check?
 # end
 
   describe '#occupied_by_player?' do
@@ -186,7 +186,7 @@ describe Game do
   end
 
   describe 'king_in_check?' do
-    # Script, nested in #illegal_move? -> find_piece_legal_moves -> #start_turn
+    # Script, nested in #illegal_move? -> #find_piece_legal_moves -> #start_turn
 
     subject(:test_game) { described_class.new }
 
@@ -202,6 +202,26 @@ describe Game do
 
         allow(test_game).to receive(:find_opponent_moves) { test_moves }
         expect(test_game.king_in_check?(move, king_coord)).to be false
+      end
+    end
+  end
+
+  describe 'move_keeps_king_in_check?' do
+    # Query / Command to Board, nested in #illegal_move?
+
+    subject(:test_game) { described_class.new(test_board) }
+    let(:test_board){ Board.new }
+
+    context 'when opponent Rook is at [2, 4], and player King at [7, 4] with player move of Knight from [5, 2] to [6, 4]' do
+
+      it 'returns true' do
+        test_move = [6, 4]
+        test_origin_piece = Knight.new([5, 2], 'black')
+        test_king_coord = [7, 4]
+
+        expect(test_board).to receive(:move_piece_to_coords).exactly(3)
+        allow(test_game).to receive(:king_in_check?) { false }
+        expect(test_game.move_keeps_king_in_check?(test_move, test_origin_piece, test_king_coord)).to be false
       end
     end
   end
