@@ -8,7 +8,6 @@ class Game
     @player_one = player_one
     @player_two = player_two
     @current_player = @player_one
-    @current_piece = nil
   end
 
   def start
@@ -20,19 +19,16 @@ class Game
   def start_turn
     loop do
       display_user
-      @current_piece = ask_user_start
-      moves = find_piece_moves(@current_piece)
-
-      origin_piece = @current_piece
-
+      origin_piece = ask_user_start
+      moves = find_piece_moves(origin_piece)
       legal_moves = find_piece_legal_moves(moves, origin_piece)
       redo if legal_moves.empty?
 
       destination_coord = ask_user_destination(legal_moves)
-      start_coord = @current_piece.coord
+      start_coord = origin_piece.coord
       update_board(start_coord, destination_coord)
       swap_player
-      # break if game_over?
+      break if game_over?
     end
   end
 
@@ -233,33 +229,36 @@ class Game
 
   def display_checkmate
     @board.show_grid
-    puts "Checkmate."
+    puts 'Checkmate.'
   end
 
   def checkmate?
-    player = @current_player.pieces
-    player_pieces = find_pieces(player)
-    player_legal_moves = all_legal_moves(player_pieces)
-
     king = find_king
     king_coord = king.coord
-    no_player_moves?(player_legal_moves) && king_in_check?(nil, king_coord)
+    return unless king_in_check?(nil, king_coord)
+
+    no_player_moves?
+  end
+
+  def no_player_moves?
+    player = @current_player.pieces
+    player_pieces = find_pieces(player)
+    player_legal_moves = all_legal_moves(player_pieces) 
+    no_legal_moves?(player_legal_moves)
   end
 
   def all_legal_moves(player_pieces)
     player_legal_moves = []
 
     player_pieces.map do |piece|
-      @current_piece = piece
-      moves = find_piece_moves(@current_piece)
-      # missing argument for find_piece_legal_moves
-      legal_moves = find_piece_legal_moves(moves)
+      moves = find_piece_moves(piece)
+      legal_moves = find_piece_legal_moves(moves, piece)
       player_legal_moves.push(legal_moves)
     end
     player_legal_moves
   end
 
-  def no_player_moves?(player_legal_moves)
+  def no_legal_moves?(player_legal_moves)
     all_moves = player_legal_moves.flatten(1)
     all_moves.any? == false
   end
@@ -280,7 +279,7 @@ end
 
 # Next Pseudo Steps
 
-  # Check on @current_piece usage
+  
 
   # Write tests for new methods (#find_available_opponent_moves, #move_shields_king, #move_puts_self_in_check)
 
