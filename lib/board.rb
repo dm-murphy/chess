@@ -10,7 +10,6 @@ class Board
     @white_king = King.new([0, 4], 'white')
     @black_king = King.new([7, 4], 'black')
     @origin_piece = nil
-    # @destination_coord = nil
     @visited = []
     start_pieces
   end
@@ -64,7 +63,7 @@ class Board
     piece.find_single_moves
   end
 
-  def replace_original_piece(piece, coords)
+  def move_piece_to_coords(piece, coords)
     @grid[coords.first][coords.last] = piece
   end
 
@@ -90,16 +89,14 @@ class Board
     # reset_path_finder
   end
 
-  def reset_path_finder
-    @origin_piece = nil
-    @destination_coord = nil
-    @visitied = []
-  end
+  # def reset_path_finder
+  #   @origin_piece = nil
+  #   @destination_coord = nil
+  #   @visitied = []
+  # end
 
   def build_path(destination_coord, queue = [@origin_piece])
     current = queue.last
-    # p current.coord
-    # p current.single_moves
     return if current.nil?
     return path_array(current) if current.coord == destination_coord
 
@@ -125,62 +122,4 @@ class Board
 
     path_array(piece.parent, array)
   end
-
-  # def path_finder(origin, destination)
-  #   @origin_piece = origin
-  #   @destination_coord = destination
-  #   @visited = [@origin_piece]
-  #   build_path
-  #   # reset_path_finder
-  # end
-
-  # def reset_path_finder
-  #   @origin_piece = nil
-  #   @destination_coord = nil
-  #   @visitied = []
-  # end
-
-  # def build_path(queue = [@origin_piece])
-  #   current = queue.last
-
-  #   return if current.nil?
-  #   return path_array(current) if current.coord == @destination_coord
-
-  #   current.single_moves.each do |move|
-  #     next if @visited.include?(move)
-
-  #     class_type = current.class
-  #     piece_type = current.pieces
-  #     piece_child = class_type.new(move, piece_type)
-  #     current.children.push(piece_child)
-  #     piece_child.parent = current
-  #     @visited.push(piece_child.coord)
-  #     queue.unshift(piece_child)
-  #   end
-
-  #   queue.pop
-  #   build_path(queue)
-  # end
-
-  # def path_array(piece, array = [])
-  #   array.unshift piece.coord
-  #   return array if piece == @origin_piece
-
-  #   path_array(piece.parent, array)
-  # end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 end

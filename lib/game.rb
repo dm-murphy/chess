@@ -36,18 +36,6 @@ class Game
     end
   end
 
-  def blocked?(destination_move, origin_piece)
-    origin = origin_piece
-    destination = destination_move
-    array = @board.path_finder(origin, destination)
-    origin.children = []
-    new_array = array - [destination_move]  
-    final_array = new_array - [origin.coord]
-    final_array.any? do |x, y|
-      @board.occupied?(x, y)
-    end
-  end
-
   def display_user
     @board.show_grid
     puts "#{@current_player.name} choose a piece"
@@ -95,51 +83,52 @@ class Game
       move_puts_self_in_check?(move, origin_piece) || king_stays_in_check?(move, origin_piece)
   end
 
-  def king_stays_in_check?(move, origin_piece)
-    if piece_is_king?(origin_piece)
-      king_coord = move
-      king_in_check?(move, king_coord)
-    else
-      king = find_king
-      king_coord = king.coord
-      move_keeps_king_in_check?(move, origin_piece, king_coord)
+  def occupied_by_player?(move_coord, origin_piece)
+    landing_space = coords_to_grid_object(move_coord)
+    landing_space.pieces == origin_piece.pieces
+  end
+
+  def blocked?(destination_move, origin_piece)
+    origin = origin_piece
+    destination = destination_move
+    array = @board.path_finder(origin, destination)
+    origin.children = []
+    new_array = array - [destination_move]  
+    final_array = new_array - [origin.coord]
+    final_array.any? do |x, y|
+      @board.occupied?(x, y)
     end
+  end
+
+  def move_puts_self_in_check?(move, origin_piece)
+    king_coord = find_king_coord(move, origin_piece)
+    @board.clean_square(origin_piece.coord)
+    result = king_in_check?(move, king_coord) && move_keeps_king_in_check?(move, origin_piece, king_coord)
+    @board.move_piece_to_coords(origin_piece, origin_piece.coord)
+    result
+  end
+
+  def king_stays_in_check?(move, origin_piece)
+    king_coord = find_king_coord(move, origin_piece)
+    move_keeps_king_in_check?(move, origin_piece, king_coord)
   end
 
   def move_keeps_king_in_check?(move, origin_piece, king_coord)
     destination_piece = coords_to_grid_object(move)
-    origin_piece_coord = origin_piece.coord
     @board.move_piece_to_coords(origin_piece, move)
     result = king_in_check?(move, king_coord)
-    @board.move_piece_to_coords(origin_piece, origin_piece_coord)
+    @board.move_piece_to_coords(origin_piece, origin_piece.coord)
     @board.move_piece_to_coords(destination_piece, move)
     result
   end
 
-  def move_puts_self_in_check?(move, origin_piece)
-    save_me_original_piece = origin_piece
-    origin_coords = origin_piece.coord
-    @board.clean_square(origin_coords)
-
+  def find_king_coord(move, origin_piece)
     if piece_is_king?(origin_piece)
-      king_coord = move
+      move
     else
       king = find_king
-      king_coord = king.coord
+      king.coord
     end
-
-    if (king_in_check?(move, king_coord) == true) && move_keeps_king_in_check?(move, origin_piece, king_coord)
-      @board.move_piece_to_coords(save_me_original_piece, origin_coords)
-      true
-    else 
-      @board.move_piece_to_coords(save_me_original_piece, origin_coords)
-      false
-    end
-  end
-
-  def occupied_by_player?(move_coord, origin_piece)
-    landing_space = coords_to_grid_object(move_coord)
-    landing_space.pieces == origin_piece.pieces
   end
 
   def piece_is_king?(piece)
@@ -290,8 +279,6 @@ class Game
 end
 
 # Next Pseudo Steps
-
-  # Clean up #move_shields_king? and #move_puts_self_in_check? 
 
   # Check on @current_piece usage
 
