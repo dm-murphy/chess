@@ -130,20 +130,10 @@ class Game
 
 
   def move_puts_self_in_check?(move, origin_piece)
-    # This could maybe work for both problems, guarding king moves into check and other move of blocking check
-    
-    # Empty square for originpiece coordinates
-    # Then afterwards you will need to bring object back to square somehow
-
-    # Just change origin piece coords to move coords
     save_me_original_piece = origin_piece
     origin_coords = origin_piece.coord
     @board.clean_square(origin_coords)
-    
-    # landing_space = coords_to_grid_object(move)
 
-
-    # BOOM RIGHT HERE. The king is doing the move in this scenario so find king brings it back to wrong spot
     if piece_is_king?(origin_piece)
       king_coord = move
     else
@@ -151,11 +141,7 @@ class Game
       king_coord = king.coord
     end
 
-    # king = find_king
-    # king_coord = king.coord
     if (king_in_check?(move, king_coord) == true) && (move_shields_king?(move, origin_piece, king_coord) == false)
-      # puts "King in check was true"
-      # puts "Original piece #{save_me_original_piece.coord}"
       @board.replace_original_piece(save_me_original_piece, origin_coords)
       true
     else 

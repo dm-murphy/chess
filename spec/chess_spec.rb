@@ -128,11 +128,11 @@ describe Game do
 
       it 'returns false' do
         test_coord = [2, 0]
-        test_game.instance_variable_set(:@current_player, Player.new('Player 1', 'white'))
+        test_piece = Knight.new([0, 1], 'white')
 
         blank_square = Square.new
         allow(test_game).to receive(:coords_to_grid_object) { blank_square }
-        expect(test_game.occupied_by_player?(test_coord)).to be false
+        expect(test_game.occupied_by_player?(test_coord, test_piece)).to be false
       end
     end
 
@@ -140,11 +140,11 @@ describe Game do
   
       it 'returns false' do
         test_coord = [2, 2]
-        test_game.instance_variable_set(:@current_player, Player.new('Player 1', 'white'))
+        test_piece = Knight.new([0, 1], 'white')
 
         black_knight = Knight.new([2, 2], 'black')
         allow(test_game).to receive(:coords_to_grid_object) { black_knight }
-        expect(test_game.occupied_by_player?(test_coord)).to be false
+        expect(test_game.occupied_by_player?(test_coord, test_piece)).to be false
       end
     end
 
@@ -152,11 +152,11 @@ describe Game do
   
       it 'returns true' do
         test_coord = [1, 3]
-        test_game.instance_variable_set(:@current_player, Player.new('Player 1', 'white'))
+        test_piece = Knight.new([0, 1], 'white')
 
         other_white_knight = Knight.new([1, 3], 'white')
         allow(test_game).to receive(:coords_to_grid_object) { other_white_knight }
-        expect(test_game.occupied_by_player?(test_coord)).to be true
+        expect(test_game.occupied_by_player?(test_coord, test_piece)).to be true
       end
     end
 
@@ -164,11 +164,11 @@ describe Game do
     
       it 'returns false' do
         test_coord = [5, 2]
-        test_game.instance_variable_set(:@current_player, Player.new('Player 2', 'black'))
+        test_piece = Knight.new([7, 1], 'black')
 
         white_knight = Knight.new([5, 2], 'white')
         allow(test_game).to receive(:coords_to_grid_object) { white_knight }
-        expect(test_game.occupied_by_player?(test_coord)).to be false
+        expect(test_game.occupied_by_player?(test_coord, test_piece)).to be false
       end
     end
 
@@ -176,11 +176,11 @@ describe Game do
     
       it 'returns true' do
         test_coord = [6, 3]
-        test_game.instance_variable_set(:@current_player, Player.new('Player 2', 'black'))
+        test_piece = Knight.new([7, 1], 'black')
 
         other_black_knight = Knight.new([6, 3], 'black')
         allow(test_game).to receive(:coords_to_grid_object) { other_black_knight }
-        expect(test_game.occupied_by_player?(test_coord)).to be true
+        expect(test_game.occupied_by_player?(test_coord, test_piece)).to be true
       end
     end
   end
