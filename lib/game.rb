@@ -91,43 +91,30 @@ class Game
   end
 
   def illegal_move?(move, origin_piece)
-    if occupied_by_player?(move, origin_piece)
-      true
-    elsif blocked?(move, origin_piece)
-      true
-    elsif move_puts_self_in_check?(move, origin_piece)
-      true
-    elsif piece_is_king?(origin_piece)
+    occupied_by_player?(move, origin_piece) || blocked?(move, origin_piece) ||
+      move_puts_self_in_check?(move, origin_piece) || king_stays_in_check?(move, origin_piece)
+  end
+
+  def king_stays_in_check?(move, origin_piece)
+    if piece_is_king?(origin_piece)
       king_coord = move
       king_in_check?(move, king_coord)
     else
       king = find_king
       king_coord = king.coord
-      move_shields_king?(move, origin_piece, king_coord) == false
+      move_keeps_king_in_check?(move, origin_piece, king_coord)
     end
   end
 
-  def move_shields_king?(move, origin_piece, king_coord)
-    
-    save_me_original_piece = origin_piece
-    save_me_destination_piece = coords_to_grid_object(move)
-    # puts "save_me_original is #{save_me_original_piece} and save_me_destination is #{save_me_destination_piece}"
-    original_piece_coord = origin_piece.coord
-    # @board.move_piece(original_piece_coord, move)
-    @board.replace_original_piece(save_me_original_piece, move)
-    # puts "BUT NOW save_me_original is #{save_me_original_piece} and save_me_destination is #{save_me_destination_piece}"
-    
-    if king_in_check?(move, king_coord)
-      @board.replace_original_piece(save_me_original_piece, original_piece_coord)
-      @board.replace_original_piece(save_me_destination_piece, move)
-      false
-    else
-      @board.replace_original_piece(save_me_original_piece, original_piece_coord)
-      @board.replace_original_piece(save_me_destination_piece, move)
-      true
-    end
+  def move_keeps_king_in_check?(move, origin_piece, king_coord)
+    destination_piece = coords_to_grid_object(move)
+    origin_piece_coord = origin_piece.coord
+    @board.move_piece_to_coords(origin_piece, move)
+    result = king_in_check?(move, king_coord)
+    @board.move_piece_to_coords(origin_piece, origin_piece_coord)
+    @board.move_piece_to_coords(destination_piece, move)
+    result
   end
-
 
   def move_puts_self_in_check?(move, origin_piece)
     save_me_original_piece = origin_piece
@@ -141,11 +128,11 @@ class Game
       king_coord = king.coord
     end
 
-    if (king_in_check?(move, king_coord) == true) && (move_shields_king?(move, origin_piece, king_coord) == false)
-      @board.replace_original_piece(save_me_original_piece, origin_coords)
+    if (king_in_check?(move, king_coord) == true) && move_keeps_king_in_check?(move, origin_piece, king_coord)
+      @board.move_piece_to_coords(save_me_original_piece, origin_coords)
       true
     else 
-      @board.replace_original_piece(save_me_original_piece, origin_coords)
+      @board.move_piece_to_coords(save_me_original_piece, origin_coords)
       false
     end
   end
