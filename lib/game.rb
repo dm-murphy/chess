@@ -99,7 +99,7 @@ class Game
   def move_puts_self_in_check?(move, origin_piece)
     king_coord = find_king_coord(move, origin_piece)
     @board.clean_square(origin_piece.coord)
-    result = king_in_check?(move, king_coord) && move_keeps_king_in_check?(move, origin_piece, king_coord)
+    result = king_in_check?(king_coord, move) && move_keeps_king_in_check?(move, origin_piece, king_coord)
     @board.move_piece_to_coords(origin_piece, origin_piece.coord)
     result
   end
@@ -112,7 +112,7 @@ class Game
   def move_keeps_king_in_check?(move, origin_piece, king_coord)
     destination_piece = coords_to_grid_object(move)
     @board.move_piece_to_coords(origin_piece, move)
-    result = king_in_check?(move, king_coord)
+    result = king_in_check?(king_coord, move)
     @board.move_piece_to_coords(origin_piece, origin_piece.coord)
     @board.move_piece_to_coords(destination_piece, move)
     result
@@ -139,7 +139,7 @@ class Game
     end
   end
 
-  def king_in_check?(move, king_coord)
+  def king_in_check?(king_coord, move = nil)
     opponent_moves = find_opponent_moves(move)
     coord_in_check?(king_coord, opponent_moves)
   end
@@ -235,7 +235,7 @@ class Game
   def checkmate?
     king = find_king
     king_coord = king.coord
-    return unless king_in_check?(nil, king_coord)
+    return unless king_in_check?(king_coord)
 
     no_player_moves?
   end
