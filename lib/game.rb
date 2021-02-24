@@ -215,16 +215,22 @@ class Game
   end
 
   def game_over?
-    return unless checkmate?
+    if checkmate?
+      display_checkmate
+      true
+    elsif draw?
+      display_draw
+      true
+    end
+  end
 
-    display_checkmate
-    true
-    # elsif draw?
-    #   display_draw
-    #   true
-    # else
-    #   false
-    # end
+  def display_draw
+    @board.show_grid
+    puts 'Draw.'
+  end
+
+  def draw?
+    no_player_moves?
   end
 
   def display_checkmate
@@ -263,11 +269,6 @@ class Game
     all_moves.any? == false
   end
 
-  # def draw?
-  #   # Placeholder for now
-  #   false
-  # end
-
   def swap_player
     @current_player = if @current_player == @player_one
                         @player_two
@@ -285,4 +286,10 @@ end
 
   # Main Game logic missing:
 
-    # Computer checks for draw and if true displays result
+      # Castling
+
+      # Bishops
+
+      # Queens
+
+      # Pawns
