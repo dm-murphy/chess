@@ -23,50 +23,62 @@ class Game
       moves = find_piece_moves(origin_piece)
       legal_moves = find_piece_legal_moves(moves, origin_piece)
       redo if legal_moves.empty?
-      
+
       castle_destination = []
       castle(origin_piece, legal_moves, castle_destination)
-      
-
-      # Check for Castle
-      # If Castle is true, add Castle legal_move to array of legal_moves
-      # When updating Board, check for piece as king, if no first move, add first move (don't have to worry about updating ROOK's first move?)
-
 
       destination_coord = ask_user_destination(legal_moves)
       start_coord = origin_piece.coord
       update_board(start_coord, destination_coord)
       rook_castle(origin_piece, destination_coord, castle_destination)
       piece_move_history(origin_piece, destination_coord)
-      
+
       swap_player
       break if game_over?
     end
   end
 
   def piece_move_history(origin_piece, destination_coord)
-    p origin_piece
-    p origin_piece.first_move
     origin_piece.first_move.push(destination_coord)
   end
 
   def castle(origin_piece, legal_moves, castle_destination)
     return unless piece_is_king?(origin_piece)
-    return unless origin_piece.first_move.empty?#
-
-    puts "Pizza"
-
-    # Separate King side castle and Queen side castle
+    return unless origin_piece.first_move.empty?
 
     king_side_castle(origin_piece, legal_moves, castle_destination)
-    #queen_side_castle(origin_piece, legal_moves)
+    queen_side_castle(origin_piece, legal_moves, castle_destination)
+  end
 
-    # when board updates it also has to change Rook position
-    # then board has to update first moves from nil to something
+  def queen_side_castle(origin_piece, legal_moves, castle_destination)
+    rook = find_queen_side_rook
+    return unless rook.first_move.empty?
+
+    path = find_queen_side_path
+    return if blocked_path?(path)
+
+    path.pop
+    check_path = path.push(origin_piece.coord)
+    return if path_in_check?(check_path)
+
+    if origin_piece.pieces == 'white'
+      legal_moves.push([0, 2])
+      castle_destination.push([0, 2])
+    else
+      legal_moves.push([7, 2])
+      castle_destination.push([7, 2])
+    end
+  end
+
+  def find_queen_side_rook
+    find_king.pieces == 'white' ? @board.white_queen_side_rook : @board.black_queen_side_rook
+  end
+
+  def find_queen_side_path
+    find_king.pieces == 'white' ? [[0, 3], [0, 2], [0, 1]] : [[7, 3], [7, 2], [7, 1]]
   end
 
   def king_side_castle(origin_piece, legal_moves, castle_destination)
-    # problem here
     rook = find_king_side_rook
     return unless rook.first_move.empty?
 
@@ -76,8 +88,7 @@ class Game
     check_path = path.push(origin_piece.coord)
     return if path_in_check?(check_path)
 
-    # origin_piece.pieces == 'white' ? legal_moves.push([0, 6]) : legal_moves.push([7, 6])
-    if origin_piece.pieces == 'white' 
+    if origin_piece.pieces == 'white'
       legal_moves.push([0, 6])
       castle_destination.push([0, 6])
     else
@@ -99,30 +110,11 @@ class Game
   end
 
   def find_king_side_rook
-    rook_coord = if find_king.pieces == 'white'
-                   [0, 7]
-                 else
-                   [7, 7]
-                 end
-    coords_to_grid_object(rook_coord)
+    find_king.pieces == 'white' ? @board.white_king_side_rook : @board.black_king_side_rook
   end
 
   def find_king_side_path
     find_king.pieces == 'white' ? [[0, 5], [0, 6]] : [[7, 5], [7, 6]]
-  end
-
-  def castle_blocked?(destination_move, origin_piece)
-    origin = origin_piece
-    destination = destination_move
-    
-    array = @board.path_finder(origin, destination)
-    puts "For origin #{origin} and destination #{destination} the array is #{array}"
-    origin.children = []
-    new_array = array - [destination_move]  
-    final_array = new_array - [origin.coord]
-    final_array.any? do |x, y|
-      @board.occupied?(x, y)
-    end
   end
 
   def display_user
@@ -316,8 +308,12 @@ class Game
     elsif destination_coord == [7, 6]
       rook_start_coord = [7, 7]
       rook_destination_coord = [7, 5]
-      # elsif Queen side white
-      # elsif Queen side black
+    elsif destination_coord == [0, 2]
+      rook_start_coord = [0, 0]
+      rook_destination_coord = [0, 3]
+    elsif destination_coord == [7, 2]
+      rook_start_coord = [7, 0]
+      rook_destination_coord = [7, 3]
     end
     update_board(rook_start_coord, rook_destination_coord)
   end
