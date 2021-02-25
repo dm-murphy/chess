@@ -3,12 +3,16 @@
 # lib/chess_spec.rb
 
 class Board
-  attr_accessor :grid, :white_king, :black_king
+  attr_accessor :grid, :white_king, :white_king_side_rook, :white_queen_side_rook, :black_king, :black_king_side_rook, :black_queen_side_rook
 
   def initialize
     @grid = Array.new(8) { Array.new(8, Square.new) }
     @white_king = King.new([0, 4], 'white')
+    @white_king_side_rook = Rook.new([0, 7], 'white')
+    @white_queen_side_rook = Rook.new([0, 0], 'white')
     @black_king = King.new([7, 4], 'black')
+    @black_king_side_rook = Rook.new([7, 7], 'black')
+    @black_queen_side_rook = Rook.new([7, 0], 'black')
     @origin_piece = nil
     @visited = []
     start_pieces
@@ -31,16 +35,16 @@ class Board
   end
 
   def start_pieces
-    @grid[0][0] = Rook.new([0, 0], 'white')
+    @grid[0][0] = @white_queen_side_rook
     @grid[0][1] = Knight.new([0, 1], 'white')
     @grid[0][4] = @white_king
     @grid[0][6] = Knight.new([0, 6], 'white')
-    @grid[0][7] = Rook.new([0, 7], 'white')
-    @grid[7][0] = Rook.new([7, 0], 'black')
+    @grid[0][7] = @white_king_side_rook
+    @grid[7][0] = @black_queen_side_rook
     @grid[7][1] = Knight.new([7, 1], 'black')
     @grid[7][4] = @black_king
     @grid[7][6] = Knight.new([7, 6], 'black')
-    @grid[7][7] = Rook.new([7, 7], 'black')
+    @grid[7][7] = @black_king_side_rook
   end
 
   def change_pieces(old_coord, new_coord)
