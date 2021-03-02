@@ -16,6 +16,12 @@ class Game
     start_turn
   end
 
+  def blocked_path?(path)
+    path.any? do |x, y|
+      @board.occupied?(x, y)
+    end
+  end
+
   def start_turn
     loop do
       display_user
@@ -24,97 +30,15 @@ class Game
       legal_moves = find_piece_legal_moves(moves, origin_piece)
       redo if legal_moves.empty?
 
-      castle_destination = []
-      castle(origin_piece, legal_moves, castle_destination)
-
+      find_castle_moves(origin_piece, legal_moves)
       destination_coord = ask_user_destination(legal_moves)
       start_coord = origin_piece.coord
       update_board(start_coord, destination_coord)
-      rook_castle(origin_piece, destination_coord, castle_destination)
+      update_castling_rooks(destination_coord)
       piece_move_history(origin_piece, destination_coord)
-
       swap_player
       break if game_over?
     end
-  end
-
-  def piece_move_history(origin_piece, destination_coord)
-    origin_piece.first_move.push(destination_coord)
-  end
-
-  def castle(origin_piece, legal_moves, castle_destination)
-    return unless piece_is_king?(origin_piece)
-    return unless origin_piece.first_move.empty?
-
-    king_side_castle(origin_piece, legal_moves, castle_destination)
-    queen_side_castle(origin_piece, legal_moves, castle_destination)
-  end
-
-  def queen_side_castle(origin_piece, legal_moves, castle_destination)
-    rook = find_queen_side_rook
-    return unless rook.first_move.empty?
-
-    path = find_queen_side_path
-    return if blocked_path?(path)
-
-    path.pop
-    check_path = path.push(origin_piece.coord)
-    return if path_in_check?(check_path)
-
-    if origin_piece.pieces == 'white'
-      legal_moves.push([0, 2])
-      castle_destination.push([0, 2])
-    else
-      legal_moves.push([7, 2])
-      castle_destination.push([7, 2])
-    end
-  end
-
-  def find_queen_side_rook
-    find_king.pieces == 'white' ? @board.white_queen_side_rook : @board.black_queen_side_rook
-  end
-
-  def find_queen_side_path
-    find_king.pieces == 'white' ? [[0, 3], [0, 2], [0, 1]] : [[7, 3], [7, 2], [7, 1]]
-  end
-
-  def king_side_castle(origin_piece, legal_moves, castle_destination)
-    rook = find_king_side_rook
-    return unless rook.first_move.empty?
-
-    path = find_king_side_path
-    return if blocked_path?(path)
-
-    check_path = path.push(origin_piece.coord)
-    return if path_in_check?(check_path)
-
-    if origin_piece.pieces == 'white'
-      legal_moves.push([0, 6])
-      castle_destination.push([0, 6])
-    else
-      legal_moves.push([7, 6])
-      castle_destination.push([7, 6])
-    end
-  end
-
-  def path_in_check?(path)
-    path.any? do |coord|
-      king_in_check?(coord)
-    end
-  end
-
-  def blocked_path?(path)
-    path.any? do |x, y|
-      @board.occupied?(x, y)
-    end
-  end
-
-  def find_king_side_rook
-    find_king.pieces == 'white' ? @board.white_king_side_rook : @board.black_king_side_rook
-  end
-
-  def find_king_side_path
-    find_king.pieces == 'white' ? [[0, 5], [0, 6]] : [[7, 5], [7, 6]]
   end
 
   def display_user
@@ -286,6 +210,11 @@ class Game
     false
   end
 
+  def find_castle_moves(origin_piece, legal_moves)
+    @castle_moves = Castling.new(@board, @current_player)
+    @castle_moves.castle(origin_piece, legal_moves)
+  end
+
   def ask_user_destination(legal_moves)
     loop do
       puts "Choose a destination: #{legal_moves}"
@@ -299,27 +228,17 @@ class Game
     @board.change_pieces(start_coord, destination_coord)
   end
 
-  def rook_castle(origin_piece, destination_coord, castle_destination)
-    return unless castle_destination.include?(destination_coord)
+  def update_castling_rooks(destination_coord)
+    return unless @castle_moves.rook_castled?(destination_coord)
 
-    if destination_coord == [0, 6]
-      rook_start_coord = [0, 7]
-      rook_destination_coord = [0, 5]
-    elsif destination_coord == [7, 6]
-      rook_start_coord = [7, 7]
-      rook_destination_coord = [7, 5]
-    elsif destination_coord == [0, 2]
-      rook_start_coord = [0, 0]
-      rook_destination_coord = [0, 3]
-    elsif destination_coord == [7, 2]
-      rook_start_coord = [7, 0]
-      rook_destination_coord = [7, 3]
-    end
+    rook_start_coord = @castle_moves.find_rook_start(destination_coord)
+    rook_destination_coord = @castle_moves.find_rook_destination(destination_coord)
     update_board(rook_start_coord, rook_destination_coord)
   end
 
-  # def king_castled?
-  # end
+  def piece_move_history(origin_piece, destination_coord)
+    origin_piece.first_move.push(destination_coord)
+  end
 
   def game_over?
     if checkmate?
@@ -393,7 +312,7 @@ end
 
   # Main Game logic missing:
 
-      # Castling
+
 
       # Bishops
 
