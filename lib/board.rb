@@ -37,12 +37,16 @@ class Board
   def start_pieces
     @grid[0][0] = @white_queen_side_rook
     @grid[0][1] = Knight.new([0, 1], 'white')
+    @grid[0][2] = Bishop.new([0, 2], 'white')
     @grid[0][4] = @white_king
+    @grid[0][5] = Bishop.new([0, 5], 'white')
     @grid[0][6] = Knight.new([0, 6], 'white')
     @grid[0][7] = @white_king_side_rook
     @grid[7][0] = @black_queen_side_rook
     @grid[7][1] = Knight.new([7, 1], 'black')
+    @grid[7][2] = Bishop.new([7, 2], 'black')
     @grid[7][4] = @black_king
+    @grid[7][5] = Bishop.new([7, 5], 'black')
     @grid[7][6] = Knight.new([7, 6], 'black')
     @grid[7][7] = @black_king_side_rook
   end

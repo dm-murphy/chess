@@ -7,6 +7,7 @@ require './lib/square'
 require './lib/knight'
 require './lib/king'
 require './lib/rook'
+require './lib/bishop'
 
 describe Game do
 
