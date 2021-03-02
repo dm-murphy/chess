@@ -7,6 +7,7 @@ require_relative 'square.rb'
 require_relative 'knight.rb'
 require_relative 'king.rb'
 require_relative 'rook.rb'
+require_relative 'castling.rb'
 
 test_game = Game.new
 test_game.start
