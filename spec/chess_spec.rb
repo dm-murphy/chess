@@ -8,6 +8,8 @@ require './lib/knight'
 require './lib/king'
 require './lib/rook'
 require './lib/bishop'
+require './lib/queen'
+require './lib/castling.rb'
 
 describe Game do
 

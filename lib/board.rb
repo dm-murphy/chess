@@ -38,6 +38,7 @@ class Board
     @grid[0][0] = @white_queen_side_rook
     @grid[0][1] = Knight.new([0, 1], 'white')
     @grid[0][2] = Bishop.new([0, 2], 'white')
+    @grid[0][3] = Queen.new([0, 3], 'white')
     @grid[0][4] = @white_king
     @grid[0][5] = Bishop.new([0, 5], 'white')
     @grid[0][6] = Knight.new([0, 6], 'white')
@@ -45,6 +46,7 @@ class Board
     @grid[7][0] = @black_queen_side_rook
     @grid[7][1] = Knight.new([7, 1], 'black')
     @grid[7][2] = Bishop.new([7, 2], 'black')
+    @grid[7][3] = Queen.new([7, 3], 'black')
     @grid[7][4] = @black_king
     @grid[7][5] = Bishop.new([7, 5], 'black')
     @grid[7][6] = Knight.new([7, 6], 'black')

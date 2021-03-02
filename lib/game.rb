@@ -16,12 +16,6 @@ class Game
     start_turn
   end
 
-  def blocked_path?(path)
-    path.any? do |x, y|
-      @board.occupied?(x, y)
-    end
-  end
-
   def start_turn
     loop do
       display_user
@@ -100,7 +94,14 @@ class Game
     origin.children = []
     new_array = array - [destination_move]  
     final_array = new_array - [origin.coord]
-    final_array.any? do |x, y|
+    blocked_path?(final_array)    
+    # final_array.any? do |x, y|
+    #   @board.occupied?(x, y)
+    # end
+  end
+
+  def blocked_path?(path)
+    path.any? do |x, y|
       @board.occupied?(x, y)
     end
   end
