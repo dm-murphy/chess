@@ -3,7 +3,7 @@
 
 # Creates king objects for Board class with coordinates, pieces, display style and possible moves
 class King
-  attr_accessor :coord, :pieces, :display, :possible_moves, :children, :parent, :single_moves, :first_move
+  attr_accessor :coord, :pieces, :display, :possible_moves, :children, :parent, :single_moves, :first_move, :check_squares
 
   def initialize(coord, pieces)
     @coord = coord
@@ -16,7 +16,11 @@ class King
     find_possible_moves
     find_single_moves
 
+    # @check_squares = []
+    # find_possible_check_squares
+
     @first_move = []
+    
   end
 
   def find_possible_moves
@@ -57,5 +61,96 @@ class King
     coord_moves.map do |x, y|
       @single_moves.push([x, y]) if x.between?(0, 7) && y.between?(0, 7)
     end
+  end
+
+  def possible_check_squares
+    [[1, 2],
+     [2, 1],
+     [2, -1],
+     [1, -2],
+     [-1, -2],
+     [-2, -1],
+     [-2, 1],
+     [-1, 2],
+     [1, 0],
+     [2, 0],
+     [3, 0],
+     [4, 0],
+     [5, 0],
+     [6, 0],
+     [7, 0],
+     [-1, 0],
+     [-2, 0],
+     [-3, 0],
+     [-4, 0],
+     [-5, 0],
+     [-6, 0],
+     [-7, 0],
+     [0, 1],
+     [0, 2],
+     [0, 3],
+     [0, 4],
+     [0, 5],
+     [0, 6],
+     [0, 7],
+     [0, -1],
+     [0, -2],
+     [0, -3],
+     [0, -4],
+     [0, -5],
+     [0, -6],
+     [0, -7],
+     [1, 1],
+     [2, 2],
+     [3, 3],
+     [4, 4],
+     [5, 5],
+     [6, 6],
+     [7, 7],
+     [-1, -1],
+     [-2, -2],
+     [-3, -3],
+     [-4, -4],
+     [-5, -5],
+     [-6, -6],
+     [-7, -7],
+     [-1, 1],
+     [-2, 2],
+     [-3, 3],
+     [-4, 4],
+     [-5, 5],
+     [-6, 6],
+     [-7, 7],
+     [1, -1],
+     [2, -2],
+     [3, -3],
+     [4, -4],
+     [5, -5],
+     [6, -6],
+     [7, -7]]
+  end
+
+  # def find_possible_check_squares
+  #   coord_changes = possible_check_squares
+
+  #   coord_moves = coord_changes.map do |x, y|
+  #     [@coord[0] + x, @coord[1] + y]
+  #   end
+  #   coord_moves.map do |x, y|
+  #     @check_squares.push([x, y]) if x.between?(0, 7) && y.between?(0, 7)
+  #   end
+  # end
+  def find_possible_check_squares(king_coord)
+    coord_changes = possible_check_squares
+    
+    check_squares = []
+
+    coord_moves = coord_changes.map do |x, y|
+      [king_coord[0] + x, king_coord[1] + y]
+    end
+    coord_moves.map do |x, y|
+      check_squares.push([x, y]) if x.between?(0, 7) && y.between?(0, 7)
+    end
+    check_squares
   end
 end
