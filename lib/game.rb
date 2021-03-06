@@ -21,17 +21,27 @@ class Game
       display_user
       origin_piece = ask_user_start
       moves = find_piece_moves(origin_piece)
+      
       legal_moves = find_piece_legal_moves(moves, origin_piece)
+      
       redo if legal_moves.empty?
 
       find_castle_moves(origin_piece, legal_moves)
+
+
+      
       destination_coord = ask_user_destination(legal_moves)
       start_coord = origin_piece.coord
       update_board(start_coord, destination_coord)
       update_castling_rooks(destination_coord)
       piece_move_history(origin_piece, destination_coord)
       swap_player
-      break if game_over?
+
+
+      # break if game_over?
+
+
+
     end
   end
 
@@ -88,12 +98,15 @@ class Game
   end
 
   def blocked?(destination_move, origin_piece)
+    # PROBLEM IN BLOCKED
+
     origin = origin_piece
     destination = destination_move
     array = @board.path_finder(origin, destination)
     origin.children = []
     new_array = array - [destination_move]  
     final_array = new_array - [origin.coord]
+    puts "#{origin_piece} making this move #{destination_move} has this final array #{final_array}"
     blocked_path?(final_array)    
     # final_array.any? do |x, y|
     #   @board.occupied?(x, y)
@@ -107,16 +120,18 @@ class Game
   end
 
   def move_puts_self_in_check?(move, origin_piece)
+    
     king_coord = find_king_coord(move, origin_piece)
     @board.clean_square(origin_piece.coord)
     result = king_in_check?(king_coord, move) && move_keeps_king_in_check?(move, origin_piece, king_coord)
     @board.move_piece_to_coords(origin_piece, origin_piece.coord)
-    puts "move #{move} of origin #{origin_piece} with king coord #{king_coord} puts self in check #{result}"
+    # puts "move #{move} of origin #{origin_piece} with king coord #{king_coord} puts self in check #{result}"
     result
   end
 
   def king_stays_in_check?(move, origin_piece)
     king_coord = find_king_coord(move, origin_piece)
+    # p king_coord
     move_keeps_king_in_check?(move, origin_piece, king_coord)
   end
 
@@ -131,15 +146,15 @@ class Game
     @board.move_piece_to_coords(origin_piece, move)
 
     @board.clean_square(origin_piece.coord)
-    @board.show_grid
-    p @board.grid[5][5]
+    # @board.show_grid
+    # p @board.grid[5][5]
 
 
 
     result = king_in_check?(king_coord, move)
     @board.move_piece_to_coords(origin_piece, origin_piece.coord)
     @board.move_piece_to_coords(destination_piece, move)
-    puts "MOVE #{move} of ORIGIN #{origin_piece} with KING COORD #{king_coord} _KEEPS_KING_IN_CHECK #{result}"
+    # puts "MOVE #{move} of ORIGIN #{origin_piece} with KING COORD #{king_coord} _KEEPS_KING_IN_CHECK #{result}"
     result
   end
 
