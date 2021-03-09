@@ -20,6 +20,12 @@ class Game
     loop do
       display_user
       origin_piece = ask_user_start
+
+      # destination_coord = [4, 0]
+      # @board.test_method(origin_piece, destination_coord)
+
+
+
       moves = find_piece_moves(origin_piece)
       
       legal_moves = find_piece_legal_moves(moves, origin_piece)
@@ -38,7 +44,7 @@ class Game
       swap_player
 
 
-      # break if game_over?
+      break if game_over?
 
 
 
@@ -106,7 +112,7 @@ class Game
     origin.children = []
     new_array = array - [destination_move]  
     final_array = new_array - [origin.coord]
-    puts "#{origin_piece} making this move #{destination_move} has this final array #{final_array}"
+    # puts "#{origin_piece} making this move #{destination_move} has this final array #{final_array}"
     blocked_path?(final_array)    
     # final_array.any? do |x, y|
     #   @board.occupied?(x, y)
@@ -191,6 +197,8 @@ class Game
 
   # This does speed things up significantly until a piece is in check
   # def king_in_check?(king_coord, move = nil)
+
+  # UPDATE no longer matters since removing recursive method for blocked path in board class
     
     
 
