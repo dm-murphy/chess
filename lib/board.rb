@@ -139,26 +139,26 @@ class Board
   #   build_path(destination_coord, queue)
   # end
 
-  def build_path(destination_coord, queue = [@origin_piece])
-    current = queue.last
-    return if current.nil?
-    return path_array(current) if current.coord == destination_coord
+  # def build_path(destination_coord, queue = [@origin_piece])
+  #   current = queue.last
+  #   return if current.nil?
+  #   return path_array(current) if current.coord == destination_coord
 
-    current.single_moves.each do |move|
-      next if @visited.include?(move)
+  #   current.single_moves.each do |move|
+  #     next if @visited.include?(move)
 
-      class_type = current.class
-      piece_type = current.pieces
-      piece_child = class_type.new(move, piece_type)
-      current.children.push(piece_child)
-      piece_child.parent = current
-      @visited.push(piece_child.coord)
-      queue.unshift(piece_child)
-    end
+  #     class_type = current.class
+  #     piece_type = current.pieces
+  #     piece_child = class_type.new(move, piece_type)
+  #     current.children.push(piece_child)
+  #     piece_child.parent = current
+  #     @visited.push(piece_child.coord)
+  #     queue.unshift(piece_child)
+  #   end
 
-    queue.pop
-    build_path(destination_coord, queue)
-  end
+  #   queue.pop
+  #   build_path(destination_coord, queue)
+  # end
 
   def test_method(origin_piece, destination_coord)
     origin_piece.next_space_moves.each do |move|
@@ -196,10 +196,10 @@ class Board
     x.between?(0, 7) && y.between?(0, 7)
   end
 
-  def path_array(piece, array = [])
-    array.unshift piece.coord
-    return array if piece == @origin_piece
+  # def path_array(piece, array = [])
+  #   array.unshift piece.coord
+  #   return array if piece == @origin_piece
 
-    path_array(piece.parent, array)
-  end
+  #   path_array(piece.parent, array)
+  # end
 end
