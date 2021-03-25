@@ -20,34 +20,18 @@ class Game
     loop do
       display_user
       origin_piece = ask_user_start
-
-      # destination_coord = [4, 0]
-      # @board.test_method(origin_piece, destination_coord)
-
-
-
       moves = find_piece_moves(origin_piece)
-      
       legal_moves = find_piece_legal_moves(moves, origin_piece)
-      
       redo if legal_moves.empty?
 
       find_castle_moves(origin_piece, legal_moves)
-
-
-      
       destination_coord = ask_user_destination(legal_moves)
       start_coord = origin_piece.coord
       update_board(start_coord, destination_coord)
       update_castling_rooks(destination_coord)
       piece_move_history(origin_piece, destination_coord)
       swap_player
-
-
       break if game_over?
-
-
-
     end
   end
 
@@ -104,19 +88,13 @@ class Game
   end
 
   def blocked?(destination_move, origin_piece)
-    # PROBLEM IN BLOCKED
-
     origin = origin_piece
     destination = destination_move
     array = @board.path_finder(origin, destination)
     origin.children = []
-    new_array = array - [destination_move]  
+    new_array = array - [destination_move]
     final_array = new_array - [origin.coord]
-    # puts "#{origin_piece} making this move #{destination_move} has this final array #{final_array}"
-    blocked_path?(final_array)    
-    # final_array.any? do |x, y|
-    #   @board.occupied?(x, y)
-    # end
+    blocked_path?(final_array)
   end
 
   def blocked_path?(path)
@@ -126,41 +104,25 @@ class Game
   end
 
   def move_puts_self_in_check?(move, origin_piece)
-    
     king_coord = find_king_coord(move, origin_piece)
     @board.clean_square(origin_piece.coord)
     result = king_in_check?(king_coord, move) && move_keeps_king_in_check?(move, origin_piece, king_coord)
     @board.move_piece_to_coords(origin_piece, origin_piece.coord)
-    # puts "move #{move} of origin #{origin_piece} with king coord #{king_coord} puts self in check #{result}"
     result
   end
 
   def king_stays_in_check?(move, origin_piece)
     king_coord = find_king_coord(move, origin_piece)
-    # p king_coord
     move_keeps_king_in_check?(move, origin_piece, king_coord)
   end
 
   def move_keeps_king_in_check?(move, origin_piece, king_coord)
-    # puts "Move: #{move}  Origin Piece: #{origin_piece}   King_coord:  #{king_coord}"
-
-
-    ######## FIND THIS FOR NEXT SESSION
-    # Missing the Board clean square to allow Queen to check King on route to Rook in 7, 7?
-    # And do you have to move it back?
     destination_piece = coords_to_grid_object(move)
     @board.move_piece_to_coords(origin_piece, move)
-
     @board.clean_square(origin_piece.coord)
-    # @board.show_grid
-    # p @board.grid[5][5]
-
-
-
     result = king_in_check?(king_coord, move)
     @board.move_piece_to_coords(origin_piece, origin_piece.coord)
     @board.move_piece_to_coords(destination_piece, move)
-    # puts "MOVE #{move} of ORIGIN #{origin_piece} with KING COORD #{king_coord} _KEEPS_KING_IN_CHECK #{result}"
     result
   end
 
@@ -186,68 +148,9 @@ class Game
   end
 
   def king_in_check?(king_coord, move = nil)
-    # test = coords_to_grid_object(king_coord)
-    # p test
-
-
     opponent_moves = find_opponent_moves(move)
     coord_in_check?(king_coord, opponent_moves)
   end
-
-
-  # This does speed things up significantly until a piece is in check
-  # def king_in_check?(king_coord, move = nil)
-
-  # UPDATE no longer matters since removing recursive method for blocked path in board class
-    
-    
-
-  #   king = find_king
-
-    
-  #   king_check_squares = king.find_possible_check_squares(king_coord)
-    
-    
-  #   possible_checks = new_find_opponent_moves(king_check_squares)
-
-  #   opponent_pieces = make_opponent_pieces(possible_checks)
-
-  #   remaining_pieces = remove_possible_capture(opponent_pieces, move)
-    
-    
-    
-  #   opponent_moves = find_available_opponent_moves(remaining_pieces)
-    
-  #   coord_in_check?(king_coord, opponent_moves)
-  # end
-
-  def make_opponent_pieces(remaining_checks)
-    opponent_pieces = []
-    remaining_checks.each do |coord|
-      object = coords_to_grid_object(coord)
-      opponent_pieces.push(object)
-    end
-    opponent_pieces
-  end
-
-  def new_remove_move_square(possible_checks, move)
-    remaining_checks = []
-    possible_checks.map do |coord|
-      remaining_checks.push(coord) unless coord == move
-    end
-    remaining_checks
-  end
-
-  def new_find_opponent_moves(king_check_squares)
-    possible_checks = []
-    opponent = find_opponent
-    
-    king_check_squares.map do |coord|
-      possible_checks.push(coord) if coords_to_grid_object(coord).pieces == opponent
-    end
-    possible_checks
-  end
-
 
   def find_opponent_moves(move)
     opponent = find_opponent
@@ -336,16 +239,6 @@ class Game
     origin_piece.first_move.push(destination_coord)
   end
 
-  # def game_over?
-  #   if checkmate?
-  #     display_checkmate
-  #     true
-  #   elsif draw?
-  #     display_draw
-  #     true
-  #   end
-  # end
-
   def display_draw
     @board.show_grid
     puts 'Draw.'
@@ -378,18 +271,6 @@ class Game
     king_in_check?(king_coord)
   end
 
-
-  # def checkmate?
-  #   king = find_king
-  #   king_coord = king.coord
-  #   return unless king_in_check?(king_coord)
-
-  #   puts "Do you see me?"
-    
-  #   # No player moves runs twice because of game_over setup
-  #   no_player_moves?
-  # end
-  
   def no_player_moves?
     player = @current_player.pieces
     player_pieces = find_pieces(player)
@@ -410,20 +291,6 @@ class Game
     player_legal_moves
   end
 
-
-  # def all_legal_moves(player_pieces)
-  #   player_legal_moves = []
-
-  #   player_pieces.map do |piece|
-  #     moves = find_piece_moves(piece)
-      
-  #     legal_moves = find_piece_legal_moves(moves, piece)
-      
-  #     player_legal_moves.push(legal_moves)
-  #   end
-  #   player_legal_moves
-  # end
-
   def no_legal_moves?(player_legal_moves)
     all_moves = player_legal_moves.flatten(1)
     all_moves.any? == false
@@ -440,16 +307,8 @@ end
 
 # Next Pseudo Steps
 
-  
-
   # Write tests for new methods (#find_available_opponent_moves, #move_shields_king, #move_puts_self_in_check)
 
   # Main Game logic missing:
-
-
-
-      # Bishops
-
-      # Queens
 
       # Pawns
