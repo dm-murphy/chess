@@ -4,7 +4,7 @@
 
 # Creates rook objects for Board class with coordinates, pieces, display style and possible moves
 class Rook
-  attr_accessor :coord, :pieces, :display, :possible_moves, :children, :parent, :single_moves, :first_move
+  attr_accessor :coord, :pieces, :display, :possible_moves, :single_moves, :first_move
 
   def initialize(coord, pieces)
     @coord = coord
@@ -12,12 +12,9 @@ class Rook
     @display = pieces == 'white' ? "\u{2656}" : "\u{265C}"
     @possible_moves = []
     @single_moves = []
-    @children = []
-    @parent = nil
+    @first_move = []
     find_possible_moves
     find_single_moves
-
-    @first_move = []
   end
 
   def find_possible_moves
