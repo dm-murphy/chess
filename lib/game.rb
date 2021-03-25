@@ -235,6 +235,8 @@ class Game
   end
 
   def piece_move_history(origin_piece, destination_coord)
+    return unless defined?(origin_piece.first_move)
+
     origin_piece.first_move.push(destination_coord)
   end
 
