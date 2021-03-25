@@ -4,7 +4,7 @@
 
 # Creates knight objects for Board class with coordinates, pieces, display style and possible moves
 class Knight
-  attr_accessor :coord, :pieces, :display, :possible_moves, :single_moves, :first_move
+  attr_accessor :coord, :pieces, :display, :possible_moves, :single_moves
 
   def initialize(coord, pieces)
     @coord = coord
@@ -12,7 +12,6 @@ class Knight
     @display = pieces == 'white' ? "\u{2658}" : "\u{265E}"
     @possible_moves = []
     @single_moves = []
-    @first_move = []
     find_possible_moves
     find_single_moves
   end
