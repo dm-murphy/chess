@@ -68,11 +68,6 @@ class Board
     piece.coord = new_coord
     piece.possible_moves = []
     piece.find_possible_moves
-    # Add this
-
-    ##### Don't forget about updating/removing these if changing class responsibility here
-    # piece.single_moves = []
-    # piece.find_single_moves
   end
 
   def move_piece_to_coords(piece, coords)
@@ -91,22 +86,16 @@ class Board
     @grid[row][column].class != Square
   end
 
-  def path_finder(origin, destination)
-    @origin_piece = origin
-    destination_coord = destination
-    build_path(@origin_piece, destination_coord)
-  end
-
   def build_path(origin_piece, destination_coord)
     origin_piece.next_space_moves.each do |move|
       path = []
       path.push(origin_piece.coord)
       x = move[0]
       y = move[1]
-      loop do 
+      loop do
         current_coord = path.last
         next_coord = [current_coord[0] + x, current_coord[1] + y]
-        break if valid?(next_coord) == false
+        break unless valid?(next_coord)
 
         path.push(next_coord)
         return path if next_coord == destination_coord
