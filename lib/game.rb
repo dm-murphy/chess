@@ -91,7 +91,6 @@ class Game
     origin = origin_piece
     destination = destination_move
     array = @board.path_finder(origin, destination)
-    origin.children = []
     new_array = array - [destination_move]
     final_array = new_array - [origin.coord]
     blocked_path?(final_array)
