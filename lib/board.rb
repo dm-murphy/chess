@@ -71,8 +71,8 @@ class Board
     # Add this
 
     ##### Don't forget about updating/removing these if changing class responsibility here
-    piece.single_moves = []
-    piece.find_single_moves
+    # piece.single_moves = []
+    # piece.find_single_moves
   end
 
   def move_piece_to_coords(piece, coords)
@@ -91,76 +91,13 @@ class Board
     @grid[row][column].class != Square
   end
 
-
-  # def path_finder(origin, destination)
-  #   @origin_piece = origin
-  #   destination_coord = destination
-  #   @visited = [@origin_piece]
-  #   build_path(destination_coord)
-    
-  #   # reset_path_finder
-  # end
-
   def path_finder(origin, destination)
     @origin_piece = origin
     destination_coord = destination
-    # @visited = [@origin_piece]
-    # build_path(destination_coord)
-    test_method(@origin_piece, destination_coord)
-    # reset_path_finder
+    build_path(@origin_piece, destination_coord)
   end
 
-
-
-  # def reset_path_finder
-  #   @origin_piece = nil
-  #   @destination_coord = nil
-  #   @visitied = []
-  # end
-
-  # def build_path(destination_coord, queue = [@origin_piece])
-  #   current = queue.last
-  #   return if current.nil?
-  #   return path_array(current) if current.coord == destination_coord
-
-  #   current.single_moves.each do |move|
-  #     next if @visited.include?(move)
-
-  #     class_type = current.class
-  #     piece_type = current.pieces
-  #     piece_child = class_type.new(move, piece_type)
-  #     current.children.push(piece_child)
-  #     piece_child.parent = current
-  #     @visited.push(piece_child.coord)
-  #     queue.unshift(piece_child)
-  #   end
-
-  #   queue.pop
-  #   build_path(destination_coord, queue)
-  # end
-
-  # def build_path(destination_coord, queue = [@origin_piece])
-  #   current = queue.last
-  #   return if current.nil?
-  #   return path_array(current) if current.coord == destination_coord
-
-  #   current.single_moves.each do |move|
-  #     next if @visited.include?(move)
-
-  #     class_type = current.class
-  #     piece_type = current.pieces
-  #     piece_child = class_type.new(move, piece_type)
-  #     current.children.push(piece_child)
-  #     piece_child.parent = current
-  #     @visited.push(piece_child.coord)
-  #     queue.unshift(piece_child)
-  #   end
-
-  #   queue.pop
-  #   build_path(destination_coord, queue)
-  # end
-
-  def test_method(origin_piece, destination_coord)
+  def build_path(origin_piece, destination_coord)
     origin_piece.next_space_moves.each do |move|
       path = []
       path.push(origin_piece.coord)
@@ -173,33 +110,13 @@ class Board
 
         path.push(next_coord)
         return path if next_coord == destination_coord
-        # p path if next_coord == destination_coord
       end
-      # path = []
-      # path.push(new_coord)
-      
-      # next if new_coord == destination_coord
-      
-      # path = []
-      # path.push(new_coord)
-      # new_coord.parent = origin_piece
     end
   end
 
   def valid?(coord)
-    # p coord
-    # coord.map do |x, y|
     x = coord[0]
     y = coord[1]
-    # p x
-    # p y
     x.between?(0, 7) && y.between?(0, 7)
   end
-
-  # def path_array(piece, array = [])
-  #   array.unshift piece.coord
-  #   return array if piece == @origin_piece
-
-  #   path_array(piece.parent, array)
-  # end
 end
