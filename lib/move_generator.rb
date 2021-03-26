@@ -5,6 +5,11 @@
 # Responsible for generating and verifying moves for Game class
 class MoveGenerator < Game
 
+  def initialize(board, current_player)
+    @board = board
+    @current_player = current_player
+  end
+
   def generate_legal_moves(piece)
     moves = find_piece_moves(piece)
     find_piece_legal_moves(moves, piece)

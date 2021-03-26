@@ -42,7 +42,7 @@ class Game
   end
 
   def generate_moves(origin_piece)
-    @move_generator = MoveGenerator.new
+    @move_generator = MoveGenerator.new(@board, @current_player)
     @move_generator.generate_legal_moves(origin_piece)
   end
 
