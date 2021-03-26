@@ -2,8 +2,8 @@
 
 # lib/chess_spec.rb
 
-# Responsible for providing castling move coordinates to Game class
-class Castling < Game
+# Responsible for providing castling move coordinates to MoveGenerator class
+class Castling < MoveGenerator
   attr_accessor :castle_destination
 
   def initialize(board, current_player)
