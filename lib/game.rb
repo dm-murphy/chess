@@ -194,10 +194,6 @@ class Game
     remaining_pieces
   end
 
-  def find_all_pieces_possible_moves(pieces)
-    pieces.map(&:possible_moves)
-  end
-
   def coord_in_check?(coord, opponent_moves)
     opponent_moves.map do |move|
       return true if move == coord
