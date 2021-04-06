@@ -4,6 +4,7 @@
 
 # Responsible for generating and verifying moves for Game class
 class MoveGenerator < Game
+  attr_accessor :current_player
 
   def initialize(board, current_player)
     @board = board
@@ -18,6 +19,18 @@ class MoveGenerator < Game
   def find_castle_moves(origin_piece, legal_moves)
     @castle_moves = Castling.new(@board, @current_player)
     @castle_moves.castle(origin_piece, legal_moves)
+  end
+
+  def castled?(destination_coord)
+    @castle_moves.rook_castled?(destination_coord)
+  end
+
+  def rook_start(destination_coord)
+    @castle_moves.find_rook_start(destination_coord)
+  end
+
+  def rook_destination(destination_coord)
+    @castle_moves.find_rook_destination(destination_coord)
   end
 
   def find_piece_moves(piece)
@@ -166,7 +179,7 @@ class MoveGenerator < Game
   def no_player_moves?
     player = @current_player.pieces
     player_pieces = find_pieces(player)
-    player_legal_moves = all_legal_moves(player_pieces) 
+    player_legal_moves = all_legal_moves(player_pieces)
     no_legal_moves?(player_legal_moves)
   end
 
@@ -187,5 +200,4 @@ class MoveGenerator < Game
     all_moves = player_legal_moves.flatten(1)
     all_moves.any? == false
   end
-
 end
