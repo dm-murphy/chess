@@ -43,6 +43,7 @@ class Board
     @grid[0][5] = Bishop.new([0, 5], 'white')
     @grid[0][6] = Knight.new([0, 6], 'white')
     @grid[0][7] = @white_king_side_rook
+    @grid[1][0] = Pawn.new([1, 0], 'white')
     @grid[7][0] = @black_queen_side_rook
     @grid[7][1] = Knight.new([7, 1], 'black')
     @grid[7][2] = Bishop.new([7, 2], 'black')
