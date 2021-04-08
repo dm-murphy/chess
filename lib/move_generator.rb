@@ -48,7 +48,38 @@ class MoveGenerator < Game
 
   def illegal_move?(move, origin_piece)
     occupied_by_player?(move, origin_piece) || blocked?(move, origin_piece) ||
-      move_puts_self_in_check?(move, origin_piece) || king_stays_in_check?(move, origin_piece)
+      move_puts_self_in_check?(move, origin_piece) || king_stays_in_check?(move, origin_piece) ||
+      illegal_pawn_move?(move, origin_piece)
+  end
+
+  def illegal_pawn_move?(move, origin_piece)
+    return unless origin_piece.class == Pawn
+
+    origin_coords = origin_piece.coord
+    coord_change = subtract_coordinates(move, origin_coords)
+
+    if origin_piece.forward_moves.include?(coord_change)
+      pawn_move_blocked?(move, origin_piece)
+    elsif origin_piece.diagonal_attacks.include?(coord_change)
+      pawn_attack_invalid?(move, origin_piece)
+    end
+  end
+
+  def subtract_coordinates(move, origin_coords)
+    result_x = move[0] - origin_coords[0]
+    result_y = move[1] - origin_coords[1]
+    [result_x, result_y]
+  end
+
+  def pawn_move_blocked?(move, origin_piece)
+    array = @board.build_path(origin_piece, move)
+    pawn_path = array - [origin_piece.coord]
+    blocked_path?(pawn_path)
+  end
+
+  def pawn_attack_invalid?(move, origin_piece)
+    destination_square = coords_to_grid_object(move)
+    player_piece?(destination_square) || @board.empty_space?(move)
   end
 
   def occupied_by_player?(move_coord, origin_piece)
