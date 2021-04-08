@@ -138,8 +138,6 @@ end
 
 # Next Pseudo Steps
 
-  # Write tests for new methods (#find_available_opponent_moves, #move_shields_king, #move_puts_self_in_check)
-
   # Main Game logic missing:
 
       # Pawns
