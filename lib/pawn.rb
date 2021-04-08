@@ -17,8 +17,6 @@ class Pawn
   def find_possible_moves
     coord_changes = find_piece_moves
 
-    # p coord_changes
-
     coord_moves = coord_changes.map do |x, y|
       [@coord[0] + x, @coord[1] + y]
     end
@@ -28,34 +26,8 @@ class Pawn
   end
 
   def find_piece_moves
-    if @pieces == 'white'
-      find_white_moves
-    else
-      find_black_moves
-    end
+    forward_moves + diagonal_attacks
   end
-
-  def find_white_moves
-    array = [[1, 0], [1, 1], [1, -1]]
-    array.push([2, 0]) if @first_move.empty?
-    array
-  end
-
-  def find_black_moves
-    array = [[-1, 0], [-1, 1], [-1, -1]]
-    array.push([-2, 0]) if @first_move.empty?
-    array
-  end
-
-  # Regular move cannot swap out an opponent piece
-
-  # En passant?
-
-  # Promotion?
-
-  # forward_moves
-
-  # diagonal_attacks
 
   def forward_moves
     if @pieces == 'white'
@@ -79,4 +51,8 @@ class Pawn
   def next_space_moves
     find_piece_moves
   end
+
+  # En passant?
+
+  # Promotion?
 end
