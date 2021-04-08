@@ -80,9 +80,15 @@ class Board
     @grid[old_coord.first][old_coord.last] = Square.new
   end
 
+  def empty_space?(coord)
+    @grid[coord.first][coord.last].class == Square
+  end
+
+  # Not used anymore?
   def empty_square?(row, column)
     @grid[row][column].class == Square
   end
+  #
 
   def occupied?(row, column)
     @grid[row][column].class != Square
