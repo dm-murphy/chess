@@ -55,6 +55,12 @@ class Board
     @grid[6][7] = Pawn.new([6, 7], 'black')
   end
 
+  def promote_pawn(promoted_piece_name, start_coord, pieces)
+    clean_square(start_coord)
+    piece_class = Object.const_get promoted_piece_name
+    @grid[start_coord.first][start_coord.last] = piece_class.new(start_coord, pieces)
+  end
+
   def change_pieces(old_coord, new_coord)
     piece = move_piece(old_coord, new_coord)
     update_piece(piece, new_coord)
