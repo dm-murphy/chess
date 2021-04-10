@@ -48,6 +48,7 @@ class Game
 
     piece_selection = prompt_pawn_promotion
     promoted_piece = find_piece_class(piece_selection)
+    p promoted_piece
   end
 
   def prompt_pawn_promotion
@@ -63,14 +64,8 @@ class Game
   end
 
   def find_piece_class(piece_selection)
-    
-  end
-
-  def white_pawn_promotion
-  end
-
-  def black_pawn_promotion
-    puts "Black pawn gets promoted"
+    hash = { "Queen" => 1, "Knight" => 2, "Rook" => 3, "Bishop" => 4 }
+    hash.key(piece_selection)
   end
 
   def update_move_generator
