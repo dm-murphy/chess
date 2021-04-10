@@ -37,22 +37,36 @@ class Game
   def update_pieces(origin_piece, destination_coord, start_coord)
     update_piece_move_history(origin_piece, destination_coord)
     check_pawn_promotion(origin_piece, destination_coord)
+    # Swap origin piece with promoted piece and make start coords equal then continue as usual
     update_board(start_coord, destination_coord)
     update_castling_rooks(destination_coord)
   end
 
   def check_pawn_promotion(origin_piece, destination_coord)
     return unless origin_piece.class == Pawn
+    return unless destination_coord.first == 7 || destination_coord.first == 0
 
-    if origin_piece.pieces == 'white' && destination_coord.first == 7
-      white_pawn_promotion
-    elsif origin_piece.pieces == 'black' && destination_coord.first == 0
-      black_pawn_promotion
+    piece_selection = prompt_pawn_promotion
+    promoted_piece = find_piece_class(piece_selection)
+  end
+
+  def prompt_pawn_promotion
+    puts "#{@current_player.name} select piece for pawn promotion:"
+    puts "1 = Queen"
+    puts "2 = Knight"
+    puts "3 = Rook"
+    puts "4 = Bishop"
+    loop do
+      string = @current_player.select_piece.to_i
+      return string if string.between?(1, 4)
     end
   end
 
+  def find_piece_class(piece_selection)
+    
+  end
+
   def white_pawn_promotion
-    puts "White pawn gets promoted"
   end
 
   def black_pawn_promotion
