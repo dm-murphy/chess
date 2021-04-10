@@ -44,7 +44,19 @@ class Game
   def check_pawn_promotion(origin_piece, destination_coord)
     return unless origin_piece.class == Pawn
 
-    puts "pizza"
+    if origin_piece.pieces == 'white' && destination_coord.first == 7
+      white_pawn_promotion
+    elsif origin_piece.pieces == 'black' && destination_coord.first == 0
+      black_pawn_promotion
+    end
+  end
+
+  def white_pawn_promotion
+    puts "White pawn gets promoted"
+  end
+
+  def black_pawn_promotion
+    puts "Black pawn gets promoted"
   end
 
   def update_move_generator
