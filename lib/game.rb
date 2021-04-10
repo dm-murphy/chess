@@ -36,19 +36,20 @@ class Game
 
   def update_pieces(origin_piece, destination_coord, start_coord)
     update_piece_move_history(origin_piece, destination_coord)
-    check_pawn_promotion(origin_piece, destination_coord)
+    check_pawn_promotion(origin_piece, destination_coord, start_coord)
     # Swap origin piece with promoted piece and make start coords equal then continue as usual
     update_board(start_coord, destination_coord)
     update_castling_rooks(destination_coord)
   end
 
-  def check_pawn_promotion(origin_piece, destination_coord)
+  def check_pawn_promotion(origin_piece, destination_coord, start_coord)
     return unless origin_piece.class == Pawn
     return unless destination_coord.first == 7 || destination_coord.first == 0
 
-    piece_selection = prompt_pawn_promotion
-    promoted_piece = find_piece_class(piece_selection)
-    p promoted_piece
+    piece_selection_number = prompt_pawn_promotion
+    promoted_piece_name = find_piece_class(piece_selection_number)
+    pieces = origin_piece.pieces
+    @board.promote_pawn(promoted_piece_name, start_coord, pieces)
   end
 
   def prompt_pawn_promotion
@@ -63,9 +64,9 @@ class Game
     end
   end
 
-  def find_piece_class(piece_selection)
+  def find_piece_class(piece_selection_number)
     hash = { "Queen" => 1, "Knight" => 2, "Rook" => 3, "Bishop" => 4 }
-    hash.key(piece_selection)
+    hash.key(piece_selection_number)
   end
 
   def update_move_generator
