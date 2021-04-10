@@ -28,13 +28,17 @@ class Game
       generate_castle_moves(origin_piece, legal_moves)
       destination_coord = ask_user_destination(legal_moves)
       start_coord = origin_piece.coord
-      update_piece_move_history(origin_piece, destination_coord)
-      update_board(start_coord, destination_coord)
-      update_castling_rooks(destination_coord)
-      
+      update_pieces
+        update_piece_move_history(origin_piece, destination_coord)
+        update_board(start_coord, destination_coord)
+        update_castling_rooks(destination_coord)
       swap_player
       break if game_over?
     end
+  end
+
+  def update_pieces
+    
   end
 
   def update_move_generator
