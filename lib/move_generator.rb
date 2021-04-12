@@ -65,11 +65,12 @@ class MoveGenerator < Game
     end
   end
 
-  def subtract_coordinates(move, origin_coords)
-    result_x = move[0] - origin_coords[0]
-    result_y = move[1] - origin_coords[1]
-    [result_x, result_y]
-  end
+  # # Move out to Game class
+  # def subtract_coordinates(move, origin_coords)
+  #   result_x = move[0] - origin_coords[0]
+  #   result_y = move[1] - origin_coords[1]
+  #   [result_x, result_y]
+  # end
 
   def pawn_move_blocked?(move, origin_piece)
     array = @board.build_path(origin_piece, move)
