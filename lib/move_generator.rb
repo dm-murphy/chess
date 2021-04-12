@@ -167,13 +167,14 @@ class MoveGenerator < Game
     available_opponent_moves
   end
 
-  def find_opponent
-    if @current_player.pieces == 'white'
-      'black'
-    elsif @current_player.pieces == 'black'
-      'white'
-    end
-  end
+  # Move back to Game class
+  # def find_opponent
+  #   if @current_player.pieces == 'white'
+  #     'black'
+  #   elsif @current_player.pieces == 'black'
+  #     'white'
+  #   end
+  # end
 
   def find_pieces(player)
     pieces = []
