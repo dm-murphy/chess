@@ -6,9 +6,11 @@
 class MoveGenerator < Game
   attr_accessor :current_player
 
-  def initialize(board, current_player)
+  def initialize(board, current_player, en_passant_opponent_pieces, en_passant_coordinate)
     @board = board
     @current_player = current_player
+    @en_passant_opponent_pieces = en_passant_opponent_pieces
+    @en_passant_coordinate = en_passant_coordinate
   end
 
   def generate_legal_moves(piece)
