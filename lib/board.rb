@@ -44,6 +44,13 @@ class Board
     @grid[0][6] = Knight.new([0, 6], 'white')
     @grid[0][7] = @white_king_side_rook
     @grid[1][0] = Pawn.new([1, 0], 'white')
+    @grid[1][1] = Pawn.new([1, 1], 'white')
+    @grid[1][2] = Pawn.new([1, 2], 'white')
+    @grid[1][3] = Pawn.new([1, 3], 'white')
+    @grid[1][4] = Pawn.new([1, 4], 'white')
+    @grid[1][5] = Pawn.new([1, 5], 'white')
+    @grid[1][6] = Pawn.new([1, 6], 'white')
+    @grid[1][7] = Pawn.new([1, 7], 'white')
     @grid[7][0] = @black_queen_side_rook
     @grid[7][1] = Knight.new([7, 1], 'black')
     @grid[7][2] = Bishop.new([7, 2], 'black')
@@ -52,7 +59,13 @@ class Board
     @grid[7][5] = Bishop.new([7, 5], 'black')
     @grid[7][6] = Knight.new([7, 6], 'black')
     @grid[7][7] = @black_king_side_rook
+    @grid[6][0] = Pawn.new([6, 0], 'black')
     @grid[6][1] = Pawn.new([6, 1], 'black')
+    @grid[6][2] = Pawn.new([6, 2], 'black')
+    @grid[6][3] = Pawn.new([6, 3], 'black')
+    @grid[6][4] = Pawn.new([6, 4], 'black')
+    @grid[6][5] = Pawn.new([6, 5], 'black')
+    @grid[6][6] = Pawn.new([6, 6], 'black')
     @grid[6][7] = Pawn.new([6, 7], 'black')
   end
 
