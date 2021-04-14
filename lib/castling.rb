@@ -6,13 +6,14 @@
 class Castling < MoveGenerator
   attr_accessor :castle_destination
 
-  def initialize(board, current_player)
-    @board = board
-    @current_player = current_player
-    @castle_destination = []
-  end
+  # def initialize#(board, current_player)
+  # #   @board = board
+  # #   @current_player = current_player
+  #   @castle_destination = []
+  # end
 
   def castle(origin_piece, legal_moves)
+    @castle_destination = []
     return unless piece_is_king?(origin_piece)
     return unless origin_piece.first_move.empty?
 

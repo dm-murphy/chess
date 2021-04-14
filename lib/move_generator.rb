@@ -4,22 +4,112 @@
 
 # Responsible for generating and verifying moves for Game class
 class MoveGenerator < Game
-  attr_accessor :current_player
+  # attr_accessor :board
 
-  def initialize(board, current_player, en_passant_opponent_pieces, en_passant_coordinate)
-    @board = board
-    @current_player = current_player
-    @en_passant_opponent_pieces = en_passant_opponent_pieces
-    @en_passant_coordinate = en_passant_coordinate
+  def initialize(board, player_one, player_two)
+    super(board, player_one, player_two)
+  end
+  # def initialize(board)#, current_player)#, en_passant_opponent_pieces, en_passant_coordinate)
+    
+  #   @board = board
+  #   # @current_player = current_player
+    
+  #   # @en_passant_moves = EnPassantMoves.new(@board)#, @current_player)
+
+  #   # @en_passant_opponent_pieces = en_passant_opponent_pieces
+  #   # @en_passant_coordinate = en_passant_coordinate
+  # end
+
+
+  def setup_special
+    @en_passant_moves = EnPassantMoves.new(board, player_one, player_two)
+    @en_passant_moves.setup_en_passant
   end
 
+  def update_pieces(origin_piece, destination_coord, start_coord)
+    puts "Current player is #{@@current_player.pieces}"
+    # swap_player
+    # puts "Current player is #{@@current_player.pieces}"
+    # swap_player
+    @en_passant_moves.test_new_en_passant_script(origin_piece, destination_coord, start_coord)
+    # update_captured_en_passant(destination_coord)
+    # check_en_passant(origin_piece, destination_coord, start_coord)
+    update_piece_move_history(origin_piece, destination_coord)
+    check_pawn_promotion(origin_piece, destination_coord, start_coord)
+    update_board(start_coord, destination_coord)
+    
+    update_castling_rooks(destination_coord)
+    
+  end
+
+  def update_board(start_coord, destination_coord)
+    @board.change_pieces(start_coord, destination_coord)
+  end
+
+  def update_castling_rooks(destination_coord)
+    return unless castled?(destination_coord)
+
+    rook_start_coord = rook_start(destination_coord)
+    rook_destination_coord = rook_destination(destination_coord)
+    update_board(rook_start_coord, rook_destination_coord)
+  end
+
+  def update_piece_move_history(origin_piece, destination_coord)
+    return unless defined?(origin_piece.first_move)
+
+    origin_piece.first_move.push(destination_coord)
+  end
+
+  def check_pawn_promotion(origin_piece, destination_coord, start_coord)
+    return unless origin_piece.class == Pawn
+    return unless destination_coord.first == 7 || destination_coord.first == 0
+
+    piece_selection_number = prompt_pawn_promotion
+    promoted_piece_name = find_piece_class(piece_selection_number)
+    pieces = origin_piece.pieces
+    @board.promote_pawn(promoted_piece_name, start_coord, pieces)
+  end
+
+  def prompt_pawn_promotion
+    puts "#{@@current_player.name} select piece for pawn promotion:"
+    puts "1 = Queen"
+    puts "2 = Knight"
+    puts "3 = Rook"
+    puts "4 = Bishop"
+    loop do
+      string = @@current_player.select_piece.to_i
+      return string if string.between?(1, 4)
+    end
+  end
+
+  def find_piece_class(piece_selection_number)
+    hash = { "Queen" => 1, "Knight" => 2, "Rook" => 3, "Bishop" => 4 }
+    hash.key(piece_selection_number)
+  end
+
+
   def generate_legal_moves(piece)
+    legal_moves = find_legal_moves(piece)
+    puts "These are regular legal_moves #{legal_moves}"
+    # next_step_moves = @en_passant_moves.apply_en_passant(piece, legal_moves)
+    find_en_passant_capture_move(piece, legal_moves)
+    puts "These are legal_moves plus en_passant_capture_move #{legal_moves}"
+    find_castle_moves(piece, legal_moves)
+    legal_moves
+  end
+
+  def find_en_passant_capture_move(piece, legal_moves)
+    @en_passant_moves.apply_en_passant(piece, legal_moves)
+  end
+
+  def find_legal_moves(piece)
     moves = find_piece_moves(piece)
     find_piece_legal_moves(moves, piece)
   end
 
   def find_castle_moves(origin_piece, legal_moves)
-    @castle_moves = Castling.new(@board, @current_player)
+    @castle_moves = Castling.new(board, player_one, player_two)
+    
     @castle_moves.castle(origin_piece, legal_moves)
   end
 
@@ -67,12 +157,12 @@ class MoveGenerator < Game
     end
   end
 
-  # # Move out to Game class
-  # def subtract_coordinates(move, origin_coords)
-  #   result_x = move[0] - origin_coords[0]
-  #   result_y = move[1] - origin_coords[1]
-  #   [result_x, result_y]
-  # end
+  # # Move back to Move Generator
+  def subtract_coordinates(move, origin_coords)
+    result_x = move[0] - origin_coords[0]
+    result_y = move[1] - origin_coords[1]
+    [result_x, result_y]
+  end
 
   def pawn_move_blocked?(move, origin_piece)
     array = @board.build_path(origin_piece, move)
@@ -139,9 +229,9 @@ class MoveGenerator < Game
   end
 
   def find_king
-    if @current_player.pieces == 'white'
+    if @@current_player.pieces == 'white'
       @board.white_king
-    elsif @current_player.pieces == 'black'
+    elsif @@current_player.pieces == 'black'
       @board.black_king
     end
   end
@@ -169,14 +259,14 @@ class MoveGenerator < Game
     available_opponent_moves
   end
 
-  # Move back to Game class
-  # def find_opponent
-  #   if @current_player.pieces == 'white'
-  #     'black'
-  #   elsif @current_player.pieces == 'black'
-  #     'white'
-  #   end
-  # end
+  # Move back to Move Generator
+  def find_opponent
+    if @@current_player.pieces == 'white'
+      'black'
+    elsif @@current_player.pieces == 'black'
+      'white'
+    end
+  end
 
   def find_pieces(player)
     pieces = []
@@ -212,7 +302,7 @@ class MoveGenerator < Game
   end
 
   def no_player_moves?
-    player = @current_player.pieces
+    player = @@current_player.pieces
     player_pieces = find_pieces(player)
     player_legal_moves = all_legal_moves(player_pieces)
     no_legal_moves?(player_legal_moves)
