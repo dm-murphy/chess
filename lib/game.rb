@@ -4,12 +4,16 @@
 
 # Responsible for cycling through turns between players in game until game ends
 class Game
+  # attr_accessor :en_passant_coordinate, :en_passant_opponent_pieces
+
   def initialize(board = Board.new, player_one = Player.new('Player 1', 'white'), player_two = Player.new('Player 2', 'black'))
     @board = board
     @player_one = player_one
     @player_two = player_two
     @current_player = @player_one
     @move_generator = update_move_generator
+    @en_passant_opponent_pieces = []
+    @en_passant_coordinate = nil
   end
 
   def start
@@ -23,6 +27,8 @@ class Game
       display_user
       origin_piece = ask_user_start
       legal_moves = generate_legal_moves(origin_piece)
+      apply_en_passant(origin_piece, legal_moves)
+
       redo if legal_moves.empty?
 
       generate_castle_moves(origin_piece, legal_moves)
@@ -34,12 +40,96 @@ class Game
     end
   end
 
+  def apply_en_passant(piece, moves)
+    return if @en_passant_opponent_pieces.empty?
+    return unless @en_passant_opponent_pieces.include?(piece)
+    return if @move_generator.move_puts_self_in_check?(@en_passant_coordinate, piece)
+    return if @move_generator.king_stays_in_check?(@en_passant_coordinate, piece)
+
+    moves.push(@en_passant_coordinate)
+    # if user actually picks this move still need to clear the pawn from opponent
+  end
+
   def update_pieces(origin_piece, destination_coord, start_coord)
+    check_en_passant(origin_piece, destination_coord, start_coord)
     update_piece_move_history(origin_piece, destination_coord)
     check_pawn_promotion(origin_piece, destination_coord, start_coord)
-    # Swap origin piece with promoted piece and make start coords equal then continue as usual
     update_board(start_coord, destination_coord)
     update_castling_rooks(destination_coord)
+  end
+
+  def check_en_passant(origin_piece, destination_coord, start_coord)
+    @en_passant_opponent_pieces = []
+    @en_passant_coordinate = nil
+
+    return unless origin_piece.class == Pawn
+    return unless double_jump?(destination_coord, start_coord)
+
+    find_en_passant_opponent_pieces(destination_coord)
+    return if @en_passant_opponent_pieces.empty?
+
+    coordinate = find_en_passant_coordinate(start_coord)
+    @en_passant_coordinate = coordinate
+    puts "#{@en_passant_coordinate} and #{@en_passant_opponent_pieces}"
+  end
+
+  def find_en_passant_coordinate(coord)
+    x_change = if @current_player.pieces == 'white'
+                 1
+               else
+                 -1
+               end
+    result_x = coord.first + x_change
+    result_y = coord.last
+    [result_x, result_y]
+  end
+
+  def find_en_passant_opponent_pieces(destination_coord)
+    left_side_coord = find_left_side_coord(destination_coord)
+    right_side_coord = find_right_side_coord(destination_coord)
+
+    left_side_piece = coords_to_grid_object(left_side_coord) unless left_side_coord.nil?
+    right_side_piece = coords_to_grid_object(right_side_coord) unless right_side_coord.nil?
+
+    add_possible_en_passant(left_side_piece)
+    add_possible_en_passant(right_side_piece)
+  end
+
+  def add_possible_en_passant(piece)
+    return unless piece.class == Pawn && piece.pieces == find_opponent
+
+    @en_passant_opponent_pieces.push(piece)
+  end
+
+  def find_right_side_coord(destination_coord)
+    result_x = destination_coord.first
+    result_y = destination_coord.last + 1
+    [result_x, result_y] if result_x.between?(0, 7) && result_y.between?(0, 7)
+  end
+
+  def find_left_side_coord(destination_coord)
+    result_x = destination_coord.first
+    result_y = destination_coord.last - 1
+    [result_x, result_y] if result_x.between?(0, 7) && result_y.between?(0, 7)
+  end
+
+  def double_jump?(destination_coord, start_coord)
+    result = subtract_coordinates(destination_coord, start_coord)
+    result == [2, 0] || result == [-2, 0]
+  end
+
+  def find_opponent
+    if @current_player.pieces == 'white'
+      'black'
+    elsif @current_player.pieces == 'black'
+      'white'
+    end
+  end
+
+  def subtract_coordinates(move, origin_coords)
+    result_x = move[0] - origin_coords[0]
+    result_y = move[1] - origin_coords[1]
+    [result_x, result_y]
   end
 
   def check_pawn_promotion(origin_piece, destination_coord, start_coord)
@@ -70,7 +160,7 @@ class Game
   end
 
   def update_move_generator
-    @move_generator = MoveGenerator.new(@board, @current_player)
+    @move_generator = MoveGenerator.new(@board, @current_player, @en_passant_opponent_pieces, @en_passant_coordinate)
   end
 
   def generate_legal_moves(origin_piece)
