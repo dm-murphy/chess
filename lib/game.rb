@@ -51,11 +51,24 @@ class Game
   end
 
   def update_pieces(origin_piece, destination_coord, start_coord)
+    update_captured_en_passant(destination_coord)
     check_en_passant(origin_piece, destination_coord, start_coord)
     update_piece_move_history(origin_piece, destination_coord)
     check_pawn_promotion(origin_piece, destination_coord, start_coord)
     update_board(start_coord, destination_coord)
     update_castling_rooks(destination_coord)
+    # update_captured_en_passant
+  end
+
+  def update_captured_en_passant(destination_coord)
+    return unless en_passant_captured?(destination_coord)
+
+    en_passant_capture_coord = find_x_coordinate_forward(destination_coord)
+    @board.clean_square(en_passant_capture_coord)
+  end
+
+  def en_passant_captured?(destination_coord)
+    @en_passant_coordinate == destination_coord
   end
 
   def check_en_passant(origin_piece, destination_coord, start_coord)
@@ -68,16 +81,27 @@ class Game
     find_en_passant_opponent_pieces(destination_coord)
     return if @en_passant_opponent_pieces.empty?
 
-    coordinate = find_en_passant_coordinate(start_coord)
+    coordinate = find_x_coordinate_backward(start_coord)
     @en_passant_coordinate = coordinate
     puts "#{@en_passant_coordinate} and #{@en_passant_opponent_pieces}"
   end
 
-  def find_en_passant_coordinate(coord)
+  def find_x_coordinate_backward(coord)
     x_change = if @current_player.pieces == 'white'
                  1
                else
                  -1
+               end
+    result_x = coord.first + x_change
+    result_y = coord.last
+    [result_x, result_y]
+  end
+
+  def find_x_coordinate_forward(coord)
+    x_change = if @current_player.pieces == 'white'
+                 -1
+               else
+                 1
                end
     result_x = coord.first + x_change
     result_y = coord.last
