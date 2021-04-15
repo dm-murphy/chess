@@ -10,28 +10,20 @@ class Game
     @board = board
     @player_one = player_one
     @player_two = player_two
-    # @current_player = @player_one
-    @@current_player = player_one
-    # @move_generator = move_generator
-    # @move_generator = update_move_generator
-    # @move_generator = MoveGenerator.new(@board)#, @current_player)
-    # @move_generator = MoveGenerator.new
-    # @move_generator.setup_special
-    # @en_passant_opponent_pieces = []
-    # @en_passant_coordinate = nil
+    @move_generator = MoveGenerator.new(board, player_one, player_two)
   end
 
   def start
     # Add display for rules and how to input board positions
     # Add option to Load game file
-    @move_generator = MoveGenerator.new(board, player_one, player_two)
-    @move_generator.setup_special
+    
     start_turn
   end
 
   def start_turn
     loop do
       display_user
+      
       # puts "#{@@current_player.pieces}"
       # swap_player
       # puts "#{@@current_player.pieces}"
@@ -49,7 +41,7 @@ class Game
       test_new_update_pieces(origin_piece, destination_coord, start_coord)
       # update_pieces(origin_piece, destination_coord, start_coord)
       
-      swap_player
+      
       break if game_over?
     end
   end
@@ -222,13 +214,12 @@ class Game
 
   def display_user
     @board.show_grid
-    puts "#{@@current_player.name} choose a piece"
-    puts
   end
 
   def ask_user_start
     loop do
-      string = @@current_player.select_piece
+      string = @move_generator.ask_move
+      # string = @move_generator.current_player.select_piece
       coord = string_to_coord(string)
       piece = coords_to_grid_object(coord)
       return piece if player_piece?(piece)
@@ -240,7 +231,7 @@ class Game
   end
 
   def player_piece?(piece)
-    piece.pieces == @@current_player.pieces
+    piece.pieces == @move_generator.current_player.pieces
   end
 
   def coords_to_grid_object(coord)
@@ -252,7 +243,7 @@ class Game
   def ask_user_destination(legal_moves)
     loop do
       puts "Choose a destination: #{legal_moves}"
-      destination = @@current_player.select_piece
+      destination = @move_generator.current_player.select_piece
       destination_coord = string_to_coord(destination)
       return destination_coord if legal_moves.include?(destination_coord)
     end
@@ -290,11 +281,11 @@ class Game
     true
   end
 
-  def swap_player
-    @@current_player = if @@current_player == @player_one
-                        @player_two
-                      else
-                        @player_one
-                      end
-  end
+  # def swap_player
+  #   @current_player = if @current_player == @player_one
+  #                       @player_two
+  #                     else
+  #                       @player_one
+  #                     end
+  # end
 end

@@ -3,11 +3,15 @@
 # lib/chess_spec.rb
 
 # Responsible for generating and verifying moves for Game class
-class MoveGenerator < Game
-  # attr_accessor :board
+class MoveGenerator
+  attr_accessor :current_player
 
   def initialize(board, player_one, player_two)
-    super(board, player_one, player_two)
+    @board = board
+    @player_one = player_one
+    @player_two = player_two
+    @current_player = player_one
+    @en_passant_moves = EnPassantMoves.new(board)
   end
   # def initialize(board)#, current_player)#, en_passant_opponent_pieces, en_passant_coordinate)
     
@@ -20,14 +24,42 @@ class MoveGenerator < Game
   #   # @en_passant_coordinate = en_passant_coordinate
   # end
 
+  def remove_piece(coord)
+    @board.clean_square(coord)
+  end
+  
 
-  def setup_special
-    @en_passant_moves = EnPassantMoves.new(board, player_one, player_two)
-    @en_passant_moves.setup_en_passant
+  def ask_move
+    puts "#{@current_player.name} choose a piece"
+    puts
+    @current_player.select_piece
   end
 
+  def swap_player
+    @current_player = if @current_player == @player_one
+                        @player_two
+                      else
+                        @player_one
+                      end
+  end
+
+  def coords_to_grid_object(coord)
+    row = coord.first
+    column = coord.last
+    @board.grid[row][column]
+  end
+
+  def player_piece?(piece)
+    piece.pieces == @current_player.pieces
+  end
+
+  # def setup_special
+  #   # @en_passant_moves = EnPassantMoves.new(@board, @player_one, @player_two)
+  #   @en_passant_moves.setup_en_passant
+  # end
+
   def update_pieces(origin_piece, destination_coord, start_coord)
-    puts "Current player is #{@@current_player.pieces}"
+    puts "MOve Generator object thinks #{@current_player} is #{@current_player.pieces}"
     # swap_player
     # puts "Current player is #{@@current_player.pieces}"
     # swap_player
@@ -39,7 +71,7 @@ class MoveGenerator < Game
     update_board(start_coord, destination_coord)
     
     update_castling_rooks(destination_coord)
-    
+    swap_player
   end
 
   def update_board(start_coord, destination_coord)
@@ -71,13 +103,13 @@ class MoveGenerator < Game
   end
 
   def prompt_pawn_promotion
-    puts "#{@@current_player.name} select piece for pawn promotion:"
+    puts "#{@current_player.name} select piece for pawn promotion:"
     puts "1 = Queen"
     puts "2 = Knight"
     puts "3 = Rook"
     puts "4 = Bishop"
     loop do
-      string = @@current_player.select_piece.to_i
+      string = @current_player.select_piece.to_i
       return string if string.between?(1, 4)
     end
   end
@@ -90,10 +122,7 @@ class MoveGenerator < Game
 
   def generate_legal_moves(piece)
     legal_moves = find_legal_moves(piece)
-    puts "These are regular legal_moves #{legal_moves}"
-    # next_step_moves = @en_passant_moves.apply_en_passant(piece, legal_moves)
     find_en_passant_capture_move(piece, legal_moves)
-    puts "These are legal_moves plus en_passant_capture_move #{legal_moves}"
     find_castle_moves(piece, legal_moves)
     legal_moves
   end
@@ -108,7 +137,7 @@ class MoveGenerator < Game
   end
 
   def find_castle_moves(origin_piece, legal_moves)
-    @castle_moves = Castling.new(board, player_one, player_two)
+    @castle_moves = Castling.new(@board, @player_one, @player_two)
     
     @castle_moves.castle(origin_piece, legal_moves)
   end
@@ -219,31 +248,34 @@ class MoveGenerator < Game
     if piece_is_king?(origin_piece)
       move
     else
-      king = find_king
+      king = find_king(origin_piece)
       king.coord
     end
   end
 
   def piece_is_king?(piece)
-    piece == find_king
+    piece == find_king(piece)
   end
 
-  def find_king
-    if @@current_player.pieces == 'white'
+  def find_king(piece)
+    if piece.pieces == 'white'
       @board.white_king
-    elsif @@current_player.pieces == 'black'
+    elsif piece.pieces == 'black'
       @board.black_king
     end
   end
 
   def king_in_check?(king_coord, move = nil)
-    opponent_moves = find_opponent_moves(move)
+    opponent = find_opponent(king_coord) #New
+    p opponent
+    opponent_moves = find_opponent_moves(opponent, move)
     coord_in_check?(king_coord, opponent_moves)
   end
 
-  def find_opponent_moves(move)
-    opponent = find_opponent
+  def find_opponent_moves(opponent, move)
+    # New removed find opponent added opponent argument to find_opponent_moves
     opponent_pieces = find_pieces(opponent)
+    puts "Opponent_pieces are #{opponent_pieces}"
     remaining_pieces = remove_possible_capture(opponent_pieces, move)
     find_available_opponent_moves(remaining_pieces)
   end
@@ -260,10 +292,12 @@ class MoveGenerator < Game
   end
 
   # Move back to Move Generator
-  def find_opponent
-    if @@current_player.pieces == 'white'
+  def find_opponent(coord)
+    #Refactored to add coord argument and find piece instead of current player
+    piece = coords_to_grid_object(coord)
+    if piece.pieces == 'white'
       'black'
-    elsif @@current_player.pieces == 'black'
+    elsif piece.pieces == 'black'
       'white'
     end
   end
@@ -296,13 +330,22 @@ class MoveGenerator < Game
   end
 
   def check?
-    king = find_king
+    king = find_player_king
     king_coord = king.coord
     king_in_check?(king_coord)
   end
 
+  # New Method
+  def find_player_king
+    if @current_player.pieces == 'white'
+      @board.white_king
+    elsif @current_player.pieces == 'black'
+      @board.black_king
+    end
+  end
+
   def no_player_moves?
-    player = @@current_player.pieces
+    player = @current_player.pieces
     player_pieces = find_pieces(player)
     player_legal_moves = all_legal_moves(player_pieces)
     no_legal_moves?(player_legal_moves)
