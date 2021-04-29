@@ -15,11 +15,8 @@ class EnPassantMoves < MoveGenerator
     @en_passant_opponent_pieces = []
     @en_passant_coordinate = nil
   end
-  
-  def apply_en_passant(piece, moves)
-    puts "en passant opponent pieces = #{@en_passant_opponent_pieces} and en passant coordinate = #{@en_passant_coordinate}"
-    puts "piece = #{piece} and moves = #{moves}"
 
+  def apply_en_passant(piece, moves)
     return if @en_passant_opponent_pieces.empty?
     return unless @en_passant_opponent_pieces.include?(piece)
     return if move_puts_self_in_check?(@en_passant_coordinate, piece)
@@ -28,8 +25,7 @@ class EnPassantMoves < MoveGenerator
     moves.push(@en_passant_coordinate)
   end
 
-  def test_new_en_passant_script(origin_piece, destination_coord, start_coord)
-    
+  def update_en_passant(origin_piece, destination_coord, start_coord)
     update_captured_en_passant(origin_piece, destination_coord)
     check_en_passant(origin_piece, destination_coord, start_coord)
   end
@@ -39,6 +35,10 @@ class EnPassantMoves < MoveGenerator
 
     en_passant_capture_coord = find_x_coordinate_forward(origin_piece, destination_coord)
     remove_piece(en_passant_capture_coord)
+  end
+
+  def remove_piece(coord)
+    @board.clean_square(coord)
   end
 
   def en_passant_captured?(destination_coord)
@@ -63,13 +63,11 @@ class EnPassantMoves < MoveGenerator
     return unless origin_piece.class == Pawn
     return unless double_jump?(destination_coord, start_coord)
 
-    
     find_en_passant_opponent_pieces(origin_piece, destination_coord)
     return if @en_passant_opponent_pieces.empty?
 
     coordinate = find_x_coordinate_backward(origin_piece, start_coord)
     @en_passant_coordinate = coordinate
-    puts "#{@en_passant_coordinate} and #{@en_passant_opponent_pieces}"
   end
 
   def find_x_coordinate_backward(origin_piece, coord)

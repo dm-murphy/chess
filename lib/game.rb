@@ -23,22 +23,15 @@ class Game
     loop do
       display_user
       origin_piece = ask_user_start
-      legal_moves = generate_legal_moves(origin_piece)
+      legal_moves = @move_generator.generate_legal_moves(origin_piece)
       redo if legal_moves.empty?
 
       destination_coord = ask_user_destination(legal_moves)
       start_coord = origin_piece.coord
-      test_new_update_pieces(origin_piece, destination_coord, start_coord)
+      @move_generator.update_pieces(origin_piece, destination_coord, start_coord)
+      @move_generator.swap_player
       break if game_over?
     end
-  end
-
-  def test_new_update_pieces(origin_piece, destination_coord, start_coord)
-    @move_generator.update_pieces(origin_piece, destination_coord, start_coord)
-  end
-
-  def generate_legal_moves(origin_piece)
-    @move_generator.generate_legal_moves(origin_piece)
   end
 
   def display_user
