@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# lib/chess_spec.rb
 
 # Creates pawn objects for Board class with coordinates, pieces, display style and possible moves
 class Pawn
@@ -51,8 +52,4 @@ class Pawn
   def next_space_moves
     find_piece_moves
   end
-
-  # En passant?
-
-  # Promotion?
 end

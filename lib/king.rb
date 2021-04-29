@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# lib/chess_spec.rb
 
 # Creates king objects for Board class with coordinates, pieces, display style and possible moves
 class King
