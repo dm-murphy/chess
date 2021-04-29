@@ -223,7 +223,7 @@ class MoveGenerator
   end
 
   def find_en_passant_capture_move(piece, legal_moves)
-    @en_passant_moves.apply_en_passant(piece, legal_moves)
+    @en_passant_moves.add_en_passant_move(piece, legal_moves)
   end
 
   def find_castle_moves(origin_piece, legal_moves)
