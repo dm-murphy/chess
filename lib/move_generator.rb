@@ -14,32 +14,41 @@ class MoveGenerator
     @en_passant_moves = EnPassantMoves.new(board)
   end
 
-  # Move back to Game class?
+  def ask_user_start
+    loop do
+      string = ask_move
+      coord = string_to_coord(string)
+      piece = coords_to_grid_object(coord)
+      return piece if player_piece?(piece)
+    end
+  end
+
   def ask_move
     puts "#{@current_player.name} choose a piece"
     puts
     @current_player.select_piece
   end
 
-  # Move back to Game class?
-  def swap_player
-    @current_player = if @current_player == @player_one
-                        @player_two
-                      else
-                        @player_one
-                      end
+  def string_to_coord(string)
+    string.chomp.split('').map(&:to_i)
   end
 
-  # DRY - Game class
   def coords_to_grid_object(coord)
     row = coord.first
     column = coord.last
     @board.grid[row][column]
   end
 
-  # DRY - Game class
   def player_piece?(piece)
     piece.pieces == @current_player.pieces
+  end
+
+  def swap_player
+    @current_player = if @current_player == @player_one
+                        @player_two
+                      else
+                        @player_one
+                      end
   end
 
   def generate_legal_moves(piece)
@@ -229,6 +238,15 @@ class MoveGenerator
   def find_castle_moves(origin_piece, legal_moves)
     @castle_moves = Castling.new(@board, @player_one, @player_two)
     @castle_moves.castle(origin_piece, legal_moves)
+  end
+
+  def ask_user_destination(legal_moves)
+    loop do
+      puts "Choose a destination: #{legal_moves}"
+      destination = @current_player.select_piece
+      destination_coord = string_to_coord(destination)
+      return destination_coord if legal_moves.include?(destination_coord)
+    end
   end
 
   def update_pieces(origin_piece, destination_coord, start_coord)

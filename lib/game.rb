@@ -21,12 +21,12 @@ class Game
 
   def start_turn
     loop do
-      display_user
-      origin_piece = ask_user_start
+      @board.show_grid
+      origin_piece = @move_generator.ask_user_start
       legal_moves = @move_generator.generate_legal_moves(origin_piece)
       redo if legal_moves.empty?
 
-      destination_coord = ask_user_destination(legal_moves)
+      destination_coord = @move_generator.ask_user_destination(legal_moves)
       start_coord = origin_piece.coord
       @move_generator.update_pieces(origin_piece, destination_coord, start_coord)
       @move_generator.swap_player
@@ -34,60 +34,23 @@ class Game
     end
   end
 
-  def display_user
-    @board.show_grid
-  end
-
-  def ask_user_start
-    loop do
-      string = @move_generator.ask_move
-      coord = string_to_coord(string)
-      piece = coords_to_grid_object(coord)
-      return piece if player_piece?(piece)
-    end
-  end
-
-  def string_to_coord(string)
-    string.chomp.split('').map(&:to_i)
-  end
-
-  def player_piece?(piece)
-    piece.pieces == @move_generator.current_player.pieces
-  end
-
-  def coords_to_grid_object(coord)
-    row = coord.first
-    column = coord.last
-    @board.grid[row][column]
-  end
-
-  def ask_user_destination(legal_moves)
-    loop do
-      puts "Choose a destination: #{legal_moves}"
-      destination = @move_generator.current_player.select_piece
-      destination_coord = string_to_coord(destination)
-      return destination_coord if legal_moves.include?(destination_coord)
-    end
-  end
-
-  def display_draw
-    @board.show_grid
-    puts 'Draw.'
-  end
-
-  def display_checkmate
-    @board.show_grid
-    puts 'Checkmate.'
-  end
-
   def game_over?
     return unless @move_generator.no_player_moves?
 
+    @board.show_grid
     if @move_generator.check?
       display_checkmate
     else
       display_draw
     end
     true
+  end
+
+  def display_checkmate
+    puts 'Checkmate.'
+  end
+
+  def display_draw
+    puts 'Draw.'
   end
 end
