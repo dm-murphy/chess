@@ -2,7 +2,7 @@
 
 # lib/chess_spec.rb
 
-# Responsible for cycling through turns between players in game until game ends
+# Responsible for cycling through game turns until game ends
 class Game
   attr_accessor :board, :player_one, :player_two
 
