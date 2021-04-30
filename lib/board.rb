@@ -7,15 +7,38 @@ class Board
 
   def initialize
     @grid = Array.new(8) { Array.new(8, Square.new) }
-    @white_king = King.new([0, 4], 'white')
-    @white_king_side_rook = Rook.new([0, 7], 'white')
-    @white_queen_side_rook = Rook.new([0, 0], 'white')
-    @black_king = King.new([7, 4], 'black')
-    @black_king_side_rook = Rook.new([7, 7], 'black')
-    @black_queen_side_rook = Rook.new([7, 0], 'black')
-    @origin_piece = nil
-    @visited = []
-    start_pieces
+    @grid[0][0] = @white_queen_side_rook = Rook.new([0, 0], 'white')
+    @grid[0][1] = Knight.new([0, 1], 'white')
+    @grid[0][2] = Bishop.new([0, 2], 'white')
+    @grid[0][3] = Queen.new([0, 3], 'white')
+    @grid[0][4] = @white_king = King.new([0, 4], 'white')
+    @grid[0][5] = Bishop.new([0, 5], 'white')
+    @grid[0][6] = Knight.new([0, 6], 'white')
+    @grid[0][7] = @white_king_side_rook = Rook.new([0, 7], 'white')
+    @grid[1][0] = Pawn.new([1, 0], 'white')
+    @grid[1][1] = Pawn.new([1, 1], 'white')
+    @grid[1][2] = Pawn.new([1, 2], 'white')
+    @grid[1][3] = Pawn.new([1, 3], 'white')
+    @grid[1][4] = Pawn.new([1, 4], 'white')
+    @grid[1][5] = Pawn.new([1, 5], 'white')
+    @grid[1][6] = Pawn.new([1, 6], 'white')
+    @grid[1][7] = Pawn.new([1, 7], 'white')
+    @grid[7][0] = @black_queen_side_rook = Rook.new([7, 0], 'black')
+    @grid[7][1] = Knight.new([7, 1], 'black')
+    @grid[7][2] = Bishop.new([7, 2], 'black')
+    @grid[7][3] = Queen.new([7, 3], 'black')
+    @grid[7][4] = @black_king = King.new([7, 4], 'black')
+    @grid[7][5] = Bishop.new([7, 5], 'black')
+    @grid[7][6] = Knight.new([7, 6], 'black')
+    @grid[7][7] = @black_king_side_rook = Rook.new([7, 7], 'black')
+    @grid[6][0] = Pawn.new([6, 0], 'black')
+    @grid[6][1] = Pawn.new([6, 1], 'black')
+    @grid[6][2] = Pawn.new([6, 2], 'black')
+    @grid[6][3] = Pawn.new([6, 3], 'black')
+    @grid[6][4] = Pawn.new([6, 4], 'black')
+    @grid[6][5] = Pawn.new([6, 5], 'black')
+    @grid[6][6] = Pawn.new([6, 6], 'black')
+    @grid[6][7] = Pawn.new([6, 7], 'black')
   end
 
   def show_grid
@@ -32,47 +55,6 @@ class Board
          0    1    2    3    4    5    6    7
     
     HEREDOC
-  end
-
-  def start_pieces
-    @grid[0][0] = @white_queen_side_rook
-    @grid[0][1] = Knight.new([0, 1], 'white')
-    @grid[0][2] = Bishop.new([0, 2], 'white')
-    @grid[0][3] = Queen.new([0, 3], 'white')
-    @grid[0][4] = @white_king
-    @grid[0][5] = Bishop.new([0, 5], 'white')
-    @grid[0][6] = Knight.new([0, 6], 'white')
-    @grid[0][7] = @white_king_side_rook
-    @grid[1][0] = Pawn.new([1, 0], 'white')
-    @grid[1][1] = Pawn.new([1, 1], 'white')
-    @grid[1][2] = Pawn.new([1, 2], 'white')
-    @grid[1][3] = Pawn.new([1, 3], 'white')
-    @grid[1][4] = Pawn.new([1, 4], 'white')
-    @grid[1][5] = Pawn.new([1, 5], 'white')
-    @grid[1][6] = Pawn.new([1, 6], 'white')
-    @grid[1][7] = Pawn.new([1, 7], 'white')
-    @grid[7][0] = @black_queen_side_rook
-    @grid[7][1] = Knight.new([7, 1], 'black')
-    @grid[7][2] = Bishop.new([7, 2], 'black')
-    @grid[7][3] = Queen.new([7, 3], 'black')
-    @grid[7][4] = @black_king
-    @grid[7][5] = Bishop.new([7, 5], 'black')
-    @grid[7][6] = Knight.new([7, 6], 'black')
-    @grid[7][7] = @black_king_side_rook
-    @grid[6][0] = Pawn.new([6, 0], 'black')
-    @grid[6][1] = Pawn.new([6, 1], 'black')
-    @grid[6][2] = Pawn.new([6, 2], 'black')
-    @grid[6][3] = Pawn.new([6, 3], 'black')
-    @grid[6][4] = Pawn.new([6, 4], 'black')
-    @grid[6][5] = Pawn.new([6, 5], 'black')
-    @grid[6][6] = Pawn.new([6, 6], 'black')
-    @grid[6][7] = Pawn.new([6, 7], 'black')
-  end
-
-  def promote_pawn(promoted_piece_name, start_coord, pieces)
-    clean_square(start_coord)
-    piece_class = Object.const_get promoted_piece_name
-    @grid[start_coord.first][start_coord.last] = piece_class.new(start_coord, pieces)
   end
 
   def change_pieces(old_coord, new_coord)
@@ -92,23 +74,17 @@ class Board
     piece.find_possible_moves
   end
 
-  def move_piece_to_coords(piece, coords)
-    @grid[coords.first][coords.last] = piece
-  end
-
   def clean_square(old_coord)
     @grid[old_coord.first][old_coord.last] = Square.new
+  end
+
+  def move_piece_to_coords(piece, coords)
+    @grid[coords.first][coords.last] = piece
   end
 
   def empty_space?(coord)
     @grid[coord.first][coord.last].class == Square
   end
-
-  # Not used anymore?
-  def empty_square?(row, column)
-    @grid[row][column].class == Square
-  end
-  #
 
   def occupied?(row, column)
     @grid[row][column].class != Square
@@ -135,5 +111,11 @@ class Board
     x = coord[0]
     y = coord[1]
     x.between?(0, 7) && y.between?(0, 7)
+  end
+
+  def promote_pawn(promoted_piece_name, start_coord, pieces)
+    clean_square(start_coord)
+    piece_class = Object.const_get promoted_piece_name
+    @grid[start_coord.first][start_coord.last] = piece_class.new(start_coord, pieces)
   end
 end
