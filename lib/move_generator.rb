@@ -234,7 +234,7 @@ class MoveGenerator
   def update_pieces(origin_piece, destination_coord, start_coord)
     @en_passant_moves.update_en_passant(origin_piece, destination_coord, start_coord)
     update_piece_move_history(origin_piece, destination_coord)
-    check_pawn_promotion(origin_piece, destination_coord, start_coord)
+    find_pawn_promotion_moves(origin_piece, destination_coord, start_coord)
     update_board(start_coord, destination_coord)
     update_castling_rooks(destination_coord)
   end
@@ -245,31 +245,9 @@ class MoveGenerator
     origin_piece.first_move.push(destination_coord)
   end
 
-  def check_pawn_promotion(origin_piece, destination_coord, start_coord)
-    return unless origin_piece.class == Pawn
-    return unless destination_coord.first == 7 || destination_coord.first == 0
-
-    piece_selection_number = prompt_pawn_promotion
-    promoted_piece_name = find_piece_class(piece_selection_number)
-    pieces = origin_piece.pieces
-    @board.promote_pawn(promoted_piece_name, start_coord, pieces)
-  end
-
-  def prompt_pawn_promotion
-    puts "#{@current_player.name} select piece for pawn promotion:"
-    puts '1 = Queen'
-    puts '2 = Knight'
-    puts '3 = Rook'
-    puts '4 = Bishop'
-    loop do
-      string = @current_player.select_piece.to_i
-      return string if string.between?(1, 4)
-    end
-  end
-
-  def find_piece_class(piece_selection_number)
-    hash = { 'Queen' => 1, 'Knight' => 2, 'Rook' => 3, 'Bishop' => 4 }
-    hash.key(piece_selection_number)
+  def find_pawn_promotion_moves(origin_piece, destination_coord, start_coord)
+    @pawn_promotion_moves = PawnPromotionMoves.new(@board, @player_one, @player_two)
+    @pawn_promotion_moves.check_pawn_promotion(origin_piece, destination_coord, start_coord)
   end
 
   def update_board(start_coord, destination_coord)

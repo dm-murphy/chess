@@ -13,6 +13,7 @@ require_relative 'bishop.rb'
 require_relative 'queen.rb'
 require_relative 'en_passant_moves.rb'
 require_relative 'castling.rb'
+require_relative 'pawn_promotion_moves.rb'
 
 test_game = Game.new
 test_game.start
