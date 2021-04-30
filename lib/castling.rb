@@ -29,14 +29,12 @@ class Castling < MoveGenerator
     add_king_side_move(origin_piece, legal_moves)
   end
 
-  def add_king_side_move(origin_piece, legal_moves)
-    if origin_piece.pieces == 'white'
-      legal_moves.push([0, 6])
-      @castle_destination.push([0, 6])
-    else
-      legal_moves.push([7, 6])
-      @castle_destination.push([7, 6])
-    end
+  def find_king_side_rook(king)
+    king.pieces == 'white' ? @board.white_king_side_rook : @board.black_king_side_rook
+  end
+
+  def find_king_side_path(king)
+    king.pieces == 'white' ? [[0, 5], [0, 6]] : [[7, 5], [7, 6]]
   end
 
   def path_in_check?(piece, path)
@@ -45,12 +43,14 @@ class Castling < MoveGenerator
     end
   end
 
-  def find_king_side_rook(king)
-    king.pieces == 'white' ? @board.white_king_side_rook : @board.black_king_side_rook
-  end
-
-  def find_king_side_path(king)
-    king.pieces == 'white' ? [[0, 5], [0, 6]] : [[7, 5], [7, 6]]
+  def add_king_side_move(origin_piece, legal_moves)
+    if origin_piece.pieces == 'white'
+      legal_moves.push([0, 6])
+      @castle_destination.push([0, 6])
+    else
+      legal_moves.push([7, 6])
+      @castle_destination.push([7, 6])
+    end
   end
 
   def queen_side_castle(origin_piece, legal_moves)
@@ -68,6 +68,14 @@ class Castling < MoveGenerator
     add_queen_side_move(origin_piece, legal_moves)
   end
 
+  def find_queen_side_rook(king)
+    king.pieces == 'white' ? @board.white_queen_side_rook : @board.black_queen_side_rook
+  end
+
+  def find_queen_side_path(king)
+    king.pieces == 'white' ? [[0, 3], [0, 2], [0, 1]] : [[7, 3], [7, 2], [7, 1]]
+  end
+
   def add_queen_side_move(origin_piece, legal_moves)
     if origin_piece.pieces == 'white'
       legal_moves.push([0, 2])
@@ -77,13 +85,13 @@ class Castling < MoveGenerator
       @castle_destination.push([7, 2])
     end
   end
+  
+  def update_castling_rooks(destination_coord)
+    return unless rook_castled?(destination_coord)
 
-  def find_queen_side_rook(king)
-    king.pieces == 'white' ? @board.white_queen_side_rook : @board.black_queen_side_rook
-  end
-
-  def find_queen_side_path(king)
-    king.pieces == 'white' ? [[0, 3], [0, 2], [0, 1]] : [[7, 3], [7, 2], [7, 1]]
+    rook_start_coord = find_rook_start(destination_coord)
+    rook_destination_coord = find_rook_destination(destination_coord)
+    update_board(rook_start_coord, rook_destination_coord)
   end
 
   def rook_castled?(destination_coord)

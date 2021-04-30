@@ -236,7 +236,7 @@ class MoveGenerator
     update_piece_move_history(origin_piece, destination_coord)
     find_pawn_promotion_moves(origin_piece, destination_coord, start_coord)
     update_board(start_coord, destination_coord)
-    update_castling_rooks(destination_coord)
+    @castle_moves.update_castling_rooks(destination_coord)
   end
 
   def update_piece_move_history(origin_piece, destination_coord)
@@ -252,26 +252,6 @@ class MoveGenerator
 
   def update_board(start_coord, destination_coord)
     @board.change_pieces(start_coord, destination_coord)
-  end
-
-  def update_castling_rooks(destination_coord)
-    return unless castled?(destination_coord)
-
-    rook_start_coord = rook_start(destination_coord)
-    rook_destination_coord = rook_destination(destination_coord)
-    update_board(rook_start_coord, rook_destination_coord)
-  end
-
-  def castled?(destination_coord)
-    @castle_moves.rook_castled?(destination_coord)
-  end
-
-  def rook_start(destination_coord)
-    @castle_moves.find_rook_start(destination_coord)
-  end
-
-  def rook_destination(destination_coord)
-    @castle_moves.find_rook_destination(destination_coord)
   end
 
   def check?
