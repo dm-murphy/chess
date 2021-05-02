@@ -66,12 +66,36 @@ describe MoveGenerator do
 # # Query script sent to self
 # end
 
-# describe 'all_legal_moves' do
-########################
-######### TEST #########
-########################
-# # Command script sent to self
-# end
+  describe 'all_legal_moves' do
+    # Command script sent to self
+    context 'when white player pieces have at least one move' do
+
+      it 'returns array of moves' do
+        test_player_king = King.new([0, 0], 'white')
+        test_player_pieces = [test_player_king]
+        test_king_moves = [[1, 0], [1, 1], [0, 1]]
+        test_king_legal_moves = [[1, 1], [0, 1]]
+        legal_array = [[[1, 1], [0, 1]]]
+        allow(test_game).to receive(:find_piece_moves) { test_king_moves }
+        allow(test_game).to receive(:find_piece_legal_moves) { test_king_legal_moves }
+        expect(test_game.all_legal_moves(test_player_pieces)).to eq legal_array
+      end
+    end
+
+    context 'when white player pieces have no legal moves' do
+
+      it 'returns empty array' do
+        test_player_king = King.new([0, 0], 'white')
+        test_player_pieces = [test_player_king]
+        test_king_moves = [[1, 0], [1, 1], [0, 1]]
+        test_king_legal_moves = []
+        legal_array = [[]]
+        allow(test_game).to receive(:find_piece_moves) { test_king_moves }
+        allow(test_game).to receive(:find_piece_legal_moves) { test_king_legal_moves }
+        expect(test_game.all_legal_moves(test_player_pieces)).to eq legal_array
+      end
+    end
+  end
 
 # describe '#player_piece?' do
 # Query sent to self comparing outgoing query to Player class with outgoing query to piece's class
