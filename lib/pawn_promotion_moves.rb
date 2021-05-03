@@ -9,6 +9,10 @@ class PawnPromotionMoves < MoveGenerator
     return unless origin_piece.class == Pawn
     return unless destination_coord.first == 7 || destination_coord.first == 0
 
+    promote_pawn(origin_piece, start_coord)
+  end
+
+  def promote_pawn(origin_piece, start_coord)
     piece_selection_number = prompt_pawn_promotion
     promoted_piece_name = find_piece_class(piece_selection_number)
     pieces = origin_piece.pieces
