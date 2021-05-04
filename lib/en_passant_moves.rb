@@ -31,14 +31,14 @@ class EnPassantMoves < MoveGenerator
   end
 
   def update_captured_en_passant(origin_piece, destination_coord)
-    return unless en_passant_captured?(destination_coord)
+    return unless en_passant_captured?(origin_piece, destination_coord)
 
     en_passant_capture_coord = find_x_coordinate_forward(origin_piece, destination_coord)
     remove_piece(en_passant_capture_coord)
   end
 
-  def en_passant_captured?(destination_coord)
-    @en_passant_coordinate == destination_coord
+  def en_passant_captured?(origin_piece, destination_coord)
+    origin_piece.class == Pawn && @en_passant_coordinate == destination_coord
   end
 
   def find_x_coordinate_forward(origin_piece, coord)
