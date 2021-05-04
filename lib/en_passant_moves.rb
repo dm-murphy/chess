@@ -27,49 +27,48 @@ class EnPassantMoves < MoveGenerator
 
   def update_en_passant(origin_piece, destination_coord, start_coord)
     update_captured_en_passant(origin_piece, destination_coord)
+    restart_en_passant
     check_en_passant(origin_piece, destination_coord, start_coord)
   end
 
   def update_captured_en_passant(origin_piece, destination_coord)
     return unless en_passant_captured?(origin_piece, destination_coord)
 
-    en_passant_capture_coord = find_x_coordinate_forward(origin_piece, destination_coord)
-    remove_piece(en_passant_capture_coord)
+    en_passant_captured_coord = find_captured_pawn_coordinate(origin_piece, destination_coord)
+    remove_pawn(en_passant_captured_coord)
   end
 
   def en_passant_captured?(origin_piece, destination_coord)
     origin_piece.class == Pawn && @en_passant_coordinate == destination_coord
   end
 
-  def find_x_coordinate_forward(origin_piece, coord)
+  def find_captured_pawn_coordinate(origin_piece, destination_coord)
     x_change = if origin_piece.pieces == 'white'
                  -1
                else
                  1
                end
-    result_x = coord.first + x_change
-    result_y = coord.last
+    result_x = destination_coord.first + x_change
+    result_y = destination_coord.last
     [result_x, result_y]
   end
 
-  def remove_piece(coord)
+  def remove_pawn(coord)
     @board.clean_square(coord)
   end
 
   def check_en_passant(origin_piece, destination_coord, start_coord)
-    restart_en_passant
-
-    return unless origin_piece.class == Pawn
-    return unless double_jump?(destination_coord, start_coord)
+    return unless double_jump?(origin_piece, destination_coord, start_coord)
 
     find_en_passant_opponent_pieces(origin_piece, destination_coord)
     return if @en_passant_opponent_pieces.empty?
 
-    coordinate = find_x_coordinate_backward(origin_piece, start_coord)
-    @en_passant_coordinate = coordinate
+    add_en_passant_coordinate(origin_piece, start_coord)
   end
 
-  def double_jump?(destination_coord, start_coord)
+  def double_jump?(origin_piece, destination_coord, start_coord)
+    return unless origin_piece.class == Pawn
+
     result = subtract_coordinates(destination_coord, start_coord)
     result == [2, 0] || result == [-2, 0]
   end
@@ -104,7 +103,12 @@ class EnPassantMoves < MoveGenerator
     @en_passant_opponent_pieces.push(possible_opponent_piece)
   end
 
-  def find_x_coordinate_backward(origin_piece, coord)
+  def add_en_passant_coordinate(origin_piece, start_coord)
+    coordinate = find_new_en_passant_coordinate(origin_piece, start_coord)
+    @en_passant_coordinate = coordinate
+  end
+
+  def find_new_en_passant_coordinate(origin_piece, coord)
     x_change = if origin_piece.pieces == 'white'
                  1
                else
