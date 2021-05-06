@@ -3,6 +3,7 @@
 # Creates rook objects for Board class with coordinates, pieces, display style and possible moves
 class Rook
   include Piece
+
   attr_accessor :coord, :pieces, :display, :possible_moves, :first_move
 
   def initialize(coord, pieces)

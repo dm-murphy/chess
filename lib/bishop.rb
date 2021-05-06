@@ -4,6 +4,8 @@
 
 # Creates bishop objects for Board class with coordinates, pieces, display style and possible moves
 class Bishop
+  include Piece
+
   attr_accessor :coord, :pieces, :display, :possible_moves
 
   def initialize(coord, pieces)
@@ -14,42 +16,35 @@ class Bishop
     find_possible_moves
   end
 
-  def find_possible_moves
-    coord_changes = [[1, 1],
-                     [2, 2],
-                     [3, 3],
-                     [4, 4],
-                     [5, 5],
-                     [6, 6],
-                     [7, 7],
-                     [-1, -1],
-                     [-2, -2],
-                     [-3, -3],
-                     [-4, -4],
-                     [-5, -5],
-                     [-6, -6],
-                     [-7, -7],
-                     [-1, 1],
-                     [-2, 2],
-                     [-3, 3],
-                     [-4, 4],
-                     [-5, 5],
-                     [-6, 6],
-                     [-7, 7],
-                     [1, -1],
-                     [2, -2],
-                     [3, -3],
-                     [4, -4],
-                     [5, -5],
-                     [6, -6],
-                     [7, -7]]
-
-    coord_moves = coord_changes.map do |x, y|
-      [@coord[0] + x, @coord[1] + y]
-    end
-    coord_moves.map do |x, y|
-      @possible_moves.push([x, y]) if x.between?(0, 7) && y.between?(0, 7)
-    end
+  def coord_changes
+    [[1, 1],
+     [2, 2],
+     [3, 3],
+     [4, 4],
+     [5, 5],
+     [6, 6],
+     [7, 7],
+     [-1, -1],
+     [-2, -2],
+     [-3, -3],
+     [-4, -4],
+     [-5, -5],
+     [-6, -6],
+     [-7, -7],
+     [-1, 1],
+     [-2, 2],
+     [-3, 3],
+     [-4, 4],
+     [-5, 5],
+     [-6, 6],
+     [-7, 7],
+     [1, -1],
+     [2, -2],
+     [3, -3],
+     [4, -4],
+     [5, -5],
+     [6, -6],
+     [7, -7]]
   end
 
   def next_space_moves
