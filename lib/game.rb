@@ -14,9 +14,31 @@ class Game
   end
 
   def start
-    # Add display for rules and how to input board positions
+    display_tutorial
     # Add option to Load game file
     start_turn
+  end
+
+  def display_tutorial
+    puts <<-HEREDOC
+
+    Welcome to Chess. 
+    
+    Players take turns choosing pieces and destinations.
+    
+    Select a piece by entering the column with a letter from a - h
+    followed by the row with a number from 1 - 8.
+    
+    E.g. the first player can select the kingside knight with g1
+    or the leftmost pawn with a2.
+
+    If a piece has legal moves available, the board will display them,
+    otherwise the player must choose another piece.
+
+    If a player is in check, they can only select pieces that can bring
+    them out of check.
+
+    HEREDOC
   end
 
   def start_turn
