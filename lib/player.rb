@@ -9,8 +9,15 @@ class Player
     @name = name
     @pieces = pieces
   end
-  
+
   def select_piece
-    gets.chomp
+    loop do
+      piece = gets.chomp
+      return piece if valid_piece?(piece)
+    end
+  end
+
+  def valid_piece?(piece)
+    piece.length == 2 && piece[0][/([a-hA-H]+)/] && piece[1] =~ /[1-8]/
   end
 end
