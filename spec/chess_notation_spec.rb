@@ -27,13 +27,29 @@ describe ChessNotation do
 # # Query sent to self
 # end
 
-# describe '#letter_to_number'
-# # Query sent to self
-# end
+  describe '#letter_to_number' do
+    # Query sent to self
+    context 'when a letter string is passed into the method' do
+      let(:test_chess_notation) { described_class.new }
+      it 'returns the corresponding number string' do
+        test_letter = 'd'
+        test_number = '3'
+        expect(test_chess_notation.letter_to_number(test_letter)).to eq test_number
+      end
+    end
+  end
 
-# describe '#number_to_number'
-# # Query sent to self
-# end
+  describe '#number_to_number' do
+    # Query sent to self
+    context 'when a number string is passed into the method' do
+      let(:test_chess_notation) { described_class.new }
+      it 'returns the corresponding number string' do
+        test_number = '6'
+        test_result = '5'
+        expect(test_chess_notation.number_to_number(test_number)).to eq test_result
+      end
+    end
+  end
 
   describe '#string_to_coord' do
     # Query sent to self
@@ -51,15 +67,40 @@ describe ChessNotation do
 # # Query sent to self
 # end
 
-# describe notate
-# # Query sent to self
-# end
+  describe '#notate' do
+    # Query sent to self
+    context 'when a coordinate move is passed into the method' do
+      let(:test_chess_notation) { described_class.new }
+      it 'returns the corresponding chess notation string' do
+        test_coordinate = [3, 0]
+        test_notation = 'a4'
+        expect(test_chess_notation.notate(test_coordinate)).to eq test_notation
+      end
+    end
+  end
 
-# describe y_coord_to_letter
-# # Query sent to self
-# end
+  describe '#y_coord_to_letter' do
+    # Query sent to self
+    context 'when a number integer is passed into the method' do
+      let(:test_chess_notation) { described_class.new }
+      it 'returns the corresponding letter string' do
+        test_number = 1
+        test_result = 'b'
+        expect(test_chess_notation.y_coord_to_letter(test_number)).to eq test_result
+      end
+    end
+  end
 
-# describe x_coord_to_number
-# # Query sent to self
-# end
+
+  describe '#x_coord_to_number' do
+    # Query sent to self
+    context 'when a number integer is passed into the method' do
+      let(:test_chess_notation) { described_class.new }
+      it 'returns the corresponding number string' do
+        test_number = 3
+        test_result = '4'
+        expect(test_chess_notation.x_coord_to_number(test_number)).to eq test_result
+      end
+    end
+  end
 end
