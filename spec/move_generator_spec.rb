@@ -2,6 +2,7 @@
 
 require './lib/game'
 require './lib/move_generator.rb'
+require './lib/chess_notation.rb'
 require './lib/player'
 require './lib/board'
 require './lib/square'
@@ -25,24 +26,11 @@ describe MoveGenerator do
 
 # describe '#ask_user_start' do
 # # Loop script
-# # Tests and comments below for methods inside #ask_move, #string_to_coord, #coords_to_grid_object, #player_piece?
 # end
 
 # describe '#ask_move' do
 # # Outgoing query sent to Player class
 # end
-
-  describe '#string_to_coord' do
-    # Query sent to self
-    context 'when given a string of numbers' do
-
-      it 'returns array of coordinates' do
-        string = '12'
-        result = [1, 2]
-        expect(test_game.string_to_coord(string)).to eq result
-      end
-    end
-  end
 
 # describe 'no_player_moves?' do
 # # Query script sent to self
@@ -139,8 +127,6 @@ describe MoveGenerator do
 
 # describe '#illegal_move?' do
 #  # Query script
-#  # Tests and comments below for methods inside #occupied_by_player?, #blocked?, #move_puts_self_in_check?,
-#  # #king_stays_in_check?, #illegal_pawn_move?
 # end
 
   describe '#occupied_by_player?' do

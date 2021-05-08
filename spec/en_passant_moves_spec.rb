@@ -2,6 +2,7 @@
 
 require './lib/game'
 require './lib/move_generator.rb'
+require './lib/chess_notation.rb'
 require './lib/player'
 require './lib/board'
 require './lib/square'

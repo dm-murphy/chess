@@ -2,6 +2,7 @@
 
 require_relative 'game.rb'
 require_relative 'move_generator.rb'
+require_relative 'chess_notation.rb'
 require_relative 'player.rb'
 require_relative 'board.rb'
 require_relative 'square.rb'
