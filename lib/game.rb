@@ -13,38 +13,22 @@ class Game
     @move_generator = MoveGenerator.new(board, player_one, player_two)
   end
 
-  def start
-    display_tutorial
-    # Add option to Load game file
-    start_turn
-  end
+  def load(file)
+    restored_round = YAML.load(File.read("saved_rounds/#{file}"))
 
-  def display_tutorial
-    puts <<-HEREDOC
-
-    Welcome to Chess. 
-    
-    Players take turns choosing pieces and destinations.
-    
-    Select a piece by entering the column with a letter from a - h
-    followed by the row with a number from 1 - 8.
-    
-    E.g. the first player can select the kingside knight with g1
-    or the leftmost pawn with a2.
-
-    If a piece has legal moves available, the board will display them,
-    otherwise the player must choose another piece.
-
-    If a player is in check, they can only select pieces that can bring
-    them out of check.
-
-    HEREDOC
+    @board = restored_round[:board]
+    @player_one = restored_round[:player_one]
+    @player_two = restored_round[:player_two]
+    @move_generator = restored_round[:move_generator]
   end
 
   def start_turn
     loop do
       @board.show_grid
-      origin_piece = @move_generator.ask_user_start
+      result = @move_generator.ask_user
+      redo if user_saved_game?(result)
+
+      origin_piece = @move_generator.find_origin_piece(result)
       legal_moves = @move_generator.generate_legal_moves(origin_piece)
       redo if legal_moves.empty?
 
@@ -54,6 +38,35 @@ class Game
       @move_generator.swap_player
       break if game_over?
     end
+  end
+
+  def user_saved_game?(result)
+    return unless result == 'save'
+
+    save_game
+    true
+  end
+
+  def save_game
+    time = Time.now
+
+    Dir.mkdir('saved_rounds') unless Dir.exist? 'saved_rounds'
+
+    filename = "saved_rounds/#{time}.yml"
+
+    File.open(filename,'w') do |file|
+      file.write self.to_yaml
+    end
+    puts "Saved game: #{filename}"
+  end
+
+  def to_yaml
+    YAML.dump ({
+      board: @board,
+      player_one: @player_one,
+      player_two: @player_two,
+      move_generator: @move_generator
+    })
   end
 
   def game_over?

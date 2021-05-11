@@ -14,20 +14,17 @@ class MoveGenerator
     @en_passant_moves = EnPassantMoves.new(board)
     @chess_notation = ChessNotation.new
   end
-
-  def ask_user_start
-    loop do
-      move = ask_move
-      coord = @chess_notation.convert_move_to_coord(move)
-      piece = coords_to_grid_object(coord)
-      return piece if player_piece?(piece)
-    end
-  end
-
-  def ask_move
-    puts "#{@current_player.name} choose a piece"
+  
+  def ask_user
+    puts "#{@current_player.name} choose a piece (e.g. a2) or 'save'"
     puts
     @current_player.select_piece
+  end
+  
+  def find_origin_piece(result)
+    coord = @chess_notation.convert_move_to_coord(result)
+    piece = coords_to_grid_object(coord)
+    return piece if player_piece?(piece)
   end
 
   def coords_to_grid_object(coord)

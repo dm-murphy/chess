@@ -12,9 +12,14 @@ class Player
 
   def select_piece
     loop do
-      piece = gets.chomp
-      return piece if valid_piece?(piece)
+      result = gets.chomp
+      return 'save' if save_game?(result)
+      return result if valid_piece?(result)
     end
+  end
+
+  def save_game?(result)
+    result.downcase == 'save' || result.downcase == "'save'"
   end
 
   def valid_piece?(piece)
