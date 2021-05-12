@@ -28,7 +28,11 @@ describe Game do
 # # Test methods in Board and MoveGenerator class
 # end
 
-# describe '#user_save_game?' do
+# describe '#end_turn'
+# # Script
+# end
+
+# describe '#user_saved_game?' do
 # # Script
 # end
 
@@ -38,6 +42,14 @@ describe Game do
 
 # describe '#to_yaml' do
 # # Outgoing command
+# end
+
+# describe '#not_player_piece?' do
+# # Query sent to self
+# end
+
+# describe '#illegal_piece?' do
+# # Query sent to self
 # end
 
 # describe '#game_over?' do

@@ -1,0 +1,769 @@
+---
+:board: &15 !ruby/object:Board
+  grid:
+  - - &9 !ruby/object:Rook
+      coord:
+      - 0
+      - 0
+      pieces: white
+      display: "♖"
+      possible_moves:
+      - - 1
+        - 0
+      - - 2
+        - 0
+      - - 3
+        - 0
+      - - 4
+        - 0
+      - - 5
+        - 0
+      - - 6
+        - 0
+      - - 7
+        - 0
+      - - 0
+        - 1
+      - - 0
+        - 2
+      - - 0
+        - 3
+      - - 0
+        - 4
+      - - 0
+        - 5
+      - - 0
+        - 6
+      - - 0
+        - 7
+      first_move: []
+    - !ruby/object:Square
+      display: "-"
+    - !ruby/object:Square
+      display: "-"
+    - !ruby/object:Square
+      display: "-"
+    - &10 !ruby/object:King
+      coord:
+      - 0
+      - 4
+      pieces: white
+      display: "♔"
+      possible_moves:
+      - - 1
+        - 4
+      - - 1
+        - 5
+      - - 1
+        - 3
+      - - 0
+        - 5
+      - - 0
+        - 3
+      first_move: []
+    - !ruby/object:Bishop
+      coord:
+      - 0
+      - 5
+      pieces: white
+      display: "♗"
+      possible_moves:
+      - - 1
+        - 6
+      - - 2
+        - 7
+      - - 1
+        - 4
+      - - 2
+        - 3
+      - - 3
+        - 2
+      - - 4
+        - 1
+      - - 5
+        - 0
+    - !ruby/object:Knight
+      coord:
+      - 0
+      - 6
+      pieces: white
+      display: "♘"
+      possible_moves:
+      - - 2
+        - 7
+      - - 2
+        - 5
+      - - 1
+        - 4
+    - &11 !ruby/object:Rook
+      coord:
+      - 0
+      - 7
+      pieces: white
+      display: "♖"
+      possible_moves:
+      - - 1
+        - 7
+      - - 2
+        - 7
+      - - 3
+        - 7
+      - - 4
+        - 7
+      - - 5
+        - 7
+      - - 6
+        - 7
+      - - 7
+        - 7
+      - - 0
+        - 6
+      - - 0
+        - 5
+      - - 0
+        - 4
+      - - 0
+        - 3
+      - - 0
+        - 2
+      - - 0
+        - 1
+      - - 0
+        - 0
+      first_move: []
+  - - !ruby/object:Pawn
+      coord:
+      - 1
+      - 0
+      pieces: white
+      display: "♙"
+      possible_moves:
+      - - 2
+        - 0
+      - - 3
+        - 0
+      - - 2
+        - 1
+      first_move: []
+    - !ruby/object:Bishop
+      coord:
+      - 1
+      - 1
+      pieces: white
+      display: "♗"
+      possible_moves:
+      - - 2
+        - 2
+      - - 3
+        - 3
+      - - 4
+        - 4
+      - - 5
+        - 5
+      - - 6
+        - 6
+      - - 7
+        - 7
+      - - 0
+        - 0
+      - - 0
+        - 2
+      - - 2
+        - 0
+    - !ruby/object:Square
+      display: "-"
+    - !ruby/object:Pawn
+      coord:
+      - 1
+      - 3
+      pieces: white
+      display: "♙"
+      possible_moves:
+      - - 2
+        - 3
+      - - 3
+        - 3
+      - - 2
+        - 4
+      - - 2
+        - 2
+      first_move: []
+    - !ruby/object:Pawn
+      coord:
+      - 1
+      - 4
+      pieces: white
+      display: "♙"
+      possible_moves:
+      - - 2
+        - 4
+      - - 3
+        - 4
+      - - 2
+        - 5
+      - - 2
+        - 3
+      first_move: []
+    - !ruby/object:Pawn
+      coord:
+      - 1
+      - 5
+      pieces: white
+      display: "♙"
+      possible_moves:
+      - - 2
+        - 5
+      - - 3
+        - 5
+      - - 2
+        - 6
+      - - 2
+        - 4
+      first_move: []
+    - !ruby/object:Pawn
+      coord:
+      - 1
+      - 6
+      pieces: white
+      display: "♙"
+      possible_moves:
+      - - 2
+        - 6
+      - - 3
+        - 6
+      - - 2
+        - 7
+      - - 2
+        - 5
+      first_move: []
+    - !ruby/object:Pawn
+      coord:
+      - 1
+      - 7
+      pieces: white
+      display: "♙"
+      possible_moves:
+      - - 2
+        - 7
+      - - 3
+        - 7
+      - - 2
+        - 6
+      first_move: []
+  - - !ruby/object:Knight
+      coord:
+      - 2
+      - 0
+      pieces: white
+      display: "♘"
+      possible_moves:
+      - - 3
+        - 2
+      - - 4
+        - 1
+      - - 0
+        - 1
+      - - 1
+        - 2
+    - &1 !ruby/object:Square
+      display: "-"
+    - *1
+    - *1
+    - *1
+    - *1
+    - *1
+    - *1
+  - - !ruby/object:Queen
+      coord:
+      - 3
+      - 0
+      pieces: white
+      display: "♕"
+      possible_moves:
+      - - 4
+        - 0
+      - - 5
+        - 0
+      - - 6
+        - 0
+      - - 7
+        - 0
+      - - 2
+        - 0
+      - - 1
+        - 0
+      - - 0
+        - 0
+      - - 3
+        - 1
+      - - 3
+        - 2
+      - - 3
+        - 3
+      - - 3
+        - 4
+      - - 3
+        - 5
+      - - 3
+        - 6
+      - - 3
+        - 7
+      - - 4
+        - 1
+      - - 5
+        - 2
+      - - 6
+        - 3
+      - - 7
+        - 4
+      - - 2
+        - 1
+      - - 1
+        - 2
+      - - 0
+        - 3
+    - !ruby/object:Pawn
+      coord: &2
+      - 3
+      - 1
+      pieces: white
+      display: "♙"
+      possible_moves:
+      - - 4
+        - 1
+      - - 4
+        - 2
+      - - 4
+        - 0
+      first_move:
+      - *2
+    - !ruby/object:Pawn
+      coord: &3
+      - 3
+      - 2
+      pieces: white
+      display: "♙"
+      possible_moves:
+      - - 4
+        - 2
+      - - 4
+        - 3
+      - - 4
+        - 1
+      first_move:
+      - *3
+    - &4 !ruby/object:Square
+      display: "-"
+    - *4
+    - *4
+    - *4
+    - *4
+  - - !ruby/object:Pawn
+      coord: &5
+      - 4
+      - 0
+      pieces: black
+      display: "♟"
+      possible_moves:
+      - - 3
+        - 0
+      - - 3
+        - 1
+      first_move:
+      - - 5
+        - 0
+      - *5
+    - &6 !ruby/object:Square
+      display: "-"
+    - *6
+    - *6
+    - *6
+    - *6
+    - *6
+    - *6
+  - - &12 !ruby/object:Rook
+      coord: &7
+      - 5
+      - 0
+      pieces: black
+      display: "♜"
+      possible_moves:
+      - - 6
+        - 0
+      - - 7
+        - 0
+      - - 4
+        - 0
+      - - 3
+        - 0
+      - - 2
+        - 0
+      - - 1
+        - 0
+      - - 0
+        - 0
+      - - 5
+        - 1
+      - - 5
+        - 2
+      - - 5
+        - 3
+      - - 5
+        - 4
+      - - 5
+        - 5
+      - - 5
+        - 6
+      - - 5
+        - 7
+      first_move:
+      - - 6
+        - 0
+      - *7
+    - &8 !ruby/object:Square
+      display: "-"
+    - !ruby/object:Knight
+      coord:
+      - 5
+      - 2
+      pieces: black
+      display: "♞"
+      possible_moves:
+      - - 6
+        - 4
+      - - 7
+        - 3
+      - - 7
+        - 1
+      - - 6
+        - 0
+      - - 4
+        - 0
+      - - 3
+        - 1
+      - - 3
+        - 3
+      - - 4
+        - 4
+    - *8
+    - *8
+    - *8
+    - *8
+    - *8
+  - - !ruby/object:Square
+      display: "-"
+    - !ruby/object:Pawn
+      coord:
+      - 6
+      - 1
+      pieces: black
+      display: "♟"
+      possible_moves:
+      - - 5
+        - 1
+      - - 4
+        - 1
+      - - 5
+        - 2
+      - - 5
+        - 0
+      first_move: []
+    - !ruby/object:Pawn
+      coord:
+      - 6
+      - 2
+      pieces: black
+      display: "♟"
+      possible_moves:
+      - - 5
+        - 2
+      - - 4
+        - 2
+      - - 5
+        - 3
+      - - 5
+        - 1
+      first_move: []
+    - !ruby/object:Pawn
+      coord:
+      - 6
+      - 3
+      pieces: black
+      display: "♟"
+      possible_moves:
+      - - 5
+        - 3
+      - - 4
+        - 3
+      - - 5
+        - 4
+      - - 5
+        - 2
+      first_move: []
+    - !ruby/object:Pawn
+      coord:
+      - 6
+      - 4
+      pieces: black
+      display: "♟"
+      possible_moves:
+      - - 5
+        - 4
+      - - 4
+        - 4
+      - - 5
+        - 5
+      - - 5
+        - 3
+      first_move: []
+    - !ruby/object:Pawn
+      coord:
+      - 6
+      - 5
+      pieces: black
+      display: "♟"
+      possible_moves:
+      - - 5
+        - 5
+      - - 4
+        - 5
+      - - 5
+        - 6
+      - - 5
+        - 4
+      first_move: []
+    - !ruby/object:Pawn
+      coord:
+      - 6
+      - 6
+      pieces: black
+      display: "♟"
+      possible_moves:
+      - - 5
+        - 6
+      - - 4
+        - 6
+      - - 5
+        - 7
+      - - 5
+        - 5
+      first_move: []
+    - !ruby/object:Pawn
+      coord:
+      - 6
+      - 7
+      pieces: black
+      display: "♟"
+      possible_moves:
+      - - 5
+        - 7
+      - - 4
+        - 7
+      - - 5
+        - 6
+      first_move: []
+  - - !ruby/object:Square
+      display: "-"
+    - !ruby/object:Square
+      display: "-"
+    - !ruby/object:Bishop
+      coord:
+      - 7
+      - 2
+      pieces: black
+      display: "♝"
+      possible_moves:
+      - - 6
+        - 1
+      - - 5
+        - 0
+      - - 6
+        - 3
+      - - 5
+        - 4
+      - - 4
+        - 5
+      - - 3
+        - 6
+      - - 2
+        - 7
+    - !ruby/object:Queen
+      coord:
+      - 7
+      - 3
+      pieces: black
+      display: "♛"
+      possible_moves:
+      - - 6
+        - 3
+      - - 5
+        - 3
+      - - 4
+        - 3
+      - - 3
+        - 3
+      - - 2
+        - 3
+      - - 1
+        - 3
+      - - 0
+        - 3
+      - - 7
+        - 4
+      - - 7
+        - 5
+      - - 7
+        - 6
+      - - 7
+        - 7
+      - - 7
+        - 2
+      - - 7
+        - 1
+      - - 7
+        - 0
+      - - 6
+        - 2
+      - - 5
+        - 1
+      - - 4
+        - 0
+      - - 6
+        - 4
+      - - 5
+        - 5
+      - - 4
+        - 6
+      - - 3
+        - 7
+    - &13 !ruby/object:King
+      coord:
+      - 7
+      - 4
+      pieces: black
+      display: "♚"
+      possible_moves:
+      - - 7
+        - 5
+      - - 7
+        - 3
+      - - 6
+        - 4
+      - - 6
+        - 5
+      - - 6
+        - 3
+      first_move: []
+    - !ruby/object:Bishop
+      coord:
+      - 7
+      - 5
+      pieces: black
+      display: "♝"
+      possible_moves:
+      - - 6
+        - 4
+      - - 5
+        - 3
+      - - 4
+        - 2
+      - - 3
+        - 1
+      - - 2
+        - 0
+      - - 6
+        - 6
+      - - 5
+        - 7
+    - !ruby/object:Knight
+      coord:
+      - 7
+      - 6
+      pieces: black
+      display: "♞"
+      possible_moves:
+      - - 6
+        - 4
+      - - 5
+        - 5
+      - - 5
+        - 7
+    - &14 !ruby/object:Rook
+      coord:
+      - 7
+      - 7
+      pieces: black
+      display: "♜"
+      possible_moves:
+      - - 6
+        - 7
+      - - 5
+        - 7
+      - - 4
+        - 7
+      - - 3
+        - 7
+      - - 2
+        - 7
+      - - 1
+        - 7
+      - - 0
+        - 7
+      - - 7
+        - 6
+      - - 7
+        - 5
+      - - 7
+        - 4
+      - - 7
+        - 3
+      - - 7
+        - 2
+      - - 7
+        - 1
+      - - 7
+        - 0
+      first_move: []
+  white_queen_side_rook: *9
+  white_king: *10
+  white_king_side_rook: *11
+  black_queen_side_rook: *12
+  black_king: *13
+  black_king_side_rook: *14
+:player_one: &16 !ruby/object:Player
+  name: Player 1
+  pieces: white
+:player_two: &17 !ruby/object:Player
+  name: Player 2
+  pieces: black
+:move_generator: !ruby/object:MoveGenerator
+  board: *15
+  player_one: *16
+  player_two: *17
+  current_player: *16
+  en_passant_moves: !ruby/object:EnPassantMoves
+    board: *15
+    en_passant_opponent_pieces: []
+    en_passant_coordinate: 
+  chess_notation: !ruby/object:ChessNotation {}
+  castle_moves: !ruby/object:Castling
+    board: *15
+    player_one: *16
+    player_two: *17
+    current_player: *16
+    en_passant_moves: !ruby/object:EnPassantMoves
+      board: *15
+      en_passant_opponent_pieces: []
+      en_passant_coordinate: 
+    chess_notation: !ruby/object:ChessNotation {}
+    castle_destination: []
+  pawn_promotion_moves: !ruby/object:PawnPromotionMoves
+    board: *15
+    player_one: *16
+    player_two: *17
+    current_player: *16
+    en_passant_moves: !ruby/object:EnPassantMoves
+      board: *15
+      en_passant_opponent_pieces: []
+      en_passant_coordinate: 
+    chess_notation: !ruby/object:ChessNotation {}
