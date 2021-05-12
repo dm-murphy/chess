@@ -29,6 +29,8 @@ class Game
       redo if user_saved_game?(result)
 
       origin_piece = @move_generator.find_origin_piece(result)
+      redo if origin_piece.nil?
+
       legal_moves = @move_generator.generate_legal_moves(origin_piece)
       redo if legal_moves.empty?
 

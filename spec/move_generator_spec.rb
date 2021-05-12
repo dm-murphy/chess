@@ -24,55 +24,70 @@ describe MoveGenerator do
   let(:test_player_one) { Player.new('Player 1', 'white') }
   let(:test_player_two) { Player.new('Player 2', 'black') }
 
-# describe '#ask_user_start' do
-# # Loop script
-# end
-
-# describe '#ask_move' do
+# describe '#ask_user' do
 # # Outgoing query sent to Player class
 # end
 
-# describe 'no_player_moves?' do
-# # Query script sent to self
-# end
-
-  describe 'all_legal_moves' do
-    # Command script sent to self
-    context 'when white player pieces have at least one move' do
-
-      it 'returns array of moves' do
-        test_player_king = King.new([0, 0], 'white')
-        test_player_pieces = [test_player_king]
-        test_king_moves = [[1, 0], [1, 1], [0, 1]]
-        test_king_legal_moves = [[1, 1], [0, 1]]
-        legal_array = [[[1, 1], [0, 1]]]
-        allow(test_game).to receive(:find_piece_moves) { test_king_moves }
-        allow(test_game).to receive(:find_piece_legal_moves) { test_king_legal_moves }
-        expect(test_game.all_legal_moves(test_player_pieces)).to eq legal_array
-      end
-    end
-
-    context 'when white player pieces have no legal moves' do
-
-      it 'returns empty array' do
-        test_player_king = King.new([0, 0], 'white')
-        test_player_pieces = [test_player_king]
-        test_king_moves = [[1, 0], [1, 1], [0, 1]]
-        test_king_legal_moves = []
-        legal_array = [[]]
-        allow(test_game).to receive(:find_piece_moves) { test_king_moves }
-        allow(test_game).to receive(:find_piece_legal_moves) { test_king_legal_moves }
-        expect(test_game.all_legal_moves(test_player_pieces)).to eq legal_array
-      end
-    end
-  end
-
-# describe '#player_piece?' do
-# Query sent to self comparing outgoing query to Player class with outgoing query to piece's class
+# describe '#find_origin_piece' do
+# # Query script
 # end
 
 # describe '#coords_to_grid_object' do
 # # Outgoing query sent to Board class
+# end
+
+  describe '#player_piece?' do
+  # Query sent to self comparing outgoing query to Player class with outgoing query to piece's class
+    context 'when piece is a Square' do
+  
+      it 'returns false' do
+        first_player = test_game.instance_variable_get(:@player_one)
+        test_game.instance_variable_set(:@current_player, first_player)
+        test_piece = Square.new
+        expect(test_game.player_piece?(test_piece)).to be false
+      end
+    end
+
+    context 'when piece is a Square' do
+      it 'returns false' do
+        test_piece = Square.new
+        expect(test_game.player_piece?(test_piece)).to be false
+      end
+    end
+  end
+
+  describe '#swap_player' do
+    # Command sent to self
+
+    context 'when @current_player is @player_one' do
+
+      it 'sets @current_player to @player_two' do
+        first_player = test_game.instance_variable_get(:@player_one)
+        second_player = test_game.instance_variable_get(:@player_two)
+        test_game.instance_variable_set(:@current_player, first_player)
+
+        expect { test_game.swap_player }.to change { test_game.instance_variable_get(:@current_player) }.from(first_player).to(second_player)
+      end
+    end
+
+    context 'when @current_player is @player_two' do
+
+      it 'sets @current_player to @player_one' do
+        first_player = test_game.instance_variable_get(:@player_one)
+        second_player = test_game.instance_variable_get(:@player_two)
+        test_game.instance_variable_set(:@current_player, second_player)
+
+        expect { test_game.swap_player }.to change { test_game.instance_variable_get(:@current_player) }.from(second_player).to(first_player)
+      end
+    end
+  end
+
+# describe '#generate_legal_moves' 
+# # Query script
+# end
+
+# describe '#find_legal_moves'
+# # Query script
 # end
 
 # describe '#find_piece_moves' do
@@ -193,6 +208,30 @@ describe MoveGenerator do
     end
   end
 
+# describe '#blocked?'
+# # Query script
+# end
+
+# describe '#blocked_path?'
+# # Outgoing query
+# end
+
+# describe '#move_puts_self_in_check?'
+# # Script
+# end
+
+# describe '#find_king_coord' 
+# # Query script
+# end
+
+# describe '#piece_is_king?' do
+#  # Query sent to self
+# end
+
+# describe '#find_king' do
+#  # Outgoing query sent to Board
+# end
+
   describe 'king_in_check?' do
     # Query Script sent to self
 
@@ -208,56 +247,6 @@ describe MoveGenerator do
 
         allow(test_game).to receive(:find_opponent_moves) { test_moves }
         expect(test_game.king_in_check?(piece, king_coord)).to be false
-      end
-    end
-  end
-
-  describe 'move_keeps_king_in_check?' do
-    # Query sent to self but uses commands in Board class
-
-    context 'when opponent Rook is at [2, 4], and player King at [7, 4] with player move of Knight from [5, 2] to [6, 4]' do
-
-      it 'returns true' do
-        test_move = [6, 4]
-        test_origin_piece = Knight.new([5, 2], 'black')
-        test_king_coord = [7, 4]
-
-        expect(test_board).to receive(:move_piece_to_coords).exactly(3)
-        allow(test_game).to receive(:king_in_check?) { false }
-        expect(test_game.move_keeps_king_in_check?(test_move, test_origin_piece, test_king_coord)).to be false
-      end
-    end
-  end
-
-# describe '#piece_is_king?' do
-#  # Query sent to self
-# end
-
-# describe '#find_king' do
-#  # Outgoing query sent to Board
-# end
-
-  describe '#find_opponent_moves' do
-
-    context 'when opponent Rook is at [7, 0] and opponent King at [0, 4] and player King at [7, 4] and player Knights at [7, 1] and [7, 6]' do
-
-      it 'returns array of all opponent moves' do
-        opponent = 'white'
-        move = [5, 5]
-        result = [[[7, 1], [6, 0], [5, 0], [4, 0], [3, 0], [2, 0], [1, 0], [0, 0]],
-                  [[0, 3], [0, 5], [1, 3], [1, 4], [1, 5]]]
-
-        test_rook = Rook.new([7, 7], 'white')
-        test_king = King.new([0, 4], 'white')
-        test_pieces = [test_rook, test_king]
-        test_remaining_pieces = [test_rook, test_king]
-        test_available_opponent_moves = [[[7, 1], [6, 0], [5, 0], [4, 0], [3, 0], [2, 0], [1, 0], [0, 0]],
-        [[0, 3], [0, 5], [1, 3], [1, 4], [1, 5]]]
-
-        allow(test_game).to receive(:find_pieces) { test_pieces }
-        allow(test_game).to receive(:remove_possible_capture) { test_remaining_pieces }
-        allow(test_game).to receive(:find_available_opponent_moves) { test_available_opponent_moves }
-        expect(test_game.find_opponent_moves(opponent, move)).to eq result
       end
     end
   end
@@ -282,6 +271,31 @@ describe MoveGenerator do
         expect(test_game.find_opponent(test_piece)).to eq string
       end
     end 
+  end
+
+  describe '#find_opponent_moves' do
+
+    context 'when opponent Rook is at [7, 0] and opponent King at [0, 4] and player King at [7, 4] and player Knights at [7, 1] and [7, 6]' do
+
+      it 'returns array of all opponent moves' do
+        opponent = 'white'
+        move = [5, 5]
+        result = [[[7, 1], [6, 0], [5, 0], [4, 0], [3, 0], [2, 0], [1, 0], [0, 0]],
+                  [[0, 3], [0, 5], [1, 3], [1, 4], [1, 5]]]
+
+        test_rook = Rook.new([7, 7], 'white')
+        test_king = King.new([0, 4], 'white')
+        test_pieces = [test_rook, test_king]
+        test_remaining_pieces = [test_rook, test_king]
+        test_available_opponent_moves = [[[7, 1], [6, 0], [5, 0], [4, 0], [3, 0], [2, 0], [1, 0], [0, 0]],
+        [[0, 3], [0, 5], [1, 3], [1, 4], [1, 5]]]
+
+        allow(test_game).to receive(:find_pieces) { test_pieces }
+        allow(test_game).to receive(:remove_possible_capture) { test_remaining_pieces }
+        allow(test_game).to receive(:find_available_opponent_moves) { test_available_opponent_moves }
+        expect(test_game.find_opponent_moves(opponent, move)).to eq result
+      end
+    end
   end
 
   describe '#find_pieces' do
@@ -349,6 +363,10 @@ describe MoveGenerator do
     end
   end
 
+# describe '#find_available_opponent_moves' do
+# # Query sent to self
+# end
+
   describe '#coord_in_check?' do
     # Query sent to self
   
@@ -381,8 +399,81 @@ describe MoveGenerator do
     end
   end
 
+  describe 'move_keeps_king_in_check?' do
+    # Query sent to self but uses commands in Board class
+
+    context 'when opponent Rook is at [2, 4], and player King at [7, 4] with player move of Knight from [5, 2] to [6, 4]' do
+
+      it 'returns true' do
+        test_move = [6, 4]
+        test_origin_piece = Knight.new([5, 2], 'black')
+        test_king_coord = [7, 4]
+
+        expect(test_board).to receive(:move_piece_to_coords).exactly(3)
+        allow(test_game).to receive(:king_in_check?) { false }
+        expect(test_game.move_keeps_king_in_check?(test_move, test_origin_piece, test_king_coord)).to be false
+      end
+    end
+  end
+
+# describe '#king_stays_in_check?' do
+# # Query script
+# end
+
+# describe '#illegal_pawn_move?' do
+# # Query script
+# end
+
+# describe '#subtract_coordinates' do
+# # Query sent to self
+# end
+
+# describe '#pawn_move_blocked?' do
+# # Script
+# end
+
+# describe '#pawn_attack_invalid?' do
+# # Query sent to self
+# end
+
+# describe '#find_en_passant_capture_move' do
+# # Outgoing command
+# end
+
+# describe '#find_castle_moves' do
+# # Outgoing command
+# end
+
 # describe '#ask_user_destination' do
-  # Query loop sent to Player class, returns user input as coordinate
+# # Query loop sent to Player class, returns user input as coordinate
+# end
+
+# describe '#update_pieces' do
+# # Script
+# end
+
+  describe '#update_piece_move_history' do
+    # Outgoing command
+    context 'when origin_piece argument has a method for first_move' do
+      let(:test_piece) { Pawn.new([1, 0], 'white') }
+      let(:test_destination) { [2, 0] }
+      it 'sends message to origin_piece' do
+        expect(test_piece.first_move).to receive(:push).with(test_destination)
+        test_game.update_piece_move_history(test_piece, test_destination)
+      end
+    end
+
+    context 'when origin_piece argument doest not have a method for first_move' do
+      let(:test_piece) { Square.new }
+      let(:test_destination) { [2, 0] }
+      it 'returns nil' do
+        expect(test_game.update_piece_move_history(test_piece, test_destination)).to be nil
+      end
+    end
+  end
+
+# describe '#find_pawn_promotion_moves' do
+# # Outgoing command
 # end
 
   describe '#update_board' do
@@ -399,29 +490,50 @@ describe MoveGenerator do
     end
   end
 
-  describe '#swap_player' do
-    # Command sent to self
+# describe 'check?' do
+# # Query script
+# end
 
-    context 'when @current_player is @player_one' do
+# describe '#find_player_king' do
+# # Outgoing query
+# end
 
-      it 'sets @current_player to @player_two' do
-        first_player = test_game.instance_variable_get(:@player_one)
-        second_player = test_game.instance_variable_get(:@player_two)
-        test_game.instance_variable_set(:@current_player, first_player)
+# describe 'no_player_moves?' do
+# # Query script sent to self
+# end
 
-        expect { test_game.swap_player }.to change { test_game.instance_variable_get(:@current_player) }.from(first_player).to(second_player)
+  describe 'all_legal_moves' do
+    # Command script sent to self
+    context 'when white player pieces have at least one move' do
+
+      it 'returns array of moves' do
+        test_player_king = King.new([0, 0], 'white')
+        test_player_pieces = [test_player_king]
+        test_king_moves = [[1, 0], [1, 1], [0, 1]]
+        test_king_legal_moves = [[1, 1], [0, 1]]
+        legal_array = [[[1, 1], [0, 1]]]
+        allow(test_game).to receive(:find_piece_moves) { test_king_moves }
+        allow(test_game).to receive(:find_piece_legal_moves) { test_king_legal_moves }
+        expect(test_game.all_legal_moves(test_player_pieces)).to eq legal_array
       end
     end
 
-    context 'when @current_player is @player_two' do
+    context 'when white player pieces have no legal moves' do
 
-      it 'sets @current_player to @player_one' do
-        first_player = test_game.instance_variable_get(:@player_one)
-        second_player = test_game.instance_variable_get(:@player_two)
-        test_game.instance_variable_set(:@current_player, second_player)
-
-        expect { test_game.swap_player }.to change { test_game.instance_variable_get(:@current_player) }.from(second_player).to(first_player)
-      end
+      it 'returns empty array' do
+        test_player_king = King.new([0, 0], 'white')
+        test_player_pieces = [test_player_king]
+        test_king_moves = [[1, 0], [1, 1], [0, 1]]
+        test_king_legal_moves = []
+        legal_array = [[]]
+        allow(test_game).to receive(:find_piece_moves) { test_king_moves }
+        allow(test_game).to receive(:find_piece_legal_moves) { test_king_legal_moves }
+        expect(test_game.all_legal_moves(test_player_pieces)).to eq legal_array
+       end
     end
   end
+
+# describe '#no_legal_moves?' do
+# # Query sent to self
+# end
 end

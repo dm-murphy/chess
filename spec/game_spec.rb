@@ -18,20 +18,37 @@ require './lib/castling.rb'
 require './lib/pawn_promotion_moves.rb'
 
 describe Game do
-# describe 'start_turn' do
+
+# describe '#load'
+# # Outgoing command
+# end
+
+# describe '#start_turn'
 # # Loop script sent to self
 # # Test methods in Board and MoveGenerator class
 # end
 
-# describe 'game_over?' do
+# describe '#user_save_game?' do
+# # Script
+# end
+
+# describe '#save_game' do
+# # Script
+# end
+
+# describe '#to_yaml' do
+# # Outgoing command
+# end
+
+# describe '#game_over?' do
 # # Script sent to self
 # end
 
-# describe 'display_checkmate' do
+# describe '#display_checkmate' do
 # # Puts message
 # end
 
-# describe 'display_draw' do
+# describe '#display_draw' do
 # # Puts message
 # end
 end
