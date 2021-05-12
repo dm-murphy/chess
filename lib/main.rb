@@ -77,6 +77,7 @@ def start_game(option)
   if option == '1'
     game = Game.new
     game.start_turn
+    start_game_options
   elsif option == '2'
     load_game
   end
@@ -112,6 +113,7 @@ def load_saved_round(file)
   game = Game.new
   game.load(file)
   game.start_turn
+  start_game_options
 end
 
 start
