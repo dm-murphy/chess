@@ -29,17 +29,21 @@ class Game
       redo if user_saved_game?(result)
 
       origin_piece = @move_generator.find_origin_piece(result)
-      redo if origin_piece.nil?
+      redo if not_player_piece?(origin_piece)
 
       legal_moves = @move_generator.generate_legal_moves(origin_piece)
-      redo if legal_moves.empty?
+      redo if illegal_piece?(legal_moves)
 
       destination_coord = @move_generator.ask_user_destination(legal_moves)
-      start_coord = origin_piece.coord
-      @move_generator.update_pieces(origin_piece, destination_coord, start_coord)
-      @move_generator.swap_player
+      end_turn(origin_piece, destination_coord)
       break if game_over?
     end
+  end
+
+  def end_turn(origin_piece, destination_coord)
+    start_coord = origin_piece.coord
+    @move_generator.update_pieces(origin_piece, destination_coord, start_coord)
+    @move_generator.swap_player
   end
 
   def user_saved_game?(result)
@@ -69,6 +73,21 @@ class Game
       player_two: @player_two,
       move_generator: @move_generator
     })
+  end
+
+  def not_player_piece?(origin_piece)
+    return unless origin_piece.nil?
+
+    puts 'Not a player piece'
+    true
+  end
+
+  def illegal_piece?(legal_moves)
+    return unless legal_moves.empty?
+
+    puts 'No legal moves'
+    puts 'King in check' if @move_generator.check?
+    true
   end
 
   def game_over?
