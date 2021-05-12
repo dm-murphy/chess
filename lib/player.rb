@@ -23,6 +23,6 @@ class Player
   end
 
   def valid_piece?(piece)
-    piece.length == 2 && piece[0][/([a-hA-H]+)/] && piece[1] =~ /[1-8]/
+    piece.length == 2 && piece[0][/([a-hA-H]+)/] && piece[1][/[1-8]/]
   end
 end
