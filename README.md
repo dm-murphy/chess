@@ -38,7 +38,7 @@ A full depiction of the rules of chess can be found [here.](https://www.chessvar
 
 This program uses a minimalist design that is quick and easy to run locally and on IDEs like Repl.it. The board uses chess unicode symbols for white and black pieces:
 
-[chess_game_display](chess_display.png)
+![chess_game_display](chess_display.png)
 
 The board displays chess notation with letters a - h representing the eight columnds and numbers 1 - 8 representing the eight rows.
 
