@@ -74,6 +74,4 @@ I am very grateful to all the developers who have contributed to and helped main
 
 # Repl.it
 
-Coming soon...
-
-
+Play now on [Repl.it](https://replit.com/@dmmurphy/chess#lib/main.rb)
