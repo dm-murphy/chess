@@ -40,12 +40,17 @@ This program uses a minimalist design that is quick and easy to run on IDEs like
 
 The pieces on the board use a standard chess unicode:
 
-pawns: &#9817;
-knights: &#9816;
-bishops: &#9815;
-rooks: &#9814;
-queen: &#9813;
-king: &#9812;
+pawns: &#9817; &#9823;
+
+knights: &#9816; &#9822;
+
+bishops: &#9815; &#9821;
+
+rooks: &#9814; &#9820;
+
+queen: &#9813; &#9819;
+
+king: &#9812; &#9818;
 
 The board displays chess notation with letters a - h representing the eight columnds and numbers 1 - 8 representing the eight rows.
 
