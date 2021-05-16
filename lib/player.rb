@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-# lib/chess_spec.rb
-
+# Responsible for Player user inputs
 class Player
   attr_accessor :name, :pieces
 
