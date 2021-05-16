@@ -13,18 +13,11 @@ class PawnPromotionMoves < MoveGenerator
   end
 
   def promote_pawn(origin_piece, start_coord)
-    piece_selection_number = prompt_pawn_promotion
+    display_pawn_promotion
+    piece_selection_number = @current_player.select_promotion.to_i
     promoted_piece_name = find_piece_class(piece_selection_number)
     pieces = origin_piece.pieces
     @board.promote_pawn(promoted_piece_name, start_coord, pieces)
-  end
-
-  def prompt_pawn_promotion
-    display_pawn_promotion
-    loop do
-      string = @current_player.select_piece.to_i
-      return string if string.between?(1, 4)
-    end
   end
 
   def display_pawn_promotion
