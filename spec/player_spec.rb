@@ -1,21 +1,21 @@
 #spec/player_spec.rb
 
 require './lib/game'
-require './lib/move_generator.rb'
-require './lib/chess_notation.rb'
+require './lib/moves/move_generator.rb'
+require './lib/moves/en_passant_moves.rb'
+require './lib/moves/castling.rb'
+require './lib/moves/pawn_promotion_moves.rb'
 require './lib/player'
 require './lib/board'
+require './lib/chess_notation.rb'
 require './lib/square'
-require './lib/piece'
-require './lib/pawn'
-require './lib/knight'
-require './lib/king'
-require './lib/rook'
-require './lib/bishop'
-require './lib/queen'
-require './lib/en_passant_moves.rb'
-require './lib/castling.rb'
-require './lib/pawn_promotion_moves.rb'
+require './lib/pieces/piece'
+require './lib/pieces/pawn'
+require './lib/pieces/knight'
+require './lib/pieces/king'
+require './lib/pieces/rook'
+require './lib/pieces/bishop'
+require './lib/pieces/queen'
 
 describe Player do
 

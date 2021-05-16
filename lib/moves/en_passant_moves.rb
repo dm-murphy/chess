@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# lib/chess_spec.rb
-
 # Responsible for providing en passant moves to MoveGenerator class
 class EnPassantMoves < MoveGenerator
   attr_accessor :en_passant_opponent_pieces, :en_passant_coordinate

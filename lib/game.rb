@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# lib/chess_spec.rb
-
 # Responsible for cycling through game turns until game ends
 class Game
   attr_accessor :board, :player_one, :player_two

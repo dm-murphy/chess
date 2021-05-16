@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# lib/chess_spec.rb
-
 # Responsible for generating and verifying moves for Game class
 class MoveGenerator
   attr_accessor :current_player

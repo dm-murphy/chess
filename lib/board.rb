@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# lib/chess_spec.rb
-
 # Responsible for managing chess piece positions on board grid
 class Board
   attr_accessor :grid, :white_king, :white_king_side_rook, :white_queen_side_rook, :black_king, :black_king_side_rook, :black_queen_side_rook

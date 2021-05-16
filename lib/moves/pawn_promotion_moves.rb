@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# lib/chess_spec.rb
-
 # Responsible for providing pawn promotion moves to MoveGenerator class
 class PawnPromotionMoves < MoveGenerator
 

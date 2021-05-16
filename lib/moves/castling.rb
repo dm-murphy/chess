@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# lib/chess_spec.rb
-
 # Responsible for providing castling move coordinates to MoveGenerator class
 class Castling < MoveGenerator
   attr_accessor :castle_destination
