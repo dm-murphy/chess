@@ -50,13 +50,13 @@ It was a goal of this project to display all legal moves to a player rather than
 
 In an effort to follow chess etiquette, the program does not initially announce when a player is in check. However if the checked player attempts to make an illegal move the board will notify the player that the king is in check.
 
-## Serilization
+## Serialization
 
 Players can save their game file on any turn. This allows users to restore a loaded file instead of starting a new game. The program uses YAML for serialization. All statuses in the game are kept in the saved file from the board state and piece positions to any leftover en passant captures, piece first move histories and the current player turn. Game files are saved in a new directory and players can choose which ones to load via a sorted timestamp.
 
 ## Tests with RSpec
 
-Spec files were created for most of the core classes and the piece module. Although some methods were developed with TDD, most of the program was figured out first and tested afterwards. At the start of the project, testing the program with puts messages and a quick entry of piece moves proved easy and effective. However as the program was fleshed out it became more challenging to repeat long entries of piece moves into the command line. As classes and methods were refactored and large portions of the game completely overhauled, old RSpec tests needed to be rewritten and more tests introduced. Ultimately this project proved a good lesson in the importance of testing and some of the difficulties in waiting to test until after the fact.
+Spec files were created for most of the core classes. Although some methods were developed with TDD, most of the program was figured out first and tested afterwards. At the start of the project, testing the program with puts messages and a quick entry of piece moves proved easy and effective. However as the program was fleshed out it became more challenging to repeat long entries of piece moves into the command line. As classes and methods were refactored and large portions of the game completely overhauled, old RSpec tests needed to be rewritten and more tests introduced. Ultimately this project proved a good lesson in the importance of testing and some of the difficulties in waiting to test until after the fact.
 
 Attempts were made to distinguish between incoming, outgoing and self sent messages. For many methods, simple queries were not tested. Complex queries and times when issues were repeatedly checked on the command line were given tests. Outgoing commands were tested for sending a command to the outgoing object.
 
@@ -72,6 +72,6 @@ Much more refactoring could be done on this project. The MoveGenerator class is 
 
 I am very grateful to all the developers who have contributed to and helped maintain The Odin Project, offering a free and open-source curriculum for developers like myself.
 
-# Repl.it
+# Play Now
 
-Play now on [Repl.it](https://replit.com/@dmmurphy/chess#lib/main.rb)
+Play on [Repl.it](https://replit.com/@dmmurphy/chess#lib/main.rb)
